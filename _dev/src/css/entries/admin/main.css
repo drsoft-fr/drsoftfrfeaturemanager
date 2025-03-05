@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Roboto', 'sans-serif';
+  --color-light-shades: #78AEB9;
+  --color-light-shades-50: #F4F9FC;
+  --color-light-shades-100: #EAF2F6;   /* Couleur fournie */
+  --color-light-shades-200: #CDE1EB;
+  --color-light-shades-300: #B1D0E0;
+  --color-light-shades-400: #94BFC4;
+  --color-light-shades-500: #78AEB9;
+  --color-light-shades-600: #5C9EA0;
+  --color-light-shades-700: #408D86;
+  --color-light-shades-800: #24716D;
+  --color-light-shades-900: #095555;
+
+  --color-light-accent: #B0CB83;
+  --color-light-accent-50: #F4F9EE;
+  --color-light-accent-100: #E3F0D5;
+  --color-light-accent-200: #D0E4B1;
+  --color-light-accent-300: #BCC88E;
+  --color-light-accent-400: #A8AC6A;
+  --color-light-accent-500: #B0CB83;  /* Couleur fournie */
+  --color-light-accent-600: #8C9969;
+  --color-light-accent-700: #687150;
+  --color-light-accent-800: #454C36;
+  --color-light-accent-900: #23241D;
+
+  --color-main: #83B0CB;
+  --color-main-50: #F0F6FB;
+  --color-main-100: #D9E7F2;
+  --color-main-200: #C2D9E8;
+  --color-main-300: #ABCBD8;
+  --color-main-400: #94BDCC;
+  --color-main-500: #83B0CB;   /* Couleur fournie */
+  --color-main-600: #719EAC;
+  --color-main-700: #5C8B8F;
+  --color-main-800: #467570;
+  --color-main-900: #305058;
+
+  --color-dark-accent: #CB83B0;
+  --color-dark-accent-50: #FAEEF2;
+  --color-dark-accent-100: #F5D4E1;
+  --color-dark-accent-200: #EEAFC7;
+  --color-dark-accent-300: #E68AAC;
+  --color-dark-accent-400: #E06692;
+  --color-dark-accent-500: #CB83B0;  /* Couleur fournie */
+  --color-dark-accent-600: #A05E8C;
+  --color-dark-accent-700: #783967;
+  --color-dark-accent-800: #512343;
+  --color-dark-accent-900: #290E1E;
+
+  --color-dark-shades: #161D22;
+  --color-dark-shades-50: #ECEEF0;
+  --color-dark-shades-100: #D1D4D7;
+  --color-dark-shades-200: #A5A9AE;
+  --color-dark-shades-300: #7A7F86;
+  --color-dark-shades-400: #4E545D;
+  --color-dark-shades-500: #161D22;  /* Couleur fournie */
+  --color-dark-shades-600: #13191D;
+  --color-dark-shades-700: #101418;
+  --color-dark-shades-800: #0C1012;
+  --color-dark-shades-900: #080B0D;
+}
+
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark;
+}
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: #ECEEF0;
+  --color-base-200: #D1D4D7;
+  --color-base-300: #A5A9AE;
+  --color-base-content: #161D22;
+  --color-primary: #467570;
+  --color-primary-content: #F0F6FB;
+  --color-secondary: #687150;
+  --color-secondary-content: #F4F9EE;
+  --color-accent: #783967;
+  --color-accent-content: #FAEEF2;
+  --color-neutral: #161D22;
+  --color-neutral-content: #ECEEF0;
+  --color-info: #24716D;
+  --color-info-content: #F4F9FC;
+  --color-success: #1B6423;
+  --color-success-content: #EEF9EF;
+  --color-warning: #995613;
+  --color-warning-content: #FFF5EC;
+  --color-error: #8C4044;
+  --color-error-content: #FDF2F3;
+  --radius-selector: 0rem;
+  --radius-field: 0rem;
+  --radius-box: 0rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  default: true;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: #161D22;
+  --color-base-200: #13191D;
+  --color-base-300: #101418;
+  --color-base-content: #ECEEF0;
+  --color-primary: #ABCBD8;
+  --color-primary-content: #305058;
+  --color-secondary: #BCC88E;
+  --color-secondary-content: #454C36;
+  --color-accent: #F5D4E1;
+  --color-accent-content: #783967;
+  --color-neutral: #A5A9AE;
+  --color-neutral-content: #161D22;
+  --color-info: #B1D0E0;
+  --color-info-content: #095555;
+  --color-success: #A7E5AD;
+  --color-success-content: #1B6423;
+  --color-warning: #FFBF78;
+  --color-warning-content: #66380D;
+  --color-error: #F3AAAD;
+  --color-error-content: #60292C;
+  --radius-selector: 0rem;
+  --radius-field: 0rem;
+  --radius-box: 0rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
