@@ -1,5 +1,3 @@
-import '@/css/entries/admin/main.css'
-
 import { createApp } from 'vue'
 import App from '@/vue/admin/App.vue'
 

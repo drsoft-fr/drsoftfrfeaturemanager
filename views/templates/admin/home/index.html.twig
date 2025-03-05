@@ -2,8 +2,6 @@
 {% trans_default_domain "Module.DrsoftfrFeatureManager.Admin" %}
 
 {% block stylesheets %}
-    {{ parent() }}
-
     <link rel="stylesheet" href="{{ asset('../modules/drsoftfrfeaturemanager/views/' ~ manifest.url('src/js/admin/main.js')['css'][0]) }}" type="text/css" media="all">
 {% endblock %}
 

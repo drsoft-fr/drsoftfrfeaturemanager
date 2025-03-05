@@ -7,7 +7,7 @@ const handleClick = () => {
 <template>
   <main>
     <p>Hello world !</p>
-    <button class="btn btn-accent" @click="handleClick">Click me</button>
+    <button class="btn btn-primary" @click="handleClick">Click me</button>
   </main>
 </template>
 

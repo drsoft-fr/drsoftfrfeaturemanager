@@ -4,7 +4,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import {resolve} from "path";
-import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -40,7 +39,6 @@ export default defineConfig({
     outDir: '../views',
   },
   plugins: [
-    tailwindcss(),
     vue(),
     vueDevTools(),
   ],
