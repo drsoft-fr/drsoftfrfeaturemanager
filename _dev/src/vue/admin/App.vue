@@ -4,6 +4,8 @@ import { computed, ref } from 'vue'
 const { drsoftfrfeaturemanager } = window
 const features = ref({})
 const selectedFeatureId = ref(0)
+const selectedFeatureValueIds = ref([])
+const selectAll = ref(true)
 const feature = computed(() => {
   if (!Array.isArray(features.value)) {
     return {}
@@ -14,8 +16,39 @@ const feature = computed(() => {
     {}
   )
 })
-const handleFeatureSelect = (event) =>
-  (selectedFeatureId.value = parseInt(event.target.value))
+const handleFeatureSelect = (event) => {
+  selectedFeatureId.value = parseInt(event.target.value)
+  selectedFeatureValueIds.value = []
+}
+const handleFeatureValueSelect = (event) => {
+  if (event.target.checked) {
+    selectedFeatureValueIds.value.push(event.target.value)
+  } else {
+    selectedFeatureValueIds.value = selectedFeatureValueIds.value.filter(
+      (id) => id !== event.target.value,
+    )
+  }
+}
+const handleToggleSelect = () => {
+  let ids = []
+  Array.from(document.querySelectorAll('.js-feature-value-select')).map(
+    (elm) => {
+      elm.checked = true
+      ids.push(parseInt(elm.value))
+    },
+  )
+
+  selectAll.value = false
+  selectedFeatureValueIds.value = ids
+}
+const handleToggleUnselect = () => {
+  Array.from(document.querySelectorAll('.js-feature-value-select')).map(
+    (elm) => (elm.checked = false),
+  )
+
+  selectAll.value = true
+  selectedFeatureValueIds.value = []
+}
 
 fetch(drsoftfrfeaturemanager)
   .then((res) => res.json())
@@ -28,7 +61,12 @@ fetch(drsoftfrfeaturemanager)
 <template>
   <main class="card">
     <div class="card-body">
-      <p>Hello world ! #{{ selectedFeatureId }}</p>
+      <div class="row">
+        <div class="col">feature: #{{ selectedFeatureId }}</div>
+        <div class="col">
+          featureValues: #{{ selectedFeatureValueIds.join(',') }}
+        </div>
+      </div>
       <div class="mt-3">
         <select @change="handleFeatureSelect">
           <option
@@ -41,13 +79,59 @@ fetch(drsoftfrfeaturemanager)
         </select>
       </div>
       <Transition name="fade" mode="out-in" appear>
-        <div v-if="feature.values" class="mt-3 relative">
-          <TransitionGroup class="table table-striped" name="table" tag="table">
-            <tr v-for="featureValue in feature.values" :key="featureValue.id">
-              <td>{{ featureValue.id }}</td>
-              <td>{{ featureValue.name }}</td>
-            </tr>
-          </TransitionGroup>
+        <div
+          v-if="feature.values"
+          class="mt-3 position-relative table-responsive"
+        >
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th class="position-relative" width="33%">
+                  <TransitionGroup name="replace">
+                    <button
+                      v-if="true === selectAll"
+                      class="btn btn-link"
+                      type="button"
+                      @click="handleToggleSelect"
+                    >
+                      <i aria-hidden="true" class="material-icons">check</i>
+                      Select
+                    </button>
+                    <button
+                      v-else
+                      class="btn btn-link"
+                      type="button"
+                      @click="handleToggleUnselect"
+                    >
+                      <i aria-hidden="true" class="material-icons">close</i>
+                      Unselect
+                    </button>
+                  </TransitionGroup>
+                </th>
+                <th width="33%">ID</th>
+                <th width="33%">Name</th>
+              </tr>
+            </thead>
+            <TransitionGroup name="slide" tag="tbody">
+              <tr v-for="featureValue in feature.values" :key="featureValue.id">
+                <td>
+                  <label
+                    :for="`feature-value-${featureValue.id}`"
+                    class="d-block m-0 w-100"
+                  >
+                    <input
+                      class="align-middle js-feature-value-select p-5"
+                      type="checkbox"
+                      :id="`feature-value-${featureValue.id}`"
+                      :value="featureValue.id"
+                      @change="handleFeatureValueSelect"
+                  /></label>
+                </td>
+                <td>{{ featureValue.id }}</td>
+                <td>{{ featureValue.name }}</td>
+              </tr>
+            </TransitionGroup>
+          </table>
         </div>
       </Transition>
       <div class="mt-3">
@@ -72,18 +156,32 @@ fetch(drsoftfrfeaturemanager)
   opacity: 0;
 }
 
-.table-enter-active,
-.table-leave-active {
+.replace-enter-active,
+.replace-leave-active {
   transition: all 0.5s ease;
 }
 
-.table-leave-active {
+.replace-leave-active {
+  position: absolute;
+}
+
+.replace-enter-from,
+.replace-leave-to {
+  opacity: 0;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-leave-active {
   position: absolute;
   width: 100%;
 }
 
-.table-enter-from,
-.table-leave-to {
+.slide-enter-from,
+.slide-leave-to {
   opacity: 0;
   transform: translateY(-30%);
 }
