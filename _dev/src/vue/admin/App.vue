@@ -56,15 +56,17 @@ const handleFeatureValueCreate = async (event) => {
     method: 'POST',
     body: form,
   })
-  await res.json()
+  await getFeatures()
 }
 
-fetch(drsoftfrfeaturemanager.getFeatures)
-  .then((res) => res.json())
-  .then((data) => {
-    features.value = data
-    selectedFeatureId.value = data[0].id
-  })
+const getFeatures = async () => {
+  const res = await fetch(drsoftfrfeaturemanager.getFeatures)
+  const json = await res.json()
+  features.value = json
+  selectedFeatureId.value = selectedFeatureId.value === 0 ? json[0].id : selectedFeatureId.value
+}
+
+getFeatures()
 
 const handleFeatureValueDelete = async (event) => {
   const featureValueId = parseInt(event.target.dataset.featureValueId || '')
@@ -76,7 +78,7 @@ const handleFeatureValueDelete = async (event) => {
     method: 'POST',
     body: form,
   })
-  await res.json()
+  await getFeatures()
 }
 </script>
 
