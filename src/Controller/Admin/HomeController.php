@@ -55,7 +55,10 @@ final class HomeController extends FrameworkBundleAdminController
     public function indexAction(Request $request): Response
     {
         \Media::addJsDef([
-            'drsoftfrfeaturemanager' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_get_features')
+            'drsoftfrfeaturemanager' => [
+                'getFeatures' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_get_features'),
+                'featureValueDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete'),
+            ]
         ]);
 
         return $this->render(self::TEMPLATE_FOLDER . 'index.html.twig', [
@@ -104,6 +107,18 @@ final class HomeController extends FrameworkBundleAdminController
         }
 
         return $this->json($datas);
+    }
+
+    public function ajaxFeatureValueDeleteAction(Request $request): JsonResponse
+    {
+        $id = $request->request->getInt('id');
+
+        // TODO faire la suppression de la featureValue
+
+        return $this->json([
+            'success' => true,
+            'id_feature_value' => $id,
+        ]);
     }
 
     /**

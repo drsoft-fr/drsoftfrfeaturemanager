@@ -15,3 +15,11 @@ admin_drsoft_fr_feature_manager_home_ajax_get_features:
         _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxGetFeaturesAction
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
         _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxGetFeatures
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete:
+    path: /ajax/feature-value/delete
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueDeleteAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueDelete

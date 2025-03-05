@@ -50,12 +50,33 @@ const handleToggleUnselect = () => {
   selectedFeatureValueIds.value = []
 }
 
-fetch(drsoftfrfeaturemanager)
+fetch(drsoftfrfeaturemanager.getFeatures)
   .then((res) => res.json())
   .then((data) => {
     features.value = data
     selectedFeatureId.value = data[0].id
   })
+
+const handleFeatureValueDelete = (event) => {
+  const featureValueId = parseInt(event.target.dataset.featureValueId || '')
+
+  console.log({
+    featureValueDelete: drsoftfrfeaturemanager.featureValueDelete,
+    featureValueId,
+  })
+
+  const form = new FormData()
+  form.append('id', featureValueId)
+
+  fetch(drsoftfrfeaturemanager.featureValueDelete, {
+    method: "POST",
+    body: form,
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data)
+    })
+}
 </script>
 
 <template>
@@ -86,7 +107,7 @@ fetch(drsoftfrfeaturemanager)
           <table class="table table-striped align-middle">
             <thead>
               <tr>
-                <th class="position-relative" width="25%">
+                <th class="position-relative" width="20%">
                   <TransitionGroup name="replace">
                     <button
                       v-if="true === selectAll"
@@ -108,9 +129,10 @@ fetch(drsoftfrfeaturemanager)
                     </button>
                   </TransitionGroup>
                 </th>
-                <th width="25%">ID</th>
-                <th width="25%">Name</th>
-                <th width="25%">Is custom</th>
+                <th width="20%">ID</th>
+                <th width="20%">Name</th>
+                <th width="20%">Is custom</th>
+                <th width="20%">Action</th>
               </tr>
             </thead>
             <TransitionGroup name="slide" tag="tbody">
@@ -131,6 +153,16 @@ fetch(drsoftfrfeaturemanager)
                 <td>{{ featureValue.id }}</td>
                 <td>{{ featureValue.name }}</td>
                 <td>{{ featureValue.custom }}</td>
+                <td>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    @click="handleFeatureValueDelete"
+                    :data-feature-value-id="featureValue.id"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             </TransitionGroup>
           </table>
