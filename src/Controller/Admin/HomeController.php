@@ -6,6 +6,8 @@ namespace DrSoftFr\Module\FeatureManager\Controller\Admin;
 
 use DrSoftFr\PrestaShopModuleHelper\Domain\Asset\Package;
 use DrSoftFr\PrestaShopModuleHelper\Domain\Asset\VersionStrategy\JsonManifestVersionStrategy;
+use PrestaShop\PrestaShop\Adapter\Feature\Repository\FeatureRepository;
+use PrestaShop\PrestaShop\Adapter\Feature\Repository\FeatureValueRepository;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use PrestaShopBundle\Security\Annotation\AdminSecurity;
 use PrestaShopBundle\Security\Annotation\ModuleActivated;
@@ -76,12 +78,48 @@ final class HomeController extends FrameworkBundleAdminController
      */
     public function ajaxGetFeaturesAction(Request $request): JsonResponse
     {
-        return $this->json([
-            1 => 'couleur',
-            2 => 'nom',
-            3 => 'fonction',
-            4 => 'marque',
-            5 => 'taille',
-        ]);
+        $datas = [];
+        $featureRepository = $this->getFeatureRepository();
+        /** @var array<int, array<string, mixed>> $features */
+        $features = $featureRepository->getFeaturesByLang(1);
+
+        foreach ($features as $feature) {
+            $featureValueRepository = $this->getFeatureValueRepository();
+            $featureValues = $featureValueRepository->getFeatureValuesByLang(1, ['id_feature' => $feature['id_feature']]);
+            $formattedFeatureValues = [];
+
+            foreach ($featureValues as $featureValue) {
+                $formattedFeatureValues[] = [
+                    'id' => $featureValue['id_feature_value'],
+                    'name' => $featureValue['value'],
+                ];
+            }
+
+            $datas[] = [
+                'id' => $feature['id_feature'],
+                'name' => $feature['localized_names'][1],
+                'values' => $formattedFeatureValues
+            ];
+        }
+
+        return $this->json($datas);
+    }
+
+    /**
+     * @return FeatureRepository
+     */
+    private function getFeatureRepository(): FeatureRepository
+    {
+        /* @type FeatureRepository */
+        return $this->get('PrestaShop\PrestaShop\Adapter\Feature\Repository\FeatureRepository');
+    }
+
+    /**
+     * @return FeatureValueRepository
+     */
+    private function getFeatureValueRepository(): FeatureValueRepository
+    {
+        /* @type FeatureValueRepository */
+        return $this->get('PrestaShop\PrestaShop\Adapter\Feature\Repository\FeatureValueRepository');
     }
 }
