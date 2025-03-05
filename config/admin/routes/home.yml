@@ -4,4 +4,14 @@ admin_drsoft_fr_feature_manager_home_index:
     defaults:
         _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::indexAction
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
-        _legacy_link: AdminDrSoftFrFeatureManagerHome
+        _legacy_link:
+            - AdminDrSoftFrFeatureManagerHome
+            - AdminDrSoftFrFeatureManagerHome:index
+
+admin_drsoft_fr_feature_manager_home_ajax_get_features:
+    path: /get-features
+    methods: [ GET ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxGetFeaturesAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxGetFeatures
