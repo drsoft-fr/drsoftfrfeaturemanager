@@ -57,6 +57,7 @@ final class HomeController extends FrameworkBundleAdminController
         \Media::addJsDef([
             'drsoftfrfeaturemanager' => [
                 'getFeatures' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_get_features'),
+                'featureValueCreate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_create'),
                 'featureValueDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete'),
             ]
         ]);
@@ -109,16 +110,100 @@ final class HomeController extends FrameworkBundleAdminController
         return $this->json($datas);
     }
 
+    public function ajaxFeatureValueCreateAction(Request $request): JsonResponse
+    {
+        try {
+            $featureId = $request->request->getInt('id_feature');
+            $value = $request->request->get('value');
+
+            $obj = new \FeatureValue();
+            $obj->id_feature = $featureId;
+            $obj->value = [
+                1 => $value
+            ];
+
+            if (!$obj->save()) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Failed to create FeatureValue',
+                    'id_feature' => $featureId ?? 0,
+                    'value' => $value ?? '',
+                ]);
+            }
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Feature value created',
+                'id_feature' => $featureId ?? 0,
+                'value' => $value ?? '',
+                'id_feature_value' => $obj->id ?? 0,
+            ]);
+        } catch (\Throwable $t) {
+            return $this->json([
+                'success' => false,
+                'message' =>
+                    sprintf(
+                        'Error occurred when trying to create FeatureValue [%s]',
+                        $t->getMessage()
+                    ),
+                'id_feature' => $featureId ?? 0,
+                'value' => $value ?? '',
+            ]);
+        }
+    }
+
+
+    /**
+     * Handle the AJAX request to delete a feature value.
+     *
+     * @param Request $request The incoming request object
+     *
+     * @return JsonResponse JSON response indicating the success or failure of the deletion
+     */
     public function ajaxFeatureValueDeleteAction(Request $request): JsonResponse
     {
-        $id = $request->request->getInt('id');
+        try {
+            $id = $request->request->getInt('id');
+            $obj = new \FeatureValue($id);
 
-        // TODO faire la suppression de la featureValue
+            if (!\Validate::isLoadedObject($obj)) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Feature value not found',
+                    'id_feature_value' => $id ?? 0,
+                ]);
+            }
 
-        return $this->json([
-            'success' => true,
-            'id_feature_value' => $id,
-        ]);
+            if (!$obj->delete()) {
+                return $this->json([
+                    'success' => false,
+                    'message' =>
+                        sprintf(
+                            'Failed to delete %s #%d',
+                            get_class($obj),
+                            $obj->id
+                        ),
+                    'id_feature_value' => $id ?? 0,
+                ]);
+            }
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Feature value deleted',
+                'id_feature_value' => $id,
+            ]);
+        } catch (\Throwable $t) {
+            return $this->json([
+                'success' => false,
+                'message' =>
+                    sprintf(
+                        'Error occurred when trying to delete FeatureValue #%d [%s]',
+                        $id ?? 0,
+                        $t->getMessage()
+                    ),
+                'id_feature_value' => $id ?? 0,
+            ]);
+        }
     }
 
     /**

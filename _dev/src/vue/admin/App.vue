@@ -50,6 +50,15 @@ const handleToggleUnselect = () => {
   selectedFeatureValueIds.value = []
 }
 
+const handleFeatureValueCreate = async (event) => {
+  const form = new FormData(event.currentTarget)
+  const res = await fetch(drsoftfrfeaturemanager.featureValueCreate, {
+    method: 'POST',
+    body: form,
+  })
+  await res.json()
+}
+
 fetch(drsoftfrfeaturemanager.getFeatures)
   .then((res) => res.json())
   .then((data) => {
@@ -57,25 +66,17 @@ fetch(drsoftfrfeaturemanager.getFeatures)
     selectedFeatureId.value = data[0].id
   })
 
-const handleFeatureValueDelete = (event) => {
+const handleFeatureValueDelete = async (event) => {
   const featureValueId = parseInt(event.target.dataset.featureValueId || '')
-
-  console.log({
-    featureValueDelete: drsoftfrfeaturemanager.featureValueDelete,
-    featureValueId,
-  })
-
   const form = new FormData()
-  form.append('id', featureValueId)
 
-  fetch(drsoftfrfeaturemanager.featureValueDelete, {
-    method: "POST",
+  form.append('id', featureValueId.toString())
+
+  const res = await fetch(drsoftfrfeaturemanager.featureValueDelete, {
+    method: 'POST',
     body: form,
   })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data)
-    })
+  await res.json()
 }
 </script>
 
@@ -88,16 +89,40 @@ const handleFeatureValueDelete = (event) => {
           featureValues: #{{ selectedFeatureValueIds.join(',') }}
         </div>
       </div>
-      <div class="mt-3">
-        <select @change="handleFeatureSelect">
-          <option
-            v-for="feature in features"
-            :key="feature.id"
-            :value="feature.id"
-          >
-            {{ feature.name }}
-          </option>
-        </select>
+      <div class="mt-3 row">
+        <div class="col">
+          <select @change="handleFeatureSelect">
+            <option
+              v-for="feature in features"
+              :key="feature.id"
+              :value="feature.id"
+            >
+              {{ feature.name }}
+            </option>
+          </select>
+        </div>
+        <div class="col">
+          <form @submit.prevent="handleFeatureValueCreate">
+            <input type="hidden" name="id_feature" :value="selectedFeatureId" />
+            <div class="form-group">
+              <label class="form-label" for="create-feature-value">
+                Create value for {{ feature.name }} feature
+              </label>
+              <input
+                class="form-control"
+                type="text"
+                id="create-feature-value"
+                name="value"
+              />
+              <div class="form-text">
+                Would you like to create feature value?
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary" type="submit">Create</button>
+            </div>
+          </form>
+        </div>
       </div>
       <Transition name="fade" mode="out-in" appear>
         <div
