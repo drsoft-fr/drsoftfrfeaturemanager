@@ -1,0 +1,7 @@
+admin_drsoft_fr_feature_manager_home_index:
+    path: /
+    methods: [ GET ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::indexAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome

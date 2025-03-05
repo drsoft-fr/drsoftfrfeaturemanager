@@ -1,0 +1,20 @@
+{% extends '@PrestaShop/Admin/layout.html.twig' %}
+{% trans_default_domain "Module.DrsoftfrFeatureManager.Admin" %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ asset('../modules/drsoftfrfeaturemanager/views/' ~ manifest.url('src/js/admin/main.js')['css'][0]) }}" type="text/css" media="all">
+{% endblock %}
+
+{% block content %}
+    <div id="app"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% if manifest is defined %}
+        <script src="{{ asset('../modules/drsoftfrfeaturemanager/views/' ~ manifest.url('src/js/admin/main.js')['file']) }}" async defer></script>
+    {% endif %}
+{% endblock %}
