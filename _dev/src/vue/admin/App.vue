@@ -86,7 +86,7 @@ fetch(drsoftfrfeaturemanager)
           <table class="table table-striped align-middle">
             <thead>
               <tr>
-                <th class="position-relative" width="33%">
+                <th class="position-relative" width="25%">
                   <TransitionGroup name="replace">
                     <button
                       v-if="true === selectAll"
@@ -108,8 +108,9 @@ fetch(drsoftfrfeaturemanager)
                     </button>
                   </TransitionGroup>
                 </th>
-                <th width="33%">ID</th>
-                <th width="33%">Name</th>
+                <th width="25%">ID</th>
+                <th width="25%">Name</th>
+                <th width="25%">Is custom</th>
               </tr>
             </thead>
             <TransitionGroup name="slide" tag="tbody">
@@ -129,6 +130,7 @@ fetch(drsoftfrfeaturemanager)
                 </td>
                 <td>{{ featureValue.id }}</td>
                 <td>{{ featureValue.name }}</td>
+                <td>{{ featureValue.custom }}</td>
               </tr>
             </TransitionGroup>
           </table>

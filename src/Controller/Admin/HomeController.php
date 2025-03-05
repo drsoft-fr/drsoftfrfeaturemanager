@@ -92,6 +92,7 @@ final class HomeController extends FrameworkBundleAdminController
                 $formattedFeatureValues[] = [
                     'id' => $featureValue['id_feature_value'],
                     'name' => $featureValue['value'],
+                    'custom' => (bool)$featureValue['custom']
                 ];
             }
 
