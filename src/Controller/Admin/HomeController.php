@@ -56,9 +56,14 @@ final class HomeController extends FrameworkBundleAdminController
     {
         \Media::addJsDef([
             'drsoftfrfeaturemanager' => [
-                'getFeatures' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_get_features'),
-                'featureValueCreate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_create'),
-                'featureValueDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete'),
+                'routes' => [
+                    'featureCreate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_create'),
+                    'featureDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_delete'),
+                    'featureGetAll' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_get_all'),
+                    'featureValueCreate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_create'),
+                    'featureValueDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete'),
+                    'featureValueGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_get'),
+                ]
             ]
         ]);
 
@@ -69,6 +74,86 @@ final class HomeController extends FrameworkBundleAdminController
         ]);
     }
 
+    public function ajaxFeatureCreateAction(Request $request): JsonResponse
+    {
+        try {
+            $name = $request->request->get('name', '');
+            $obj = new \Feature();
+            $obj->name = [1 => $name];
+
+            if (!$obj->save()) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Failed to create Feature',
+                    'name' => $name ?? '',
+                ]);
+            }
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Feature created',
+                'name' => $name ?? '',
+                'id_feature' => $obj->id ?? 0,
+            ]);
+        } catch (\Throwable $t) {
+            return $this->json([
+                'success' => false,
+                'message' =>
+                    sprintf(
+                        'Error occurred when trying to create Feature [%s]',
+                        $t->getMessage()
+                    ),
+                'name' => $name ?? '',
+            ]);
+        }
+    }
+
+    public function ajaxFeatureDeleteAction(Request $request): JsonResponse
+    {
+        try {
+            $featureId = $request->request->getInt('id_feature', 0);
+            $obj = new \Feature($featureId);
+
+            if (!\Validate::isLoadedObject($obj)) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Feature not found',
+                    'id_feature' => $featureId ?? 0,
+                ]);
+            }
+
+            if (!$obj->delete()) {
+                return $this->json([
+                    'success' => false,
+                    'message' =>
+                        sprintf(
+                            'Failed to delete %s #%d',
+                            get_class($obj),
+                            $obj->id
+                        ),
+                    'id_feature' => $featureId ?? 0,
+                ]);
+            }
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Feature deleted',
+                'id_feature' => $featureId,
+            ]);
+        } catch (\Throwable $t) {
+            return $this->json([
+                'success' => false,
+                'message' =>
+                    sprintf(
+                        'Error occurred when trying to delete Feature #%d [%s]',
+                        $featureId ?? 0,
+                        $t->getMessage()
+                    ),
+                'id_feature' => $featureId ?? 0,
+            ]);
+        }
+    }
+
     /**
      * @AdminSecurity(
      *     "is_granted(['read'], request.get('_legacy_controller'))",
@@ -76,11 +161,9 @@ final class HomeController extends FrameworkBundleAdminController
      *     message="Access denied."
      * )
      *
-     * @param Request $request
-     *
      * @return JsonResponse
      */
-    public function ajaxGetFeaturesAction(Request $request): JsonResponse
+    public function ajaxFeatureGetAllAction(): JsonResponse
     {
         $datas = [];
         $featureRepository = $this->getFeatureRepository();
@@ -88,22 +171,9 @@ final class HomeController extends FrameworkBundleAdminController
         $features = $featureRepository->getFeaturesByLang(1);
 
         foreach ($features as $feature) {
-            $featureValueRepository = $this->getFeatureValueRepository();
-            $featureValues = $featureValueRepository->getFeatureValuesByLang(1, ['id_feature' => $feature['id_feature']]);
-            $formattedFeatureValues = [];
-
-            foreach ($featureValues as $featureValue) {
-                $formattedFeatureValues[] = [
-                    'id' => $featureValue['id_feature_value'],
-                    'name' => $featureValue['value'],
-                    'custom' => (bool)$featureValue['custom']
-                ];
-            }
-
             $datas[] = [
-                'id' => $feature['id_feature'],
+                'id_feature' => $feature['id_feature'],
                 'name' => $feature['localized_names'][1],
-                'values' => $formattedFeatureValues
             ];
         }
 
@@ -115,7 +185,6 @@ final class HomeController extends FrameworkBundleAdminController
         try {
             $featureId = $request->request->getInt('id_feature');
             $value = $request->request->get('value');
-
             $obj = new \FeatureValue();
             $obj->id_feature = $featureId;
             $obj->value = [
@@ -152,7 +221,6 @@ final class HomeController extends FrameworkBundleAdminController
         }
     }
 
-
     /**
      * Handle the AJAX request to delete a feature value.
      *
@@ -163,14 +231,14 @@ final class HomeController extends FrameworkBundleAdminController
     public function ajaxFeatureValueDeleteAction(Request $request): JsonResponse
     {
         try {
-            $id = $request->request->getInt('id');
-            $obj = new \FeatureValue($id);
+            $featureValueId = $request->request->getInt('id_feature_value');
+            $obj = new \FeatureValue($featureValueId);
 
             if (!\Validate::isLoadedObject($obj)) {
                 return $this->json([
                     'success' => false,
                     'message' => 'Feature value not found',
-                    'id_feature_value' => $id ?? 0,
+                    'id_feature_value' => $featureValueId ?? 0,
                 ]);
             }
 
@@ -183,14 +251,14 @@ final class HomeController extends FrameworkBundleAdminController
                             get_class($obj),
                             $obj->id
                         ),
-                    'id_feature_value' => $id ?? 0,
+                    'id_feature_value' => $featureValueId ?? 0,
                 ]);
             }
 
             return $this->json([
                 'success' => true,
                 'message' => 'Feature value deleted',
-                'id_feature_value' => $id,
+                'id_feature_value' => $featureValueId,
             ]);
         } catch (\Throwable $t) {
             return $this->json([
@@ -198,12 +266,41 @@ final class HomeController extends FrameworkBundleAdminController
                 'message' =>
                     sprintf(
                         'Error occurred when trying to delete FeatureValue #%d [%s]',
-                        $id ?? 0,
+                        $featureValueId ?? 0,
                         $t->getMessage()
                     ),
-                'id_feature_value' => $id ?? 0,
+                'id_feature_value' => $featureValueId ?? 0,
             ]);
         }
+    }
+
+    /**
+     * @AdminSecurity(
+     *     "is_granted(['read'], request.get('_legacy_controller'))",
+     *     redirectRoute="admin_module_manage",
+     *     message="Access denied."
+     * )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function ajaxFeatureValueGetAction(Request $request): JsonResponse
+    {
+        $featureId = $request->request->getInt('id_feature', 0);
+        $datas = [];
+        $featureValueRepository = $this->getFeatureValueRepository();
+        $featureValues = $featureValueRepository->getFeatureValuesByLang(1, ['id_feature' => $featureId]);
+
+        foreach ($featureValues as $featureValue) {
+            $datas[] = [
+                'id_feature_value' => $featureValue['id_feature_value'],
+                'value' => $featureValue['value'],
+                'custom' => (bool)$featureValue['custom']
+            ];
+        }
+
+        return $this->json($datas);
     }
 
     /**

@@ -8,13 +8,29 @@ admin_drsoft_fr_feature_manager_home_index:
             - AdminDrSoftFrFeatureManagerHome
             - AdminDrSoftFrFeatureManagerHome:index
 
-admin_drsoft_fr_feature_manager_home_ajax_get_features:
-    path: /get-features
+admin_drsoft_fr_feature_manager_home_ajax_feature_create:
+    path: /ajax/feature/create
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureCreateAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureCreate
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_delete:
+    path: /ajax/feature/delete
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureDeleteAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureDelete
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_get_all:
+    path: /ajax/feature/get-all
     methods: [ GET ]
     defaults:
-        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxGetFeaturesAction
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureGetAllAction
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
-        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxGetFeatures
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureGetAll
 
 admin_drsoft_fr_feature_manager_home_ajax_feature_value_create:
     path: /ajax/feature-value/create
@@ -31,3 +47,11 @@ admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete:
         _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueDeleteAction
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
         _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueDelete
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_get:
+    path: /ajax/feature-value/get
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueGetAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueGet
