@@ -14,7 +14,6 @@ const { feature, features } = inject('feature')
       filter
       optionLabel="name"
       placeholder="Select a Feature"
-      class="w-full md:w-56"
       id="features"
     />
   </div>
