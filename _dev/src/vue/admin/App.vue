@@ -1,35 +1,22 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { provide, readonly, ref, watch } from 'vue'
+import FeatureCreate from '@/vue/admin/components/feature/Create.vue'
+import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
+import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
+import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
 
 const { drsoftfrfeaturemanager } = window
-const features = ref({})
-const featureValues = ref({})
+const features = ref([])
+const featureValues = ref([])
+const selectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
 const selectedFeatureId = ref(0)
 const selectedFeatureValueIds = ref([])
 const selectAll = ref(true)
 
-const feature = computed(() => {
-  if (!Array.isArray(features.value)) {
-    return {}
-  }
-
-  return (
-    features.value.find(
-      (feature) => feature.id_feature === selectedFeatureId.value,
-    ) || {}
-  )
-})
-
-const assignFeature = async (json) => {
-  features.value = json
-  selectedFeatureId.value =
-    selectedFeatureId.value === 0 ? json[0].id_feature : selectedFeatureId.value
-}
-
-const assignFeatureValue = async (json) => {
-  featureValues.value = json
+watch(selectedFeature, async () => {
   selectedFeatureValueIds.value = []
-}
+  await featureValueGet(selectedFeature.value.id_feature)
+})
 
 const featureCreate = async (elm) => {
   await fetch(drsoftfrfeaturemanager.routes.featureCreate, {
@@ -51,7 +38,10 @@ const featureDelete = async (featureId) => {
 
 const featureGetAll = async () => {
   const res = await fetch(drsoftfrfeaturemanager.routes.featureGetAll)
-  return await res.json()
+  features.value = await res.json()
+  featureValues.value = []
+
+  return features
 }
 
 const featureValueCreate = async (elm) => {
@@ -73,6 +63,10 @@ const featureValueDelete = async (featureValueId) => {
 }
 
 const featureValueGet = async (featureId) => {
+  if (typeof featureId !== 'number' || isNaN(featureId) || 0 >= featureId) {
+    return []
+  }
+
   const form = new FormData()
 
   form.append('id_feature', featureId.toString())
@@ -81,15 +75,18 @@ const featureValueGet = async (featureId) => {
     method: 'POST',
     body: form,
   })
-  return await res.json()
+
+  featureValues.value = await res.json()
+
+  return featureValues
 }
 
-const handleFeatureSelect = (event) => {
-  selectedFeatureId.value = parseInt(event.target.value)
-  selectedFeatureValueIds.value = []
-  featureValueGet(selectedFeatureId.value).then((json) =>
-    assignFeatureValue(json),
-  )
+const selectedFeatureIdUpdate = async (featureId) => {
+  if (typeof featureId !== 'number' || isNaN(featureId)) {
+    throw new Error('featureId must be a number')
+  }
+
+  selectedFeatureId.value = featureId
 }
 
 const handleFeatureValueSelect = (event) => {
@@ -124,36 +121,33 @@ const handleToggleUnselect = () => {
   selectedFeatureValueIds.value = []
 }
 
-const handleFeatureCreate = async (event) => {
-  await featureCreate(event.currentTarget)
-  const json = await featureGetAll()
-  await assignFeature(json)
-}
-
-const handleFeatureDelete = async (event) => {
-  await featureDelete(parseInt(event.target.dataset.featureId || ''))
-  const json = await featureGetAll()
-  await assignFeature(json)
-}
-
-const handleFeatureValueCreate = async (event) => {
-  const featureId = parseInt(event.currentTarget.dataset.featureId || '')
-  await featureValueCreate(event.currentTarget)
-  const json = await featureValueGet(featureId)
-  await assignFeatureValue(json)
-}
-
 const handleFeatureValueDelete = async (event) => {
   const featureId = parseInt(event.target.dataset.featureId || '')
   await featureValueDelete(parseInt(event.target.dataset.featureValueId || ''))
-  const json = await featureValueGet(featureId)
-  await assignFeatureValue(json)
+  await featureValueGet(featureId)
 }
 
+provide('feature', {
+  create: readonly(featureCreate),
+  delete: readonly(featureDelete),
+  feature: selectedFeature,
+  features: readonly(features),
+  getAll: readonly(featureGetAll),
+})
+provide('featureValue', {
+  create: readonly(featureValueCreate),
+  delete: readonly(featureValueDelete),
+  featureValues: readonly(featureValues),
+  get: readonly(featureValueGet),
+})
+provide('selectedFeatureId', {
+  selectedFeatureId: readonly(selectedFeatureId),
+  update: selectedFeatureIdUpdate,
+})
+provide('selectedFeatureValueIds', readonly(selectedFeatureValueIds))
+provide('selectAll', readonly(selectAll))
+
 featureGetAll()
-  .then((json) => assignFeature(json))
-  .then(() => featureValueGet(selectedFeatureId.value))
-  .then((json) => assignFeatureValue(json))
 </script>
 
 <template>
@@ -163,57 +157,13 @@ featureGetAll()
         <div class="col col-md-6">
           <div class="row">
             <div class="col">
-              <div>
-                <label for="features" class="form-label">Features</label>
-                <select
-                  id="features"
-                  class="form-control form-select"
-                  @change="handleFeatureSelect"
-                >
-                  <option>No feature</option>
-                  <option
-                    v-for="feature in features"
-                    :key="feature.id_feature"
-                    :value="feature.id_feature"
-                    :selected="selectedFeatureId === feature.id_feature"
-                  >
-                    {{ feature.name }}
-                  </option>
-                </select>
-              </div>
+              <FeatureSelect />
               <div class="mt-3 text-right">
-                <button
-                  type="button"
-                  class="js-feature-delete btn btn-danger"
-                  :class="{ disabled: !selectedFeatureId }"
-                  :data-feature-id="selectedFeatureId"
-                  @click="handleFeatureDelete"
-                  :disabled="!selectedFeatureId"
-                >
-                  Delete
-                </button>
+                <FeatureDelete />
               </div>
             </div>
             <div class="col">
-              <form @submit.prevent="handleFeatureCreate">
-                <div class="form-group">
-                  <label class="form-label" for="create-feature">
-                    Create new feature
-                  </label>
-                  <input
-                    class="form-control"
-                    type="text"
-                    id="create-feature"
-                    name="name"
-                  />
-                  <div class="form-text">
-                    Would you like to create a new feature?
-                  </div>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-primary" type="submit">Create</button>
-                </div>
-              </form>
+              <FeatureCreate />
             </div>
           </div>
           <Transition name="fade" mode="out-in" appear>
@@ -279,7 +229,7 @@ featureGetAll()
                         class="btn btn-danger"
                         @click="handleFeatureValueDelete"
                         :data-feature-value-id="featureValue.id_feature_value"
-                        :data-feature-id="feature.id_feature"
+                        :data-feature-id="selectedFeature.id_feature"
                       >
                         Delete
                       </button>
@@ -290,40 +240,14 @@ featureGetAll()
             </div>
           </Transition>
           <div class="mt-3">
-            <form
-              @submit.prevent="handleFeatureValueCreate"
-              :data-feature-id="selectedFeatureId"
-            >
-              <input
-                type="hidden"
-                name="id_feature"
-                :value="selectedFeatureId"
-              />
-              <div class="form-group">
-                <label class="form-label" for="create-feature-value">
-                  Create value for {{ feature.name }} feature
-                </label>
-                <input
-                  class="form-control"
-                  type="text"
-                  id="create-feature-value"
-                  name="value"
-                />
-                <div class="form-text">
-                  Would you like to create feature value?
-                </div>
-              </div>
-              <div class="form-group">
-                <button class="btn btn-primary" type="submit">Create</button>
-              </div>
-            </form>
+            <FeatureValueCreate />
           </div>
         </div>
         <div class="col col-md-6"></div>
       </div>
       <div>
         <div class="row">
-          <div class="col">Selected feature: #{{ selectedFeatureId }}</div>
+          <div class="col">Selected feature: #{{ selectedFeature }}</div>
           <div class="col">
             Selected featureValues: #{{ selectedFeatureValueIds.join(',') }}
           </div>
@@ -349,7 +273,7 @@ featureGetAll()
   </main>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;
