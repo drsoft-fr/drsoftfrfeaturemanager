@@ -13,9 +13,10 @@ const { featureValues, selectedFeatureValues } = inject('featureValue')
     v-model:selection="selectedFeatureValues"
     :value="featureValues"
     dataKey="id_feature_value"
+    removableSort
   >
     <Column selectionMode="multiple" header="Select"></Column>
-    <Column field="id_feature_value" header="ID"></Column>
+    <Column field="id_feature_value" header="ID" sortable></Column>
     <Column field="value" header="Value"></Column>
     <Column field="custom" header="Is custom"></Column>
     <Column header="Action">
