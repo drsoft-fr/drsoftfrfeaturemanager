@@ -124,20 +124,17 @@ provide('feature', {
   feature: selectedFeature,
   features: readonly(features),
   getAll: readonly(featureGetAll),
+  selectedFeatureId: readonly(selectedFeatureId),
 })
 provide('featureValue', {
   create: readonly(featureValueCreate),
   delete: readonly(featureValueDelete),
   featureValues: readonly(featureValues),
   get: readonly(featureValueGet),
+  selectAll,
   selectedFeatureValues: readonly(selectedFeatureValues),
   selectedFeatureValueIds,
 })
-provide('selectedFeatureId', {
-  selectedFeatureId: readonly(selectedFeatureId),
-  update: selectedFeatureIdUpdate,
-})
-provide('selectAll', readonly(selectAll))
 
 featureGetAll()
 </script>
@@ -241,6 +238,16 @@ featureGetAll()
           <h3
             class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
           >
+            Selected feature ID:
+          </h3>
+          <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+            <pre><code>{{ selectedFeatureId }}</code></pre>
+          </div>
+        </div>
+        <div class="flex max-w-xl flex-col items-start">
+          <h3
+            class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+          >
             Feature:
           </h3>
           <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
@@ -261,10 +268,30 @@ featureGetAll()
           <h3
             class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
           >
+            Selected featureValue IDs:
+          </h3>
+          <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+            <pre><code>{{ selectedFeatureValueIds }}</code></pre>
+          </div>
+        </div>
+        <div class="flex max-w-xl flex-col items-start">
+          <h3
+            class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+          >
             FeatureValues:
           </h3>
           <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
             <pre><code>{{ featureValues }}</code></pre>
+          </div>
+        </div>
+        <div class="flex max-w-xl flex-col items-start">
+          <h3
+            class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+          >
+            Select all feature values:
+          </h3>
+          <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+            <pre><code>{{ selectAll }}</code></pre>
           </div>
         </div>
       </div>
