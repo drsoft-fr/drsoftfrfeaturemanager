@@ -4,6 +4,7 @@ import FeatureCreate from '@/vue/admin/components/feature/Create.vue'
 import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
 import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
 import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
+import FeatureValueDelete from '@/vue/admin/components/feature-value/Delete.vue'
 
 const { drsoftfrfeaturemanager } = window
 const features = ref([])
@@ -121,12 +122,6 @@ const handleToggleUnselect = () => {
   selectedFeatureValueIds.value = []
 }
 
-const handleFeatureValueDelete = async (event) => {
-  const featureId = parseInt(event.target.dataset.featureId || '')
-  await featureValueDelete(parseInt(event.target.dataset.featureValueId || ''))
-  await featureValueGet(featureId)
-}
-
 provide('feature', {
   create: readonly(featureCreate),
   delete: readonly(featureDelete),
@@ -224,15 +219,10 @@ featureGetAll()
                     <td>{{ featureValue.value }}</td>
                     <td>{{ featureValue.custom }}</td>
                     <td>
-                      <button
-                        type="button"
-                        class="btn btn-danger"
-                        @click="handleFeatureValueDelete"
-                        :data-feature-value-id="featureValue.id_feature_value"
-                        :data-feature-id="selectedFeature.id_feature"
-                      >
-                        Delete
-                      </button>
+                      <FeatureValueDelete
+                        :feature-id="selectedFeature.id_feature"
+                        :feature-value-id="featureValue.id_feature_value"
+                      />
                     </td>
                   </tr>
                 </TransitionGroup>
