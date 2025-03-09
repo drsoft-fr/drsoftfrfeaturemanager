@@ -1,11 +1,20 @@
 <script setup>
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import InputText from 'primevue/inputtext'
+import { FilterMatchMode } from '@primevue/core/api'
 import FeatureValueDelete from '@/vue/admin/components/feature-value/Delete.vue'
 
 const { feature } = inject('feature')
 const { featureValues, selectedFeatureValues } = inject('featureValue')
+
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  value: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  id_feature_value: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  custom: { value: null, matchMode: FilterMatchMode.EQUALS },
+})
 </script>
 
 <template>
@@ -17,7 +26,19 @@ const { featureValues, selectedFeatureValues } = inject('featureValue')
     paginator
     :rows="10"
     :rowsPerPageOptions="[5, 10, 20, 50]"
+    v-model:filters="filters"
+    :globalFilterFields="['custom', 'id_feature_value', 'value']"
   >
+    <template #header>
+      <div class="flex justify-end">
+        <InputText
+          v-model="filters['global'].value"
+          placeholder="Keyword Search"
+        />
+      </div>
+    </template>
+    <template #empty>No customers found.</template>
+    <template #loading>Loading customers data. Please wait.</template>
     <Column selectionMode="multiple" header="Select"></Column>
     <Column field="id_feature_value" header="ID" sortable></Column>
     <Column field="value" header="Value"></Column>
