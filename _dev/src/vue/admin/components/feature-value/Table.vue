@@ -14,6 +14,9 @@ const { featureValues, selectedFeatureValues } = inject('featureValue')
     :value="featureValues"
     dataKey="id_feature_value"
     removableSort
+    paginator
+    :rows="10"
+    :rowsPerPageOptions="[5, 10, 20, 50]"
   >
     <Column selectionMode="multiple" header="Select"></Column>
     <Column field="id_feature_value" header="ID" sortable></Column>
