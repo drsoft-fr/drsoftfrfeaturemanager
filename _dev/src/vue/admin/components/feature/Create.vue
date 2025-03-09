@@ -3,18 +3,28 @@ import { inject, ref } from 'vue'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 
 const { create, getAll } = inject('feature')
 const loading = ref(false)
+const toast = useToast()
 const handleFeatureCreate = async (event) => {
   loading.value = true
   await create(event.currentTarget)
   await getAll()
   loading.value = false
+  toast.add({
+    severity: 'success',
+    summary: 'Confirmed',
+    detail: 'Feature created',
+    life: 3000,
+  })
 }
 </script>
 
 <template>
+  <Toast />
   <form @submit.prevent="handleFeatureCreate">
     <div class="flex flex-col gap-2">
       <label for="create-feature"> Create new feature </label>
