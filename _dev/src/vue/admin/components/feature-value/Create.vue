@@ -3,20 +3,30 @@ import { inject, ref } from 'vue'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
+import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 
 const { feature } = inject('feature')
 const { create, get } = inject('featureValue')
 const loading = ref(false)
+const toast = useToast()
 const handleFeatureValueCreate = async (event) => {
   loading.value = true
   const featureId = parseInt(event.currentTarget.dataset.featureId || '')
   await create(event.currentTarget)
   await get(featureId)
   loading.value = false
+  toast.add({
+    severity: 'success',
+    summary: 'Confirmed',
+    detail: 'Feature value created',
+    life: 3000,
+  })
 }
 </script>
 
 <template>
+  <Toast />
   <Transition name="fade" mode="out-in" appear>
     <form
       v-show="feature.id_feature"
