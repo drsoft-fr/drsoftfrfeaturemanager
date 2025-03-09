@@ -3,6 +3,7 @@ import { computed, provide, readonly, ref, watch } from 'vue'
 import FeatureCreate from '@/vue/admin/components/feature/Create.vue'
 import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
 import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
+import FeatureValueBulkSelect from '@/vue/admin/components/feature-value/BulkSelect.vue'
 import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
 import FeatureValueDelete from '@/vue/admin/components/feature-value/Delete.vue'
 import FeatureValueSelect from '@/vue/admin/components/feature-value/Select.vue'
@@ -13,7 +14,6 @@ const featureValues = ref([])
 const selectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
 const selectedFeatureId = ref(0)
 const selectedFeatureValueIds = ref([])
-const selectAll = ref(true)
 const selectedFeatureValues = computed(() =>
   featureValues.value.filter((featureValue) =>
     selectedFeatureValueIds.value.includes(featureValue.id_feature_value),
@@ -96,28 +96,6 @@ const selectedFeatureIdUpdate = async (featureId) => {
   selectedFeatureId.value = featureId
 }
 
-const handleToggleSelect = () => {
-  let ids = []
-  Array.from(document.querySelectorAll('.js-feature-value-select')).map(
-    (elm) => {
-      elm.checked = true
-      ids.push(parseInt(elm.value))
-    },
-  )
-
-  selectAll.value = false
-  selectedFeatureValueIds.value = ids
-}
-
-const handleToggleUnselect = () => {
-  Array.from(document.querySelectorAll('.js-feature-value-select')).map(
-    (elm) => (elm.checked = false),
-  )
-
-  selectAll.value = true
-  selectedFeatureValueIds.value = []
-}
-
 provide('feature', {
   create: readonly(featureCreate),
   delete: readonly(featureDelete),
@@ -131,7 +109,6 @@ provide('featureValue', {
   delete: readonly(featureValueDelete),
   featureValues: readonly(featureValues),
   get: readonly(featureValueGet),
-  selectAll,
   selectedFeatureValues: readonly(selectedFeatureValues),
   selectedFeatureValueIds,
 })
@@ -164,26 +141,7 @@ featureGetAll()
                 <thead>
                   <tr>
                     <th class="position-relative" width="20%">
-                      <TransitionGroup name="replace">
-                        <button
-                          v-if="true === selectAll"
-                          class="btn btn-link"
-                          type="button"
-                          @click="handleToggleSelect"
-                        >
-                          <i aria-hidden="true" class="material-icons">check</i>
-                          Select
-                        </button>
-                        <button
-                          v-else
-                          class="btn btn-link"
-                          type="button"
-                          @click="handleToggleUnselect"
-                        >
-                          <i aria-hidden="true" class="material-icons">close</i>
-                          Unselect
-                        </button>
-                      </TransitionGroup>
+                      <FeatureValueBulkSelect />
                     </th>
                     <th width="20%">ID</th>
                     <th width="20%">Name</th>
@@ -282,16 +240,6 @@ featureGetAll()
           </h3>
           <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
             <pre><code>{{ featureValues }}</code></pre>
-          </div>
-        </div>
-        <div class="flex max-w-xl flex-col items-start">
-          <h3
-            class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
-          >
-            Select all feature values:
-          </h3>
-          <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-            <pre><code>{{ selectAll }}</code></pre>
           </div>
         </div>
       </div>
