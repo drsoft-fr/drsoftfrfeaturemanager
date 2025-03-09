@@ -3,7 +3,6 @@ import { inject, ref } from 'vue'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
-import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 
 const { feature } = inject('feature')
@@ -26,7 +25,6 @@ const handleFeatureValueCreate = async (event) => {
 </script>
 
 <template>
-  <Toast />
   <Transition name="fade" mode="out-in" appear>
     <form
       v-show="feature.id_feature"

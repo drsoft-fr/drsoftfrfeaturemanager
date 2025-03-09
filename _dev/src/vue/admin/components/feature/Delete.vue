@@ -1,7 +1,5 @@
 <script setup>
 import { inject, ref } from 'vue'
-import Toast from 'primevue/toast'
-import ConfirmDialog from 'primevue/confirmdialog'
 import Button from 'primevue/button'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
@@ -66,8 +64,6 @@ const handleFeatureDelete = async () => {
 </script>
 
 <template>
-  <ConfirmDialog></ConfirmDialog>
-  <Toast />
   <Button
     label="Delete"
     type="button"

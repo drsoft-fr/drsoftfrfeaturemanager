@@ -1,10 +1,12 @@
 <script setup>
 import { provide, readonly, ref, watch } from 'vue'
+import ConfirmDialog from 'primevue/confirmdialog'
 import FeatureCreate from '@/vue/admin/components/feature/Create.vue'
 import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
 import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
 import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
 import FeatureValueTable from '@/vue/admin/components/feature-value/Table.vue'
+import Toast from 'primevue/toast'
 
 const { drsoftfrfeaturemanager } = window
 const features = ref([])
@@ -194,6 +196,8 @@ featureGetAll()
       </div>
     </div>
   </main>
+  <ConfirmDialog></ConfirmDialog>
+  <Toast />
 </template>
 
 <style scoped lang="scss">

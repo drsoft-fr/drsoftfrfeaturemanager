@@ -3,7 +3,6 @@ import { inject, ref } from 'vue'
 import Button from 'primevue/button'
 import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
-import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 
 const { create, getAll } = inject('feature')
@@ -24,7 +23,6 @@ const handleFeatureCreate = async (event) => {
 </script>
 
 <template>
-  <Toast />
   <form @submit.prevent="handleFeatureCreate">
     <div class="flex flex-col gap-2">
       <label for="create-feature"> Create new feature </label>
