@@ -1,10 +1,11 @@
 <script setup>
-import { provide, readonly, ref, watch } from 'vue'
+import { computed, provide, readonly, ref, watch } from 'vue'
 import FeatureCreate from '@/vue/admin/components/feature/Create.vue'
 import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
 import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
 import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
 import FeatureValueDelete from '@/vue/admin/components/feature-value/Delete.vue'
+import FeatureValueSelect from '@/vue/admin/components/feature-value/Select.vue'
 
 const { drsoftfrfeaturemanager } = window
 const features = ref([])
@@ -13,6 +14,11 @@ const selectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
 const selectedFeatureId = ref(0)
 const selectedFeatureValueIds = ref([])
 const selectAll = ref(true)
+const selectedFeatureValues = computed(() =>
+  featureValues.value.filter((featureValue) =>
+    selectedFeatureValueIds.value.includes(featureValue.id_feature_value),
+  ),
+)
 
 watch(selectedFeature, async () => {
   selectedFeatureValueIds.value = []
@@ -90,16 +96,6 @@ const selectedFeatureIdUpdate = async (featureId) => {
   selectedFeatureId.value = featureId
 }
 
-const handleFeatureValueSelect = (event) => {
-  if (event.target.checked) {
-    selectedFeatureValueIds.value.push(event.target.value)
-  } else {
-    selectedFeatureValueIds.value = selectedFeatureValueIds.value.filter(
-      (id) => id !== event.target.value,
-    )
-  }
-}
-
 const handleToggleSelect = () => {
   let ids = []
   Array.from(document.querySelectorAll('.js-feature-value-select')).map(
@@ -134,12 +130,13 @@ provide('featureValue', {
   delete: readonly(featureValueDelete),
   featureValues: readonly(featureValues),
   get: readonly(featureValueGet),
+  selectedFeatureValues: readonly(selectedFeatureValues),
+  selectedFeatureValueIds,
 })
 provide('selectedFeatureId', {
   selectedFeatureId: readonly(selectedFeatureId),
   update: selectedFeatureIdUpdate,
 })
-provide('selectedFeatureValueIds', readonly(selectedFeatureValueIds))
 provide('selectAll', readonly(selectAll))
 
 featureGetAll()
@@ -203,17 +200,9 @@ featureGetAll()
                     :key="featureValue.id_feature_value"
                   >
                     <td>
-                      <label
-                        :for="`feature-value-${featureValue.id_feature_value}`"
-                        class="d-block m-0 w-100"
-                      >
-                        <input
-                          class="align-middle js-feature-value-select p-5"
-                          type="checkbox"
-                          :id="`feature-value-${featureValue.id_feature_value}`"
-                          :value="featureValue.id_feature_value"
-                          @change="handleFeatureValueSelect"
-                      /></label>
+                      <FeatureValueSelect
+                        :feature-value-id="featureValue.id_feature_value"
+                      />
                     </td>
                     <td>{{ featureValue.id_feature_value }}</td>
                     <td>{{ featureValue.value }}</td>
@@ -265,7 +254,7 @@ featureGetAll()
             Selected featureValues:
           </h3>
           <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-            <pre><code>{{ selectedFeatureValueIds.join(',') }}</code></pre>
+            <pre><code>{{ selectedFeatureValues }}</code></pre>
           </div>
         </div>
         <div class="flex max-w-xl flex-col items-start">
