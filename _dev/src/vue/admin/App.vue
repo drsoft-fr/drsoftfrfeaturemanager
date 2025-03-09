@@ -1,27 +1,20 @@
 <script setup>
-import { computed, provide, readonly, ref, watch } from 'vue'
+import { provide, readonly, ref, watch } from 'vue'
 import FeatureCreate from '@/vue/admin/components/feature/Create.vue'
 import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
 import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
-import FeatureValueBulkSelect from '@/vue/admin/components/feature-value/BulkSelect.vue'
 import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
-import FeatureValueDelete from '@/vue/admin/components/feature-value/Delete.vue'
-import FeatureValueSelect from '@/vue/admin/components/feature-value/Select.vue'
+import FeatureValueTable from '@/vue/admin/components/feature-value/Table.vue'
 
 const { drsoftfrfeaturemanager } = window
 const features = ref([])
 const featureValues = ref([])
 const selectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
 const selectedFeatureId = ref(0)
-const selectedFeatureValueIds = ref([])
-const selectedFeatureValues = computed(() =>
-  featureValues.value.filter((featureValue) =>
-    selectedFeatureValueIds.value.includes(featureValue.id_feature_value),
-  ),
-)
+const selectedFeatureValues = ref([])
 
 watch(selectedFeature, async () => {
-  selectedFeatureValueIds.value = []
+  selectedFeatureValues.value = []
   await featureValueGet(selectedFeature.value.id_feature)
 })
 
@@ -109,8 +102,7 @@ provide('featureValue', {
   delete: readonly(featureValueDelete),
   featureValues: readonly(featureValues),
   get: readonly(featureValueGet),
-  selectedFeatureValues: readonly(selectedFeatureValues),
-  selectedFeatureValueIds,
+  selectedFeatureValues,
 })
 
 featureGetAll()
@@ -137,40 +129,7 @@ featureGetAll()
               v-if="featureValues"
               class="mt-3 position-relative table-responsive"
             >
-              <table class="table table-striped align-middle">
-                <thead>
-                  <tr>
-                    <th class="position-relative" width="20%">
-                      <FeatureValueBulkSelect />
-                    </th>
-                    <th width="20%">ID</th>
-                    <th width="20%">Name</th>
-                    <th width="20%">Is custom</th>
-                    <th width="20%">Action</th>
-                  </tr>
-                </thead>
-                <TransitionGroup name="slide" tag="tbody">
-                  <tr
-                    v-for="featureValue in featureValues"
-                    :key="featureValue.id_feature_value"
-                  >
-                    <td>
-                      <FeatureValueSelect
-                        :feature-value-id="featureValue.id_feature_value"
-                      />
-                    </td>
-                    <td>{{ featureValue.id_feature_value }}</td>
-                    <td>{{ featureValue.value }}</td>
-                    <td>{{ featureValue.custom }}</td>
-                    <td>
-                      <FeatureValueDelete
-                        :feature-id="selectedFeature.id_feature"
-                        :feature-value-id="featureValue.id_feature_value"
-                      />
-                    </td>
-                  </tr>
-                </TransitionGroup>
-              </table>
+              <FeatureValueTable />
             </div>
           </Transition>
           <div class="mt-3">
@@ -226,16 +185,6 @@ featureGetAll()
           <h3
             class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
           >
-            Selected featureValue IDs:
-          </h3>
-          <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-            <pre><code>{{ selectedFeatureValueIds }}</code></pre>
-          </div>
-        </div>
-        <div class="flex max-w-xl flex-col items-start">
-          <h3
-            class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
-          >
             FeatureValues:
           </h3>
           <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
@@ -270,21 +219,5 @@ featureGetAll()
 .replace-enter-from,
 .replace-leave-to {
   opacity: 0;
-}
-
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.5s ease;
-}
-
-.slide-leave-active {
-  position: absolute;
-  width: 100%;
-}
-
-.slide-enter-from,
-.slide-leave-to {
-  opacity: 0;
-  transform: translateY(-30%);
 }
 </style>
