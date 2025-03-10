@@ -12,7 +12,6 @@ const { drsoftfrfeaturemanager } = window
 const features = ref([])
 const featureValues = ref([])
 const selectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
-const selectedFeatureId = ref(0)
 const selectedFeatureValues = ref([])
 
 watch(selectedFeature, async () => {
@@ -83,21 +82,12 @@ const featureValueGet = async (featureId) => {
   return featureValues
 }
 
-const selectedFeatureIdUpdate = async (featureId) => {
-  if (typeof featureId !== 'number' || isNaN(featureId)) {
-    throw new Error('featureId must be a number')
-  }
-
-  selectedFeatureId.value = featureId
-}
-
 provide('feature', {
   create: readonly(featureCreate),
   delete: readonly(featureDelete),
   feature: selectedFeature,
   features: readonly(features),
   getAll: readonly(featureGetAll),
-  selectedFeatureId: readonly(selectedFeatureId),
 })
 provide('featureValue', {
   create: readonly(featureValueCreate),
@@ -157,16 +147,6 @@ featureGetAll()
           <h3
             class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
           >
-            Selected feature ID:
-          </h3>
-          <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-            <pre><code>{{ selectedFeatureId }}</code></pre>
-          </div>
-        </div>
-        <div class="flex max-w-xl flex-col items-start">
-          <h3
-            class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
-          >
             Feature:
           </h3>
           <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
@@ -208,20 +188,6 @@ featureGetAll()
 
 .fade-enter-from,
 .fade-leave-to {
-  opacity: 0;
-}
-
-.replace-enter-active,
-.replace-leave-active {
-  transition: all 0.5s ease;
-}
-
-.replace-leave-active {
-  position: absolute;
-}
-
-.replace-enter-from,
-.replace-leave-to {
   opacity: 0;
 }
 </style>
