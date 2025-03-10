@@ -23,10 +23,13 @@ watch(selectedFeature, async () => {
 })
 
 const featureCreate = async (elm) => {
-  await fetch(drsoftfrfeaturemanager.routes.featureCreate, {
+  const res = await fetch(drsoftfrfeaturemanager.routes.featureCreate, {
     method: 'POST',
     body: new FormData(elm),
   })
+  const { id_feature, name } = await res.json()
+
+  selectedFeature.value = { id_feature, name }
 }
 
 const featureDelete = async (featureId) => {
