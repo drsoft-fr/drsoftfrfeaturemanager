@@ -1,13 +1,35 @@
 <script setup>
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import { FilterMatchMode } from '@primevue/core/api'
+import InputText from 'primevue/inputtext'
 
 const {
   products,
   productTableLoading: loading,
   selectedProducts,
 } = inject('product')
+
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  id_product: { value: null, matchMode: FilterMatchMode.EQUALS },
+  id_supplier: { value: null, matchMode: FilterMatchMode.EQUALS },
+  supplier: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  id_manufacturer: { value: null, matchMode: FilterMatchMode.EQUALS },
+  manufacturer: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  reference: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  active: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  id_lang: { value: null, matchMode: FilterMatchMode.EQUALS },
+  name: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  id_shop: { value: null, matchMode: FilterMatchMode.EQUALS },
+  id_category_default: { value: null, matchMode: FilterMatchMode.EQUALS },
+  category: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  id_feature: { value: null, matchMode: FilterMatchMode.EQUALS },
+  feature: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+  id_feature_value: { value: null, matchMode: FilterMatchMode.EQUALS },
+  value: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+})
 </script>
 
 <template>
@@ -20,10 +42,38 @@ const {
       paginator
       :rows="10"
       :rowsPerPageOptions="[5, 10, 20, 50]"
+      v-model:filters="filters"
+      :globalFilterFields="[
+        'id_product',
+        'id_supplier',
+        'supplier',
+        'id_manufacturer',
+        'manufacturer',
+        'reference',
+        'active',
+        'id_lang',
+        'name',
+        'id_shop',
+        'id_category_default',
+        'category',
+        'id_feature',
+        'feature',
+        'id_feature_value',
+        'value',
+      ]"
       :loading="loading"
       v-show="products"
       class="border-t border-gray-200"
+      stripedRows
     >
+      <template #header>
+        <div class="flex justify-end">
+          <InputText
+            v-model="filters['global'].value"
+            placeholder="Keyword Search"
+          />
+        </div>
+      </template>
       <template #empty>No products found.</template>
       <template #loading>Loading products data. Please wait.</template>
       <Column selectionMode="multiple" header="Select"></Column>
