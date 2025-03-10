@@ -105,93 +105,73 @@ featureGetAll()
 </script>
 
 <template>
-  <main class="card">
-    <div class="card-body">
-      <div class="row">
-        <div class="col col-md-6">
-          <div class="row">
-            <div class="col">
-              <FeatureSelect />
-              <div class="mt-3 text-right">
-                <FeatureDelete />
-              </div>
-            </div>
-            <div class="col">
-              <FeatureCreate />
+  <main class="sm:text-lg">
+    <div
+      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-5 bg-white dark:bg-gray-900 rounded-md"
+    >
+      <div class="flex max-w-xl flex-col col-span-2 gap-8">
+        <div class="grid max-w-2xl grid-cols-2 gap-8">
+          <div>
+            <FeatureSelect />
+            <div class="mt-3 text-right">
+              <FeatureDelete />
             </div>
           </div>
-          <Transition name="fade" mode="out-in" appear>
-            <div
-              v-if="featureValues"
-              class="mt-3 position-relative table-responsive"
-            >
-              <FeatureValueTable />
-            </div>
-          </Transition>
-          <div class="mt-3">
-            <FeatureValueCreate />
-          </div>
+          <FeatureCreate />
         </div>
-        <div class="col col-md-6"></div>
+        <FeatureValueTable />
+        <FeatureValueCreate />
       </div>
-      <div
-        class="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-4"
-      >
-        <div class="flex max-w-xl flex-col items-start">
-          <h3
-            class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
-          >
-            Selected feature:
-          </h3>
-          <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-            <pre><code>{{ selectedFeature }}</code></pre>
-          </div>
+      <div class="flex max-w-xl flex-col items-start"></div>
+      <div class="flex max-w-xl flex-col items-start col-span-2"></div>
+    </div>
+    <div
+      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:mt-16 lg:mx-0 lg:max-w-none lg:grid-cols-4 bg-white dark:bg-gray-900 rounded-md"
+    >
+      <div class="flex max-w-xl flex-col items-start">
+        <h3
+          class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+        >
+          Selected feature:
+        </h3>
+        <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+          <pre><code>{{ selectedFeature }}</code></pre>
         </div>
-        <div class="flex max-w-xl flex-col items-start">
-          <h3
-            class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
-          >
-            Feature:
-          </h3>
-          <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-            <pre><code>{{ features }}</code></pre>
-          </div>
+      </div>
+      <div class="flex max-w-xl flex-col items-start">
+        <h3
+          class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+        >
+          Feature:
+        </h3>
+        <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+          <pre><code>{{ features }}</code></pre>
         </div>
-        <div class="flex max-w-xl flex-col items-start">
-          <h3
-            class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
-          >
-            Selected featureValues:
-          </h3>
-          <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-            <pre><code>{{ selectedFeatureValues }}</code></pre>
-          </div>
+      </div>
+      <div class="flex max-w-xl flex-col items-start">
+        <h3
+          class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+        >
+          Selected featureValues:
+        </h3>
+        <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+          <pre><code>{{ selectedFeatureValues }}</code></pre>
         </div>
-        <div class="flex max-w-xl flex-col items-start">
-          <h3
-            class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
-          >
-            FeatureValues:
-          </h3>
-          <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-            <pre><code>{{ featureValues }}</code></pre>
-          </div>
+      </div>
+      <div class="flex max-w-xl flex-col items-start">
+        <h3
+          class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+        >
+          FeatureValues:
+        </h3>
+        <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+          <pre><code>{{ featureValues }}</code></pre>
         </div>
       </div>
     </div>
+    <ConfirmDialog></ConfirmDialog>
+    <Toast />
   </main>
-  <ConfirmDialog></ConfirmDialog>
-  <Toast />
 </template>
 
-<style scoped lang="scss">
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>
+<style scoped lang="scss"></style>

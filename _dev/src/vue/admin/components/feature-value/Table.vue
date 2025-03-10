@@ -22,41 +22,55 @@ const filters = ref({
 </script>
 
 <template>
-  <DataTable
-    v-model:selection="selectedFeatureValues"
-    :value="featureValues"
-    dataKey="id_feature_value"
-    removableSort
-    paginator
-    :rows="10"
-    :rowsPerPageOptions="[5, 10, 20, 50]"
-    v-model:filters="filters"
-    :globalFilterFields="['custom', 'id_feature_value', 'value']"
-    :loading="loading"
-  >
-    <template #header>
-      <div class="flex justify-end">
-        <InputText
-          v-model="filters['global'].value"
-          placeholder="Keyword Search"
-        />
-      </div>
-    </template>
-    <template #empty>No feature values found.</template>
-    <template #loading>Loading feature values data. Please wait.</template>
-    <Column selectionMode="multiple" header="Select"></Column>
-    <Column field="id_feature_value" header="ID" sortable></Column>
-    <Column field="value" header="Value"></Column>
-    <Column field="custom" header="Is custom"></Column>
-    <Column header="Action">
-      <template #body="{ data }">
-        <FeatureValueDelete
-          :feature-id="feature.id_feature"
-          :feature-value-id="data.id_feature_value"
-        />
+  <Transition name="fade" mode="out-in" appear>
+    <DataTable
+      v-model:selection="selectedFeatureValues"
+      :value="featureValues"
+      dataKey="id_feature_value"
+      removableSort
+      paginator
+      :rows="10"
+      :rowsPerPageOptions="[5, 10, 20, 50]"
+      v-model:filters="filters"
+      :globalFilterFields="['custom', 'id_feature_value', 'value']"
+      :loading="loading"
+      v-show="featureValues"
+      class="border-t border-gray-200"
+    >
+      <template #header>
+        <div class="flex justify-end">
+          <InputText
+            v-model="filters['global'].value"
+            placeholder="Keyword Search"
+          />
+        </div>
       </template>
-    </Column>
-  </DataTable>
+      <template #empty>No feature values found.</template>
+      <template #loading>Loading feature values data. Please wait.</template>
+      <Column selectionMode="multiple" header="Select"></Column>
+      <Column field="id_feature_value" header="ID" sortable></Column>
+      <Column field="value" header="Value"></Column>
+      <Column field="custom" header="Is custom"></Column>
+      <Column header="Action">
+        <template #body="{ data }">
+          <FeatureValueDelete
+            :feature-id="feature.id_feature"
+            :feature-value-id="data.id_feature_value"
+          />
+        </template>
+      </Column>
+    </DataTable>
+  </Transition>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
