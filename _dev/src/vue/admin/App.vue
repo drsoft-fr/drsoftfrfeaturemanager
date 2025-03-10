@@ -164,10 +164,10 @@ featureGetAll()
 <template>
   <main class="sm:text-lg">
     <div
-      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-5 bg-white dark:bg-gray-900 rounded-md"
+      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto grid grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:grid-cols-5 bg-white dark:bg-gray-900 rounded-md"
     >
-      <div class="flex max-w-xl flex-col col-span-2 gap-8">
-        <div class="grid max-w-2xl grid-cols-2 gap-8">
+      <div class="flex flex-col col-span-2 gap-8">
+        <div class="grid grid-cols-2 gap-8">
           <div>
             <FeatureSelect />
             <div class="mt-3 text-right">
@@ -179,18 +179,18 @@ featureGetAll()
         <FeatureValueTable />
         <FeatureValueCreate />
       </div>
-      <div class="flex max-w-xl flex-col items-start"></div>
-      <div class="flex max-w-xl flex-col items-start col-span-2"></div>
+      <div class="flex flex-col items-start"></div>
+      <div class="flex flex-col items-start col-span-2"></div>
     </div>
     <div
-      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto mt-10 max-w-2xl sm:mt-16 lg:mx-0 lg:max-w-none bg-white dark:bg-gray-900 rounded-md"
+      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto mt-10 sm:mt-16 lg:mx-0 bg-white dark:bg-gray-900 rounded-md"
     >
       <ProductTable />
     </div>
     <div
-      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:mt-16 lg:mx-0 lg:max-w-none lg:grid-cols-4 bg-white dark:bg-gray-900 rounded-md"
+      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto mt-10 grid grid-cols-1 gap-x-8 gap-y-16 sm:mt-16 lg:mx-0 lg:grid-cols-4 bg-white dark:bg-gray-900 rounded-md"
     >
-      <div class="flex max-w-xl flex-col items-start">
+      <div class="flex flex-col items-start">
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
@@ -200,7 +200,7 @@ featureGetAll()
           <pre><code>{{ selectedFeature }}</code></pre>
         </div>
       </div>
-      <div class="flex max-w-xl flex-col items-start">
+      <div class="flex flex-col items-start">
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
@@ -210,7 +210,7 @@ featureGetAll()
           <pre><code>{{ features }}</code></pre>
         </div>
       </div>
-      <div class="flex max-w-xl flex-col items-start">
+      <div class="flex flex-col items-start">
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
@@ -220,7 +220,7 @@ featureGetAll()
           <pre><code>{{ selectedFeatureValues }}</code></pre>
         </div>
       </div>
-      <div class="flex max-w-xl flex-col items-start">
+      <div class="flex flex-col items-start">
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
@@ -230,7 +230,7 @@ featureGetAll()
           <pre><code>{{ featureValues }}</code></pre>
         </div>
       </div>
-      <div class="flex max-w-xl flex-col items-start">
+      <div class="flex flex-col items-start">
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
@@ -240,7 +240,7 @@ featureGetAll()
           <pre><code>{{ products }}</code></pre>
         </div>
       </div>
-      <div class="flex max-w-xl flex-col items-start">
+      <div class="flex flex-col items-start">
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
