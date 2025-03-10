@@ -11,7 +11,7 @@ const loading = ref(false)
 const toast = useToast()
 const handleFeatureValueCreate = async (event) => {
   loading.value = true
-  const featureId = parseInt(event.currentTarget.dataset.featureId || '')
+  const featureId = parseInt(feature.value.id_feature || '')
   await create(event.currentTarget)
   await get(featureId)
   loading.value = false
@@ -29,7 +29,6 @@ const handleFeatureValueCreate = async (event) => {
     <form
       v-show="feature.id_feature"
       @submit.prevent="handleFeatureValueCreate"
-      :data-feature-id="feature.id_feature"
     >
       <input type="hidden" name="id_feature" :value="feature.id_feature" />
       <div class="flex flex-col gap-2">
