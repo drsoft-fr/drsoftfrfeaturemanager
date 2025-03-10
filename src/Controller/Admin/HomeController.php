@@ -68,6 +68,7 @@ final class HomeController extends FrameworkBundleAdminController
                     'featureValueCreate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_create'),
                     'featureValueDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete'),
                     'featureValueGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_get'),
+                    'productGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_get'),
                 ]
             ]
         ]);
@@ -318,15 +319,24 @@ final class HomeController extends FrameworkBundleAdminController
      * @param Request $request
      *
      * @return JsonResponse
-     *
-     * @throws InvalidFeatureValueIdException
      */
     public function ajaxProductGetAction(Request $request): JsonResponse
     {
         $featureId = $request->request->getInt('id_feature', 0);
-        $featureValueId = $request->request->getInt('id_feature_value', 0);
+        $featureValueIds = explode(',', $request->request->get('id_feature_values', ''));
+        $a = [];
 
-        if (0 >= $featureId || 0 >= $featureValueId) {
+        foreach ($featureValueIds as $featureValueId) {
+            $featureValueId = (int)$featureValueId;
+
+            if (0 >= $featureValueId) {
+                continue;
+            }
+
+            $a[] = $featureValueId;
+        }
+
+        if (0 >= $featureId) {
             return $this->json([]);
         }
 
@@ -335,7 +345,7 @@ final class HomeController extends FrameworkBundleAdminController
             ->getGetProductsByFeatureValueIdQueryHandler()
             ->handle(
                 new FeatureId($featureId),
-                new FeatureValueId($featureValueId),
+                $a,
                 $query
             );
 
