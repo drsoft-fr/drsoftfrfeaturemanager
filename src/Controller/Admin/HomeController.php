@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace DrSoftFr\Module\FeatureManager\Controller\Admin;
 
+use DrSoftFr\Module\FeatureManager\Adapter\QueryHandler\Product\GetProductsByFeatureValueIdQueryHandler;
+use DrSoftFr\Module\FeatureManager\Query\Product\GetProductsByFeatureValueIdQuery;
 use DrSoftFr\PrestaShopModuleHelper\Domain\Asset\Package;
 use DrSoftFr\PrestaShopModuleHelper\Domain\Asset\VersionStrategy\JsonManifestVersionStrategy;
 use PrestaShop\PrestaShop\Adapter\Feature\Repository\FeatureRepository;
 use PrestaShop\PrestaShop\Adapter\Feature\Repository\FeatureValueRepository;
+use PrestaShop\PrestaShop\Core\Domain\Feature\Exception\InvalidFeatureValueIdException;
+use PrestaShop\PrestaShop\Core\Domain\Feature\ValueObject\FeatureId;
+use PrestaShop\PrestaShop\Core\Domain\Feature\ValueObject\FeatureValueId;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use PrestaShopBundle\Security\Annotation\AdminSecurity;
 use PrestaShopBundle\Security\Annotation\ModuleActivated;
@@ -304,6 +309,40 @@ final class HomeController extends FrameworkBundleAdminController
     }
 
     /**
+     * @AdminSecurity(
+     *     "is_granted(['read'], request.get('_legacy_controller'))",
+     *     redirectRoute="admin_module_manage",
+     *     message="Access denied."
+     * )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     *
+     * @throws InvalidFeatureValueIdException
+     */
+    public function ajaxProductGetAction(Request $request): JsonResponse
+    {
+        $featureId = $request->request->getInt('id_feature', 0);
+        $featureValueId = $request->request->getInt('id_feature_value', 0);
+
+        if (0 >= $featureId || 0 >= $featureValueId) {
+            return $this->json([]);
+        }
+
+        $query = $this->getGetProductsByFeatureValueIdQuery();
+        $products = $this
+            ->getGetProductsByFeatureValueIdQueryHandler()
+            ->handle(
+                new FeatureId($featureId),
+                new FeatureValueId($featureValueId),
+                $query
+            );
+
+        return $this->json($products);
+    }
+
+    /**
      * @return FeatureRepository
      */
     private function getFeatureRepository(): FeatureRepository
@@ -319,5 +358,23 @@ final class HomeController extends FrameworkBundleAdminController
     {
         /* @type FeatureValueRepository */
         return $this->get('PrestaShop\PrestaShop\Adapter\Feature\Repository\FeatureValueRepository');
+    }
+
+    /**
+     * @return GetProductsByFeatureValueIdQuery
+     */
+    private function getGetProductsByFeatureValueIdQuery(): GetProductsByFeatureValueIdQuery
+    {
+        /* @type GetProductsByFeatureValueIdQuery */
+        return $this->get('drsoft_fr.module.feature_manager.query.product.get_products_by_feature_value_id_query');
+    }
+
+    /**
+     * @return GetProductsByFeatureValueIdQueryHandler
+     */
+    private function getGetProductsByFeatureValueIdQueryHandler(): GetProductsByFeatureValueIdQueryHandler
+    {
+        /* @type GetProductsByFeatureValueIdQueryHandler */
+        return $this->get('drsoft_fr.module.feature_manager.adapter.query_handler.product.get_products_by_feature_value_id_query_handler');
     }
 }

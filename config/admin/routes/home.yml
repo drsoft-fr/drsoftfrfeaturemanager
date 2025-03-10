@@ -55,3 +55,11 @@ admin_drsoft_fr_feature_manager_home_ajax_feature_value_get:
         _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueGetAction
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
         _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueGet
+
+admin_drsoft_fr_feature_manager_home_ajax_product_get:
+    path: /ajax/product/get
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxProductGetAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductGet
