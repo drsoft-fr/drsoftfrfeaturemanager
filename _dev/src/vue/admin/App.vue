@@ -38,6 +38,7 @@ const featureDelete = async (featureId) => {
     method: 'POST',
     body: form,
   })
+  selectedFeature.value = { id_feature: 0, name: 'Sample feature' }
 }
 
 const featureGetAll = async () => {
@@ -64,6 +65,10 @@ const featureValueDelete = async (featureValueId) => {
     method: 'POST',
     body: form,
   })
+
+  selectedFeatureValues.value = selectedFeatureValues.value.filter(
+    (featureValue) => featureValue.id_feature_value !== featureValueId,
+  )
 }
 
 const featureValueGet = async (featureId) => {

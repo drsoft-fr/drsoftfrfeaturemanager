@@ -43,7 +43,6 @@ const handleFeatureDelete = async () => {
       }
 
       await featureDelete(featureId)
-      feature.value = { id_feature: 0, name: 'Sample feature' }
       await getAll()
 
       loading.value = false
