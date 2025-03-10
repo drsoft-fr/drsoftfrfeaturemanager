@@ -13,10 +13,13 @@ const features = ref([])
 const featureValues = ref([])
 const selectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
 const selectedFeatureValues = ref([])
+const featureValueTableLoading = ref(false)
 
 watch(selectedFeature, async () => {
+  featureValueTableLoading.value = true
   selectedFeatureValues.value = []
   await featureValueGet(selectedFeature.value.id_feature)
+  featureValueTableLoading.value = false
 })
 
 const featureCreate = async (elm) => {
@@ -93,6 +96,7 @@ provide('featureValue', {
   create: readonly(featureValueCreate),
   delete: readonly(featureValueDelete),
   featureValues: readonly(featureValues),
+  featureValueTableLoading,
   get: readonly(featureValueGet),
   selectedFeatureValues,
 })

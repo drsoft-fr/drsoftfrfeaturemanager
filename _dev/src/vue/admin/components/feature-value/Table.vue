@@ -7,7 +7,11 @@ import { FilterMatchMode } from '@primevue/core/api'
 import FeatureValueDelete from '@/vue/admin/components/feature-value/Delete.vue'
 
 const { feature } = inject('feature')
-const { featureValues, selectedFeatureValues } = inject('featureValue')
+const {
+  featureValues,
+  featureValueTableLoading: loading,
+  selectedFeatureValues,
+} = inject('featureValue')
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -28,6 +32,7 @@ const filters = ref({
     :rowsPerPageOptions="[5, 10, 20, 50]"
     v-model:filters="filters"
     :globalFilterFields="['custom', 'id_feature_value', 'value']"
+    :loading="loading"
   >
     <template #header>
       <div class="flex justify-end">
@@ -37,8 +42,8 @@ const filters = ref({
         />
       </div>
     </template>
-    <template #empty>No customers found.</template>
-    <template #loading>Loading customers data. Please wait.</template>
+    <template #empty>No feature values found.</template>
+    <template #loading>Loading feature values data. Please wait.</template>
     <Column selectionMode="multiple" header="Select"></Column>
     <Column field="id_feature_value" header="ID" sortable></Column>
     <Column field="value" header="Value"></Column>

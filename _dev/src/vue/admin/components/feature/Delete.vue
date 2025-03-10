@@ -5,6 +5,7 @@ import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
 
 const { delete: featureDelete, feature, getAll } = inject('feature')
+const { featureValueTableLoading } = inject('featureValue')
 const loading = ref(false)
 const confirm = useConfirm()
 const toast = useToast()
@@ -25,6 +26,7 @@ const handleFeatureDelete = async () => {
     },
     accept: async () => {
       loading.value = true
+      featureValueTableLoading.value = true
       const featureId = parseInt(feature.value.id_feature || '')
 
       if (0 >= featureId || isNaN(featureId)) {
@@ -44,6 +46,7 @@ const handleFeatureDelete = async () => {
       await getAll()
 
       loading.value = false
+      featureValueTableLoading.value = false
       toast.add({
         severity: 'success',
         summary: 'Confirmed',
