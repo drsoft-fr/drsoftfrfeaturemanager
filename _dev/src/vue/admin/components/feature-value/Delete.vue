@@ -7,9 +7,17 @@ import { useToast } from 'primevue/usetoast'
 const props = defineProps({
   featureId: Number,
   featureValueId: Number,
+  selection: {
+    type: String,
+    required: true,
+    validator(value, props) {
+      return ['left', 'right'].includes(value)
+    },
+  },
 })
 
 const { delete: featureValueDelete, get } = inject('featureValue')
+const { leftSelectedFeature, rightSelectedFeature } = inject('feature')
 const loading = ref(false)
 const confirm = useConfirm()
 const toast = useToast()
@@ -32,7 +40,12 @@ const handleFeatureValueDelete = async () => {
       loading.value = true
 
       await featureValueDelete(props.featureValueId)
-      await get(props.featureId)
+      await get(
+        props.featureId,
+        props.selection,
+        leftSelectedFeature.value.id_feature ===
+          rightSelectedFeature.value.id_feature,
+      )
 
       loading.value = false
       toast.add({

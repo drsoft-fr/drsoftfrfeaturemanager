@@ -5,18 +5,48 @@ import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
 import { useToast } from 'primevue/usetoast'
 
-const { feature } = inject('feature')
-const { create, featureValueTableLoading, get } = inject('featureValue')
+const { leftSelectedFeature, rightSelectedFeature } = inject('feature')
+const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
+  inject('featureValue')
+const { create, get } = inject('featureValue')
+
+const props = defineProps({
+  selection: {
+    type: String,
+    required: true,
+    validator(value, props) {
+      return ['left', 'right'].includes(value)
+    },
+  },
+})
+
+let tableLoading
+let selectedFeature
+
+if ('left' === props.selection) {
+  tableLoading = leftFeatureValueTableLoading
+  selectedFeature = leftSelectedFeature
+} else {
+  tableLoading = rightFeatureValueTableLoading
+  selectedFeature = rightSelectedFeature
+}
+
 const loading = ref(false)
 const toast = useToast()
+
 const handleFeatureValueCreate = async (event) => {
   loading.value = true
-  featureValueTableLoading.value = true
-  const featureId = parseInt(feature.value.id_feature || '')
+  tableLoading.value = true
+  const featureId = parseInt(selectedFeature.value.id_feature || '')
   await create(event.currentTarget)
-  await get(featureId)
+  await get(
+    featureId,
+    props.selection,
+    leftSelectedFeature.value.id_feature ===
+      rightSelectedFeature.value.id_feature,
+  )
   loading.value = false
-  featureValueTableLoading.value = false
+  tableLoading.value = false
   toast.add({
     severity: 'success',
     summary: 'Confirmed',
@@ -29,13 +59,17 @@ const handleFeatureValueCreate = async (event) => {
 <template>
   <Transition name="fade" mode="out-in" appear>
     <form
-      v-show="feature.id_feature"
+      v-show="selectedFeature.id_feature"
       @submit.prevent="handleFeatureValueCreate"
     >
-      <input type="hidden" name="id_feature" :value="feature.id_feature" />
+      <input
+        type="hidden"
+        name="id_feature"
+        :value="selectedFeature.id_feature"
+      />
       <div class="flex flex-col gap-2">
         <label for="create-feature-value">
-          Create value for {{ feature.name }} feature
+          Create value for {{ selectedFeature.name }} feature
         </label>
         <InputText
           placeholder="Feature value name"

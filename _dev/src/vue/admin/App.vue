@@ -11,38 +11,52 @@ import Toast from 'primevue/toast'
 
 const { drsoftfrfeaturemanager } = window
 const features = ref([])
-const featureValues = ref([])
+const leftFeatureValues = ref([])
+const rightFeatureValues = ref([])
 const products = ref([])
-const selectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
-const selectedFeatureValues = ref([])
-const selectedFeatureValueIds = computed(() =>
-  selectedFeatureValues.value.map(
+const leftSelectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
+const rightSelectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
+const leftSelectedFeatureValues = ref([])
+const rightSelectedFeatureValue = ref()
+const leftSelectedFeatureValueIds = computed(() =>
+  leftSelectedFeatureValues.value.map(
     (featureValue) => featureValue.id_feature_value,
   ),
 )
+const rightSelectedFeatureValueIds = computed(() => [
+  rightSelectedFeatureValue.value.id_feature_value,
+])
 const selectedProducts = ref([])
 const selectedProductIds = computed(() =>
   selectedProducts.value.map((product) => product.id_product),
 )
-const featureValueTableLoading = ref(false)
+const leftFeatureValueTableLoading = ref(false)
+const rightFeatureValueTableLoading = ref(false)
 const productTableLoading = ref(false)
 
-watch(selectedFeature, async () => {
-  featureValueTableLoading.value = true
+watch(leftSelectedFeature, async () => {
+  leftFeatureValueTableLoading.value = true
   productTableLoading.value = true
-  selectedFeatureValues.value = []
+  leftSelectedFeatureValues.value = []
   selectedProducts.value = []
-  await featureValueGet(selectedFeature.value.id_feature)
-  featureValueTableLoading.value = false
+  await featureValueGet(leftSelectedFeature.value.id_feature, 'left')
+  leftFeatureValueTableLoading.value = false
   productTableLoading.value = false
 })
 
-watch(selectedFeatureValues, async () => {
+watch(rightSelectedFeature, async () => {
+  rightFeatureValueTableLoading.value = true
+  rightSelectedFeatureValue.value = undefined
+  await featureValueGet(rightSelectedFeature.value.id_feature, 'right')
+  rightFeatureValueTableLoading.value = false
+})
+
+watch(leftSelectedFeatureValues, async () => {
   productTableLoading.value = true
   selectedProducts.value = []
   await productGet(
-    selectedFeature.value.id_feature,
-    selectedFeatureValueIds.value,
+    leftSelectedFeature.value.id_feature,
+    leftSelectedFeatureValueIds.value,
   )
   productTableLoading.value = false
 })
@@ -54,7 +68,7 @@ const featureCreate = async (elm) => {
   })
   const { id_feature, name } = await res.json()
 
-  selectedFeature.value = { id_feature, name }
+  leftSelectedFeature.value = { id_feature, name }
 }
 
 const featureDelete = async (featureId) => {
@@ -66,13 +80,18 @@ const featureDelete = async (featureId) => {
     method: 'POST',
     body: form,
   })
-  selectedFeature.value = { id_feature: 0, name: 'Sample feature' }
+  leftSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
+
+  if (featureId === rightSelectedFeature.value.id_feature) {
+    rightSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
+  }
 }
 
 const featureGetAll = async () => {
   const res = await fetch(drsoftfrfeaturemanager.routes.featureGetAll)
   features.value = await res.json()
-  featureValues.value = []
+  leftFeatureValues.value = []
+  rightFeatureValues.value = []
 
   return features
 }
@@ -94,12 +113,16 @@ const featureValueDelete = async (featureValueId) => {
     body: form,
   })
 
-  selectedFeatureValues.value = selectedFeatureValues.value.filter(
+  leftSelectedFeatureValues.value = leftSelectedFeatureValues.value.filter(
     (featureValue) => featureValue.id_feature_value !== featureValueId,
   )
+
+  if (featureValueId === rightSelectedFeatureValue.value.id_feature_value) {
+    rightSelectedFeatureValue.value = undefined
+  }
 }
 
-const featureValueGet = async (featureId) => {
+const featureValueGet = async (featureId, selection, all = false) => {
   if (typeof featureId !== 'number' || isNaN(featureId) || 0 >= featureId) {
     return []
   }
@@ -113,9 +136,25 @@ const featureValueGet = async (featureId) => {
     body: form,
   })
 
-  featureValues.value = await res.json()
+  const json = await res.json()
 
-  return featureValues
+  if ('left' === selection) {
+    leftFeatureValues.value = json
+
+    if (true === all) {
+      rightFeatureValues.value = json
+    }
+
+    return leftFeatureValues
+  } else {
+    rightFeatureValues.value = json
+
+    if (true === all) {
+      leftFeatureValues.value = json
+    }
+
+    return rightFeatureValues
+  }
 }
 
 const productGet = async (featureId, featureValueIds) => {
@@ -137,18 +176,23 @@ const productGet = async (featureId, featureValueIds) => {
 provide('feature', {
   create: readonly(featureCreate),
   delete: readonly(featureDelete),
-  feature: selectedFeature,
+  leftSelectedFeature,
+  rightSelectedFeature,
   features: readonly(features),
   getAll: readonly(featureGetAll),
 })
 provide('featureValue', {
   create: readonly(featureValueCreate),
   delete: readonly(featureValueDelete),
-  featureValues: readonly(featureValues),
-  featureValueTableLoading,
+  leftFeatureValues: readonly(leftFeatureValues),
+  rightFeatureValues: readonly(rightFeatureValues),
+  leftFeatureValueTableLoading,
+  rightFeatureValueTableLoading,
   get: readonly(featureValueGet),
-  selectedFeatureValueIds: readonly(selectedFeatureValueIds),
-  selectedFeatureValues,
+  leftSelectedFeatureValueIds: readonly(leftSelectedFeatureValueIds),
+  rightSelectedFeatureValueIds: readonly(rightSelectedFeatureValueIds),
+  leftSelectedFeatureValues,
+  rightSelectedFeatureValue,
 })
 provide('product', {
   products: readonly(products),
@@ -167,20 +211,30 @@ featureGetAll()
       class="py-8 px-4 lg:py-16 lg:px-6 mx-auto grid grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:grid-cols-5 bg-white dark:bg-gray-900 rounded-md"
     >
       <div class="flex flex-col col-span-2 gap-8">
-        <div class="grid grid-cols-2 gap-8">
+        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl">
+          Source
+        </h2>
+        <div class="grid grid-cols-2 gap-8 justify-between">
           <div>
-            <FeatureSelect />
+            <FeatureSelect selection="left" />
             <div class="mt-3 text-right">
               <FeatureDelete />
             </div>
           </div>
           <FeatureCreate />
         </div>
-        <FeatureValueTable />
-        <FeatureValueCreate />
+        <FeatureValueTable selection="left" mode="multiple" />
+        <FeatureValueCreate selection="left" />
       </div>
-      <div class="flex flex-col items-start"></div>
-      <div class="flex flex-col items-start col-span-2"></div>
+      <div class="flex flex-col gap-8 justify-between"></div>
+      <div class="flex flex-col col-span-2 gap-8 justify-between">
+        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl">
+          Destination
+        </h2>
+        <FeatureSelect selection="right" />
+        <FeatureValueTable selection="right" mode="single" />
+        <FeatureValueCreate selection="right" />
+      </div>
     </div>
     <div
       class="py-8 px-4 lg:py-16 lg:px-6 mx-auto mt-10 sm:mt-16 lg:mx-0 bg-white dark:bg-gray-900 rounded-md"
@@ -194,10 +248,20 @@ featureGetAll()
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
-          Selected feature:
+          Left Selected feature:
         </h3>
         <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-          <pre><code>{{ selectedFeature }}</code></pre>
+          <pre><code>{{ leftSelectedFeature }}</code></pre>
+        </div>
+      </div>
+      <div class="flex flex-col items-start">
+        <h3
+          class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+        >
+          Right Selected feature:
+        </h3>
+        <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+          <pre><code>{{ rightSelectedFeature }}</code></pre>
         </div>
       </div>
       <div class="flex flex-col items-start">
@@ -214,20 +278,40 @@ featureGetAll()
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
-          Selected featureValues:
+          Left Selected featureValues:
         </h3>
         <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-          <pre><code>{{ selectedFeatureValues }}</code></pre>
+          <pre><code>{{ leftSelectedFeatureValues }}</code></pre>
         </div>
       </div>
       <div class="flex flex-col items-start">
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
-          FeatureValues:
+          Right Selected featureValues:
         </h3>
         <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-          <pre><code>{{ featureValues }}</code></pre>
+          <pre><code>{{ rightSelectedFeatureValue }}</code></pre>
+        </div>
+      </div>
+      <div class="flex flex-col items-start">
+        <h3
+          class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+        >
+          Left FeatureValues:
+        </h3>
+        <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+          <pre><code>{{ leftFeatureValues }}</code></pre>
+        </div>
+      </div>
+      <div class="flex flex-col items-start">
+        <h3
+          class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
+        >
+          Right FeatureValues:
+        </h3>
+        <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
+          <pre><code>{{ rightFeatureValues }}</code></pre>
         </div>
       </div>
       <div class="flex flex-col items-start">

@@ -6,12 +6,48 @@ import InputText from 'primevue/inputtext'
 import { FilterMatchMode } from '@primevue/core/api'
 import FeatureValueDelete from '@/vue/admin/components/feature-value/Delete.vue'
 
-const { feature } = inject('feature')
+const { leftSelectedFeature, rightSelectedFeature } = inject('feature')
 const {
-  featureValues,
-  featureValueTableLoading: loading,
-  selectedFeatureValues,
+  leftFeatureValues,
+  rightFeatureValues,
+  leftSelectedFeatureValues,
+  rightSelectedFeatureValue,
+  leftFeatureValueTableLoading,
+  rightFeatureValueTableLoading,
 } = inject('featureValue')
+
+const props = defineProps({
+  mode: {
+    type: String,
+    required: true,
+    validator(value, props) {
+      return ['multiple', 'single'].includes(value)
+    },
+  },
+  selection: {
+    type: String,
+    required: true,
+    validator(value, props) {
+      return ['left', 'right'].includes(value)
+    },
+  },
+})
+
+let feature
+let loading
+let model
+let value
+if ('left' === props.selection) {
+  feature = leftSelectedFeature
+  loading = leftFeatureValueTableLoading
+  model = leftSelectedFeatureValues
+  value = leftFeatureValues
+} else {
+  feature = rightSelectedFeature
+  loading = rightFeatureValueTableLoading
+  model = rightSelectedFeatureValue
+  value = rightFeatureValues
+}
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -24,8 +60,8 @@ const filters = ref({
 <template>
   <Transition name="fade" mode="out-in" appear>
     <DataTable
-      v-model:selection="selectedFeatureValues"
-      :value="featureValues"
+      v-model:selection="model"
+      :value="value"
       dataKey="id_feature_value"
       removableSort
       paginator
@@ -34,7 +70,7 @@ const filters = ref({
       v-model:filters="filters"
       :globalFilterFields="['custom', 'id_feature_value', 'value']"
       :loading="loading"
-      v-show="featureValues"
+      v-show="value"
       class="border-t border-gray-200"
     >
       <template #header>
@@ -47,7 +83,7 @@ const filters = ref({
       </template>
       <template #empty>No feature values found.</template>
       <template #loading>Loading feature values data. Please wait.</template>
-      <Column selectionMode="multiple" header="Select"></Column>
+      <Column :selectionMode="mode" header="Select"></Column>
       <Column field="id_feature_value" header="ID" sortable></Column>
       <Column field="value" header="Value"></Column>
       <Column field="custom" header="Is custom"></Column>
@@ -56,6 +92,7 @@ const filters = ref({
           <FeatureValueDelete
             :feature-id="feature.id_feature"
             :feature-value-id="data.id_feature_value"
+            :selection
           />
         </template>
       </Column>

@@ -2,14 +2,32 @@
 import { inject } from 'vue'
 import Select from 'primevue/select'
 
-const { feature, features } = inject('feature')
+const { features, leftSelectedFeature, rightSelectedFeature } =
+  inject('feature')
+
+const props = defineProps({
+  selection: {
+    type: String,
+    required: true,
+    validator(value, props) {
+      return ['left', 'right'].includes(value)
+    },
+  },
+})
+
+let model
+if ('left' === props.selection) {
+  model = leftSelectedFeature
+} else {
+  model = rightSelectedFeature
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-2">
     <label for="features">Features</label>
     <Select
-      v-model="feature"
+      v-model="model"
       :options="features"
       filter
       optionLabel="name"

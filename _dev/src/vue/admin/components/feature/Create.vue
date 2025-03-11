@@ -6,16 +6,19 @@ import Message from 'primevue/message'
 import { useToast } from 'primevue/usetoast'
 
 const { create, getAll } = inject('feature')
-const { featureValueTableLoading } = inject('featureValue')
+const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
+  inject('featureValue')
 const loading = ref(false)
 const toast = useToast()
 const handleFeatureCreate = async (event) => {
   loading.value = true
-  featureValueTableLoading.value = true
+  leftFeatureValueTableLoading.value = true
+  rightFeatureValueTableLoading.value = true
   await create(event.currentTarget)
   await getAll()
   loading.value = false
-  featureValueTableLoading.value = false
+  leftFeatureValueTableLoading.value = false
+  rightFeatureValueTableLoading.value = false
   toast.add({
     severity: 'success',
     summary: 'Confirmed',
