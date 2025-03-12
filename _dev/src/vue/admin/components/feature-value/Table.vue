@@ -10,20 +10,13 @@ const { leftSelectedFeature, rightSelectedFeature } = inject('feature')
 const {
   leftFeatureValues,
   rightFeatureValues,
-  leftSelectedFeatureValues,
+  leftSelectedFeatureValue,
   rightSelectedFeatureValue,
   leftFeatureValueTableLoading,
   rightFeatureValueTableLoading,
 } = inject('featureValue')
 
 const props = defineProps({
-  mode: {
-    type: String,
-    required: true,
-    validator(value, props) {
-      return ['multiple', 'single'].includes(value)
-    },
-  },
   selection: {
     type: String,
     required: true,
@@ -40,7 +33,7 @@ let value
 if ('left' === props.selection) {
   feature = leftSelectedFeature
   loading = leftFeatureValueTableLoading
-  model = leftSelectedFeatureValues
+  model = leftSelectedFeatureValue
   value = leftFeatureValues
 } else {
   feature = rightSelectedFeature
@@ -83,7 +76,7 @@ const filters = ref({
       </template>
       <template #empty>No feature values found.</template>
       <template #loading>Loading feature values data. Please wait.</template>
-      <Column :selectionMode="mode" header="Select"></Column>
+      <Column selectionMode="single" header="Select"></Column>
       <Column field="id_feature_value" header="ID" sortable></Column>
       <Column field="value" header="Value"></Column>
       <Column field="custom" header="Is custom"></Column>

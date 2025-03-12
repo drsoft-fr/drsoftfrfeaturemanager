@@ -16,16 +16,14 @@ const rightFeatureValues = ref([])
 const products = ref([])
 const leftSelectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
 const rightSelectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
-const leftSelectedFeatureValues = ref([])
+const leftSelectedFeatureValue = ref()
 const rightSelectedFeatureValue = ref()
-const leftSelectedFeatureValueIds = computed(() =>
-  leftSelectedFeatureValues.value.map(
-    (featureValue) => featureValue.id_feature_value,
-  ),
+const leftSelectedFeatureValueId = computed(
+  () => leftSelectedFeatureValue.value.id_feature_value,
 )
-const rightSelectedFeatureValueIds = computed(() => [
-  rightSelectedFeatureValue.value.id_feature_value,
-])
+const rightSelectedFeatureValueId = computed(
+  () => rightSelectedFeatureValue.value.id_feature_value,
+)
 const selectedProducts = ref([])
 const selectedProductIds = computed(() =>
   selectedProducts.value.map((product) => product.id_product),
@@ -37,7 +35,7 @@ const productTableLoading = ref(false)
 watch(leftSelectedFeature, async () => {
   leftFeatureValueTableLoading.value = true
   productTableLoading.value = true
-  leftSelectedFeatureValues.value = []
+  leftSelectedFeatureValue.value = undefined
   selectedProducts.value = []
   await featureValueGet(leftSelectedFeature.value.id_feature, 'left')
   leftFeatureValueTableLoading.value = false
@@ -51,12 +49,12 @@ watch(rightSelectedFeature, async () => {
   rightFeatureValueTableLoading.value = false
 })
 
-watch(leftSelectedFeatureValues, async () => {
+watch(leftSelectedFeatureValue, async () => {
   productTableLoading.value = true
   selectedProducts.value = []
   await productGet(
     leftSelectedFeature.value.id_feature,
-    leftSelectedFeatureValueIds.value,
+    leftSelectedFeatureValueId.value,
   )
   productTableLoading.value = false
 })
@@ -157,11 +155,11 @@ const featureValueGet = async (featureId, selection, all = false) => {
   }
 }
 
-const productGet = async (featureId, featureValueIds) => {
+const productGet = async (featureId, featureValueId) => {
   const form = new FormData()
 
   form.append('id_feature', featureId.toString())
-  form.append('id_feature_values', featureValueIds.join(','))
+  form.append('id_feature_value', featureValueId.toString())
 
   const res = await fetch(drsoftfrfeaturemanager.routes.productGet, {
     method: 'POST',
@@ -189,9 +187,9 @@ provide('featureValue', {
   leftFeatureValueTableLoading,
   rightFeatureValueTableLoading,
   get: readonly(featureValueGet),
-  leftSelectedFeatureValueIds: readonly(leftSelectedFeatureValueIds),
-  rightSelectedFeatureValueIds: readonly(rightSelectedFeatureValueIds),
-  leftSelectedFeatureValues,
+  leftSelectedFeatureValueId: readonly(leftSelectedFeatureValueId),
+  rightSelectedFeatureValueId: readonly(rightSelectedFeatureValueId),
+  leftSelectedFeatureValue,
   rightSelectedFeatureValue,
 })
 provide('product', {
@@ -223,7 +221,7 @@ featureGetAll()
           </div>
           <FeatureCreate />
         </div>
-        <FeatureValueTable selection="left" mode="multiple" />
+        <FeatureValueTable selection="left" />
         <FeatureValueCreate selection="left" />
       </div>
       <div class="flex flex-col gap-8 justify-between"></div>
@@ -232,7 +230,7 @@ featureGetAll()
           Destination
         </h2>
         <FeatureSelect selection="right" />
-        <FeatureValueTable selection="right" mode="single" />
+        <FeatureValueTable selection="right" />
         <FeatureValueCreate selection="right" />
       </div>
     </div>
@@ -278,17 +276,17 @@ featureGetAll()
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
-          Left Selected featureValues:
+          Left Selected featureValue:
         </h3>
         <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
-          <pre><code>{{ leftSelectedFeatureValues }}</code></pre>
+          <pre><code>{{ leftSelectedFeatureValue }}</code></pre>
         </div>
       </div>
       <div class="flex flex-col items-start">
         <h3
           class="mt-3 text-lg/6 font-semibold text-gray-900 group-hover:text-gray-600"
         >
-          Right Selected featureValues:
+          Right Selected featureValue:
         </h3>
         <div class="mt-5 line-clamp-3 text-sm/6 text-gray-600">
           <pre><code>{{ rightSelectedFeatureValue }}</code></pre>

@@ -319,24 +319,15 @@ final class HomeController extends FrameworkBundleAdminController
      * @param Request $request
      *
      * @return JsonResponse
+     *
+     * @throws InvalidFeatureValueIdException
      */
     public function ajaxProductGetAction(Request $request): JsonResponse
     {
         $featureId = $request->request->getInt('id_feature', 0);
-        $featureValueIds = explode(',', $request->request->get('id_feature_values', ''));
-        $a = [];
+        $featureValueId = $request->request->getInt('id_feature_value', 0);
 
-        foreach ($featureValueIds as $featureValueId) {
-            $featureValueId = (int)$featureValueId;
-
-            if (0 >= $featureValueId) {
-                continue;
-            }
-
-            $a[] = $featureValueId;
-        }
-
-        if (0 >= $featureId) {
+        if (0 >= $featureId || 0 >= $featureValueId) {
             return $this->json([]);
         }
 
@@ -345,7 +336,7 @@ final class HomeController extends FrameworkBundleAdminController
             ->getGetProductsByFeatureValueIdQueryHandler()
             ->handle(
                 new FeatureId($featureId),
-                $a,
+                new FeatureValueId($featureValueId),
                 $query
             );
 
