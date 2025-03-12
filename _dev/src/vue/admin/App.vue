@@ -111,11 +111,17 @@ const featureValueDelete = async (featureValueId) => {
     body: form,
   })
 
-  leftSelectedFeatureValues.value = leftSelectedFeatureValues.value.filter(
-    (featureValue) => featureValue.id_feature_value !== featureValueId,
-  )
+  if (
+    typeof leftSelectedFeatureValue.value !== 'undefined' &&
+    featureValueId === leftSelectedFeatureValue.value.id_feature_value
+  ) {
+    leftSelectedFeatureValue.value = undefined
+  }
 
-  if (featureValueId === rightSelectedFeatureValue.value.id_feature_value) {
+  if (
+    typeof rightSelectedFeatureValue.value !== 'undefined' &&
+    featureValueId === rightSelectedFeatureValue.value.id_feature_value
+  ) {
     rightSelectedFeatureValue.value = undefined
   }
 }
