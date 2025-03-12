@@ -1,0 +1,10 @@
+imports:
+    - { resource: ../common.yml }
+
+services:
+    drsoft_fr.module.feature_manager.domain.feature.product:
+        class: DrSoftFr\Module\FeatureManager\Domain\Feature\Product
+        arguments:
+            - '@doctrine.dbal.default_connection'
+            - '%database_prefix%'
+        public: true

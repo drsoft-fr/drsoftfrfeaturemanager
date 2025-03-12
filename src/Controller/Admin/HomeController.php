@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DrSoftFr\Module\FeatureManager\Controller\Admin;
 
 use DrSoftFr\Module\FeatureManager\Adapter\QueryHandler\Product\GetProductsByFeatureValueIdQueryHandler;
+use DrSoftFr\Module\FeatureManager\Domain\Feature\Product;
 use DrSoftFr\Module\FeatureManager\Query\Product\GetProductsByFeatureValueIdQuery;
 use DrSoftFr\PrestaShopModuleHelper\Domain\Asset\Package;
 use DrSoftFr\PrestaShopModuleHelper\Domain\Asset\VersionStrategy\JsonManifestVersionStrategy;
@@ -68,6 +69,7 @@ final class HomeController extends FrameworkBundleAdminController
                     'featureValueCreate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_create'),
                     'featureValueDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete'),
                     'featureValueGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_get'),
+                    'productDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_delete'),
                     'productGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_get'),
                 ]
             ]
@@ -310,6 +312,71 @@ final class HomeController extends FrameworkBundleAdminController
     }
 
     /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function ajaxProductDeleteAction(Request $request): JsonResponse
+    {
+        try {
+            $formattedProductIds = [];
+            $productIds = explode(',', $request->request->get('id_products', ''));
+            $featureValueId = $request->request->getInt('id_feature_value', 0);
+            $featureId = $request->request->getInt('id_feature', 0);
+
+            foreach ($productIds as $productId) {
+                $productId = (int)$productId;
+
+                if (0 >= $productId) {
+                    continue;
+                }
+
+                $formattedProductIds[] = $productId;
+            }
+
+            if (0 >= $featureId || 0 >= $featureValueId || empty($formattedProductIds)) {
+                return $this->json([]);
+            }
+
+            $service = $this->getProductService();
+
+            if (!$service->bulkDelete(
+                new FeatureId($featureId),
+                new FeatureValueId($featureValueId),
+                $formattedProductIds
+            )) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Failed to delete products',
+                    'id_feature' => $featureId ?? 0,
+                    'id_feature_value' => $featureValueId ?? 0,
+                    'id_products' => $productIds ?? [],
+                ]);
+            }
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Products deleted',
+                'id_feature' => $featureId,
+                'id_feature_value' => $featureValueId,
+                'id_products' => $productIds,
+            ]);
+        } catch (\Throwable $t) {
+            return $this->json([
+                'success' => false,
+                'message' =>
+                    sprintf(
+                        'Error occurred when trying to delete Products [%s]',
+                        $t->getMessage()
+                    ),
+                'id_feature' => $featureId ?? 0,
+                'id_feature_value' => $featureValueId ?? 0,
+                'id_products' => $productIds ?? [],
+            ]);
+        }
+    }
+
+    /**
      * @AdminSecurity(
      *     "is_granted(['read'], request.get('_legacy_controller'))",
      *     redirectRoute="admin_module_manage",
@@ -377,5 +444,14 @@ final class HomeController extends FrameworkBundleAdminController
     {
         /* @type GetProductsByFeatureValueIdQueryHandler */
         return $this->get('drsoft_fr.module.feature_manager.adapter.query_handler.product.get_products_by_feature_value_id_query_handler');
+    }
+
+    /**
+     * @return Product
+     */
+    private function getProductService(): Product
+    {
+        /* @type Product */
+        return $this->get('drsoft_fr.module.feature_manager.domain.feature.product');
     }
 }

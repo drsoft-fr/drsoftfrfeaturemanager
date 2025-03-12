@@ -56,6 +56,14 @@ admin_drsoft_fr_feature_manager_home_ajax_feature_value_get:
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
         _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueGet
 
+admin_drsoft_fr_feature_manager_home_ajax_product_delete:
+    path: /ajax/product/delete
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxProductDeleteAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductDelete
+
 admin_drsoft_fr_feature_manager_home_ajax_product_get:
     path: /ajax/product/get
     methods: [ POST ]

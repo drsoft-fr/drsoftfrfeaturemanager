@@ -4,7 +4,10 @@ import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import { FilterMatchMode } from '@primevue/core/api'
 import InputText from 'primevue/inputtext'
+import ProductDelete from '@/vue/admin/components/product/Delete.vue'
 
+const { leftSelectedFeature } = inject('feature')
+const { leftSelectedFeatureValue } = inject('featureValue')
 const {
   products,
   productTableLoading: loading,
@@ -105,6 +108,15 @@ const filters = ref({
         sortable
       ></Column>
       <Column field="value" header="Feature value"></Column>
+      <Column header="Unlink">
+        <template #body="{ data }">
+          <ProductDelete
+            :feature-id="leftSelectedFeature.id_feature"
+            :feature-value-id="leftSelectedFeatureValue.id_feature_value"
+            :product-ids="[data.id_product]"
+          />
+        </template>
+      </Column>
     </DataTable>
   </Transition>
 </template>

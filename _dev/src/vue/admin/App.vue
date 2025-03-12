@@ -155,6 +155,32 @@ const featureValueGet = async (featureId, selection, all = false) => {
   }
 }
 
+/**
+ * Asynchronously deletes a product by sending a POST request with the specified product ids, feature value id, and feature id.
+ *
+ * @param {Array<number>} productIds - An array of product IDs to be deleted.
+ * @param {number} featureValueId - The ID of the feature value associated with the product.
+ * @param {number} featureId - The ID of the feature associated with the product.
+ *
+ * @returns {void}
+ */
+const productDelete = async (productIds, featureValueId, featureId) => {
+  const form = new FormData()
+
+  form.append('id_products', productIds.join(','))
+  form.append('id_feature_value', featureValueId.toString())
+  form.append('id_feature', featureId.toString())
+
+  await fetch(drsoftfrfeaturemanager.routes.productDelete, {
+    method: 'POST',
+    body: form,
+  })
+
+  selectedProducts.value = selectedProducts.value.filter(
+    (product) => !productIds.includes(product.id_product),
+  )
+}
+
 const productGet = async (featureId, featureValueId) => {
   const form = new FormData()
 
@@ -193,6 +219,7 @@ provide('featureValue', {
   rightSelectedFeatureValue,
 })
 provide('product', {
+  delete: readonly(productDelete),
   products: readonly(products),
   productTableLoading,
   get: readonly(productGet),
