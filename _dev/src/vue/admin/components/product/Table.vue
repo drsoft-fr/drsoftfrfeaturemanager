@@ -81,8 +81,14 @@ const filters = ref({
           </template>
           <template #end>
             <ProductDelete
-              :feature-id="leftSelectedFeature.id_feature"
-              :feature-value-id="leftSelectedFeatureValue.id_feature_value"
+              :feature-id="
+                leftSelectedFeature ? leftSelectedFeature.id_feature : undefined
+              "
+              :feature-value-id="
+                leftSelectedFeatureValue
+                  ? leftSelectedFeatureValue.id_feature_value
+                  : undefined
+              "
               :product-ids="selectedProductIds"
             />
           </template>
@@ -122,8 +128,14 @@ const filters = ref({
       <Column header="Unlink">
         <template #body="{ data }">
           <ProductDelete
-            :feature-id="leftSelectedFeature.id_feature"
-            :feature-value-id="leftSelectedFeatureValue.id_feature_value"
+            :feature-id="
+              leftSelectedFeature ? leftSelectedFeature.id_feature : undefined
+            "
+            :feature-value-id="
+              leftSelectedFeatureValue
+                ? leftSelectedFeatureValue.id_feature_value
+                : undefined
+            "
             :product-ids="[data.id_product]"
           />
         </template>
