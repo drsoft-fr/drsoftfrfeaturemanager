@@ -66,6 +66,7 @@ const handleProductDelete = async () => {
     :loading="loading"
     @click="handleProductDelete"
     severity="danger"
+    :disabled="!(featureId && featureValueId && productIds.length)"
   />
 </template>
 
