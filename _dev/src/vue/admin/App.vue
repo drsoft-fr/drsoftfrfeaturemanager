@@ -270,6 +270,9 @@ featureGetAll()
     <div
       class="py-8 px-4 lg:py-16 lg:px-6 mx-auto mt-10 sm:mt-16 lg:mx-0 bg-white dark:bg-gray-900 rounded-md"
     >
+      <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl">
+        Products
+      </h2>
       <ProductTable />
     </div>
     <div
