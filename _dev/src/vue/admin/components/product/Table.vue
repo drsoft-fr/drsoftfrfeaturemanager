@@ -1,6 +1,7 @@
 <script setup>
 import { inject, ref } from 'vue'
 import DataTable from 'primevue/datatable'
+import Toolbar from 'primevue/toolbar'
 import Column from 'primevue/column'
 import { FilterMatchMode } from '@primevue/core/api'
 import InputText from 'primevue/inputtext'
@@ -12,6 +13,7 @@ const {
   products,
   productTableLoading: loading,
   selectedProducts,
+  selectedProductIds,
 } = inject('product')
 
 const filters = ref({
@@ -70,12 +72,21 @@ const filters = ref({
       stripedRows
     >
       <template #header>
-        <div class="flex justify-end">
-          <InputText
-            v-model="filters['global'].value"
-            placeholder="Keyword Search"
-          />
-        </div>
+        <Toolbar>
+          <template #center>
+            <InputText
+              v-model="filters['global'].value"
+              placeholder="Keyword Search"
+            />
+          </template>
+          <template #end>
+            <ProductDelete
+              :feature-id="leftSelectedFeature.id_feature"
+              :feature-value-id="leftSelectedFeatureValue.id_feature_value"
+              :product-ids="selectedProductIds"
+            />
+          </template>
+        </Toolbar>
       </template>
       <template #empty>No products found.</template>
       <template #loading>Loading products data. Please wait.</template>
