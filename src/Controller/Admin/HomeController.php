@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DrSoftFr\Module\FeatureManager\Controller\Admin;
 
 use DrSoftFr\Module\FeatureManager\Adapter\QueryHandler\Product\GetProductsByFeatureValueIdQueryHandler;
-use DrSoftFr\Module\FeatureManager\Domain\Feature\Product;
+use DrSoftFr\Module\FeatureManager\Domain\Feature\Helper\ProductHelper;
 use DrSoftFr\Module\FeatureManager\Query\Product\GetProductsByFeatureValueIdQuery;
 use DrSoftFr\PrestaShopModuleHelper\Domain\Asset\Package;
 use DrSoftFr\PrestaShopModuleHelper\Domain\Asset\VersionStrategy\JsonManifestVersionStrategy;
@@ -413,7 +413,7 @@ final class HomeController extends FrameworkBundleAdminController
                 return $this->json([]);
             }
 
-            $service = $this->getProductService();
+            $service = $this->getProductHelper();
 
             if (!$service->bulkDelete(
                 new FeatureId($featureId),
@@ -522,11 +522,11 @@ final class HomeController extends FrameworkBundleAdminController
     }
 
     /**
-     * @return Product
+     * @return ProductHelper
      */
-    private function getProductService(): Product
+    private function getProductHelper(): ProductHelper
     {
-        /* @type Product */
-        return $this->get('drsoft_fr.module.feature_manager.domain.feature.product');
+        /* @type ProductHelper */
+        return $this->get('drsoft_fr.module.feature_manager.domain.feature.helper.product_helper');
     }
 }

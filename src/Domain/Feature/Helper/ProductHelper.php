@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace DrSoftFr\Module\FeatureManager\Domain\Feature;
+namespace DrSoftFr\Module\FeatureManager\Domain\Feature\Helper;
 
 use Doctrine\DBAL\Driver\Connection;
 use PrestaShop\PrestaShop\Core\Domain\Feature\ValueObject\FeatureId;
 use PrestaShop\PrestaShop\Core\Domain\Feature\ValueObject\FeatureValueId;
 use PrestaShop\PrestaShop\Core\Domain\Product\Exception\ProductConstraintException;
 
-final class Product
+final class ProductHelper
 {
     /**
      * @var Connection
