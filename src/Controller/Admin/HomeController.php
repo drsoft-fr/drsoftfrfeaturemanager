@@ -68,6 +68,7 @@ final class HomeController extends FrameworkBundleAdminController
                     'featureGetAll' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_get_all'),
                     'featureValueCreate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_create'),
                     'featureValueDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete'),
+                    'featureValueDuplicate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_duplicate'),
                     'featureValueGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_get'),
                     'productDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_delete'),
                     'productGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_get'),
@@ -278,6 +279,80 @@ final class HomeController extends FrameworkBundleAdminController
                         $t->getMessage()
                     ),
                 'id_feature_value' => $featureValueId ?? 0,
+            ]);
+        }
+    }
+
+    /**
+     * @AdminSecurity(
+     *     "is_granted(['read'], request.get('_legacy_controller'))",
+     *     redirectRoute="admin_module_manage",
+     *     message="Access denied."
+     * )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     *
+     * @throws InvalidFeatureValueIdException
+     */
+    public function ajaxFeatureValueDuplicateAction(Request $request): JsonResponse
+    {
+        try {
+            $featureId = $request->request->getInt('id_feature', 0);
+            $featureValueId = $request->request->getInt('id_feature_value', 0);
+
+            if (0 >= $featureId || 0 >= $featureValueId) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Invalid FeatureId or id_feature_value',
+                    'id_feature' => $featureId ?? 0,
+                    'id_feature_value' => $featureValueId ?? 0,
+                ]);
+            }
+
+            $obj = new \FeatureValue($featureValueId);
+
+            if (!\Validate::isLoadedObject($obj)) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Feature value not found',
+                    'id_feature_value' => $featureValueId ?? 0,
+                ]);
+            }
+
+            $obj->id = null;
+            $obj->id_feature_value = null;
+            $obj->id_feature = $featureId;
+            $obj->force_id = false;
+
+            if (!$obj->add()) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Failed to duplicate FeatureValue',
+                    'old_id_feature_value' => $featureValueId ?? 0,
+                    'id_feature' => $obj->feature_id ?? 0,
+                ]);
+            }
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Feature value duplicated',
+                'id_feature' => $obj->feature_id ?? 0,
+                'value' => $obj->value ?? '',
+                'id_feature_value' => $obj->id ?? 0,
+                'old_id_feature_value' => $featureValueId ?? 0,
+            ]);
+        } catch (\Throwable $t) {
+            return $this->json([
+                'success' => false,
+                'message' =>
+                    sprintf(
+                        'Error occurred when trying to duplicate FeatureValue [%s]',
+                        $t->getMessage()
+                    ),
+                'id_feature' => $featureId ?? 0,
+                'old_id_feature' => $featureValueId ?? 0,
             ]);
         }
     }

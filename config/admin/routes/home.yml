@@ -48,6 +48,14 @@ admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete:
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
         _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueDelete
 
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_duplicate:
+    path: /ajax/feature-value/duplicate
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueDuplicateAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueDuplicate
+
 admin_drsoft_fr_feature_manager_home_ajax_feature_value_get:
     path: /ajax/feature-value/get
     methods: [ POST ]

@@ -5,6 +5,7 @@ import FeatureCreate from '@/vue/admin/components/feature/Create.vue'
 import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
 import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
 import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
+import FeatureValueDuplicate from '@/vue/admin/components/feature-value/Duplicate.vue'
 import FeatureValueTable from '@/vue/admin/components/feature-value/Table.vue'
 import ProductTable from '@/vue/admin/components/product/Table.vue'
 import Toast from 'primevue/toast'
@@ -274,30 +275,41 @@ featureGetAll()
     <div
       class="py-8 px-4 lg:py-16 lg:px-6 mx-auto grid grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:grid-cols-5 bg-white dark:bg-gray-900 rounded-md"
     >
-      <div class="flex flex-col col-span-2 gap-8">
+      <div class="col-span-2">
         <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl">
           Source
         </h2>
-        <div class="grid grid-cols-2 gap-8 justify-between">
-          <div>
-            <FeatureSelect selection="left" />
-            <div class="mt-3 text-right">
-              <FeatureDelete />
+        <div class="flex flex-col gap-8">
+          <div class="grid grid-cols-2 gap-8 justify-between">
+            <div>
+              <FeatureSelect selection="left" />
+              <div class="mt-3 text-right">
+                <FeatureDelete />
+              </div>
             </div>
+            <FeatureCreate />
           </div>
-          <FeatureCreate />
+          <FeatureValueTable selection="left" />
+          <FeatureValueCreate selection="left" />
         </div>
-        <FeatureValueTable selection="left" />
-        <FeatureValueCreate selection="left" />
       </div>
-      <div class="flex flex-col gap-8 justify-between"></div>
-      <div class="flex flex-col col-span-2 gap-8 justify-between">
+      <div>
+        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl">
+          Action
+        </h2>
+        <div class="flex flex-col gap-8 justify-between">
+          <FeatureValueDuplicate />
+        </div>
+      </div>
+      <div class="col-span-2">
         <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl">
           Destination
         </h2>
-        <FeatureSelect selection="right" />
-        <FeatureValueTable selection="right" />
-        <FeatureValueCreate selection="right" />
+        <div class="flex flex-col gap-8 justify-between">
+          <FeatureSelect selection="right" />
+          <FeatureValueTable selection="right" />
+          <FeatureValueCreate selection="right" />
+        </div>
       </div>
     </div>
     <div
