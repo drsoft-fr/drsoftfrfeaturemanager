@@ -136,6 +136,26 @@ const featureValueDelete = async (featureValueId) => {
   }
 }
 
+/**
+ * Duplicates a feature value by sending a POST request to the server.
+ *
+ * @param {number} featureValueId - The ID of the feature value to be duplicated.
+ * @param {number} featureId - The ID of the feature associated with the value.
+ *
+ * @returns {Promise<void>} - A promise that resolves once the duplication request is completed.
+ */
+const featureValueDuplicate = async (featureValueId, featureId) => {
+  const form = new FormData()
+
+  form.append('id_feature_value', featureValueId.toString())
+  form.append('id_feature', featureId.toString())
+
+  await fetch(drsoftfrfeaturemanager.routes.featureValueDuplicate, {
+    method: 'POST',
+    body: form,
+  })
+}
+
 const featureValueGet = async (featureId, selection, all = false) => {
   if (typeof featureId !== 'number' || isNaN(featureId) || 0 >= featureId) {
     return []
@@ -226,6 +246,7 @@ provide('feature', {
 provide('featureValue', {
   create: readonly(featureValueCreate),
   delete: readonly(featureValueDelete),
+  duplicate: readonly(featureValueDuplicate),
   leftFeatureValues: readonly(leftFeatureValues),
   rightFeatureValues: readonly(rightFeatureValues),
   leftFeatureValueTableLoading,
