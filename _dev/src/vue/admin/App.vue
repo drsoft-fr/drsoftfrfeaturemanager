@@ -16,6 +16,12 @@ const rightFeatureValues = ref([])
 const products = ref([])
 const leftSelectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
 const rightSelectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
+const leftSelectedFeatureId = computed(() =>
+  leftSelectedFeature.value ? leftSelectedFeature.value.id_feature : 0,
+)
+const rightSelectedFeatureId = computed(() =>
+  rightSelectedFeature.value ? rightSelectedFeature.value.id_feature : 0,
+)
 const leftSelectedFeatureValue = ref()
 const rightSelectedFeatureValue = ref()
 const leftSelectedFeatureValueId = computed(() =>
@@ -212,6 +218,8 @@ provide('feature', {
   delete: readonly(featureDelete),
   leftSelectedFeature,
   rightSelectedFeature,
+  leftSelectedFeatureId: readonly(leftSelectedFeatureId),
+  rightSelectedFeatureId: readonly(rightSelectedFeatureId),
   features: readonly(features),
   getAll: readonly(featureGetAll),
 })
