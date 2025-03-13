@@ -18,11 +18,15 @@ const leftSelectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
 const rightSelectedFeature = ref({ name: 'Sample feature', id_feature: 0 })
 const leftSelectedFeatureValue = ref()
 const rightSelectedFeatureValue = ref()
-const leftSelectedFeatureValueId = computed(
-  () => leftSelectedFeatureValue.value.id_feature_value,
+const leftSelectedFeatureValueId = computed(() =>
+  leftSelectedFeatureValue.value
+    ? leftSelectedFeatureValue.value.id_feature_value
+    : 0,
 )
-const rightSelectedFeatureValueId = computed(
-  () => rightSelectedFeatureValue.value.id_feature_value,
+const rightSelectedFeatureValueId = computed(() =>
+  rightSelectedFeatureValue.value
+    ? rightSelectedFeatureValue.value.id_feature_value
+    : 0,
 )
 const selectedProducts = ref([])
 const selectedProductIds = computed(() =>
