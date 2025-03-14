@@ -234,6 +234,40 @@ const productGet = async (featureId, featureValueId) => {
   return products
 }
 
+/**
+ * Relocates a product to a new feature value within a given feature.
+ *
+ * @param {Array<number>} productIds - Array of product IDs to relocate.
+ * @param {number} newFeatureValueId - ID of the new feature value to assign to the product.
+ * @param {number} newFeatureId - ID of the new feature in which the product will be located.
+ * @param {number} featureValueId - ID of the current feature value of the product.
+ * @param {number} featureId - ID of the feature where the product is currently located.
+ *
+ * @returns {Promise<Object>} - A promise that resolves to the JSON response from the API after relocating the product.
+ */
+const productRelocate = async (
+  productIds,
+  newFeatureValueId,
+  newFeatureId,
+  featureValueId,
+  featureId,
+) => {
+  const form = new FormData()
+
+  form.append('id_products', productIds.join(','))
+  form.append('new_id_feature_value', newFeatureValueId.toString())
+  form.append('new_id_feature', newFeatureId.toString())
+  form.append('id_feature_value', featureValueId.toString())
+  form.append('id_feature', featureId.toString())
+
+  const res = await fetch(drsoftfrfeaturemanager.routes.productRelocate, {
+    method: 'POST',
+    body: form,
+  })
+
+  return await res.json()
+}
+
 provide('feature', {
   create: readonly(featureCreate),
   delete: readonly(featureDelete),
@@ -263,6 +297,7 @@ provide('product', {
   products: readonly(products),
   productTableLoading,
   get: readonly(productGet),
+  relocate: readonly(productRelocate),
   selectedProductIds: readonly(selectedProductIds),
   selectedProducts,
 })

@@ -6,9 +6,11 @@ import Column from 'primevue/column'
 import { FilterMatchMode } from '@primevue/core/api'
 import InputText from 'primevue/inputtext'
 import ProductDelete from '@/vue/admin/components/product/Delete.vue'
+import ProductRelocate from '@/vue/admin/components/product/Relocate.vue'
 
-const { leftSelectedFeature } = inject('feature')
-const { leftSelectedFeatureValue } = inject('featureValue')
+const { leftSelectedFeature, rightSelectedFeature } = inject('feature')
+const { leftSelectedFeatureValue, rightSelectedFeatureValue } =
+  inject('featureValue')
 const {
   products,
   productTableLoading: loading,
@@ -80,17 +82,43 @@ const filters = ref({
             />
           </template>
           <template #end>
-            <ProductDelete
-              :feature-id="
-                leftSelectedFeature ? leftSelectedFeature.id_feature : undefined
-              "
-              :feature-value-id="
-                leftSelectedFeatureValue
-                  ? leftSelectedFeatureValue.id_feature_value
-                  : undefined
-              "
-              :product-ids="selectedProductIds"
-            />
+              <ProductDelete
+                :feature-id="
+                  leftSelectedFeature
+                    ? leftSelectedFeature.id_feature
+                    : undefined
+                "
+                :feature-value-id="
+                  leftSelectedFeatureValue
+                    ? leftSelectedFeatureValue.id_feature_value
+                    : undefined
+                "
+                :product-ids="selectedProductIds"
+              />
+              <ProductRelocate
+                class="ml-3"
+                :new-feature-id="
+                  rightSelectedFeature
+                    ? rightSelectedFeature.id_feature
+                    : undefined
+                "
+                :new-feature-value-id="
+                  rightSelectedFeatureValue
+                    ? rightSelectedFeatureValue.id_feature_value
+                    : undefined
+                "
+                :feature-id="
+                  leftSelectedFeature
+                    ? leftSelectedFeature.id_feature
+                    : undefined
+                "
+                :feature-value-id="
+                  leftSelectedFeatureValue
+                    ? leftSelectedFeatureValue.id_feature_value
+                    : undefined
+                "
+                :product-ids="selectedProductIds"
+              />
           </template>
         </Toolbar>
       </template>
@@ -128,6 +156,29 @@ const filters = ref({
       <Column header="Unlink">
         <template #body="{ data }">
           <ProductDelete
+            :feature-id="
+              leftSelectedFeature ? leftSelectedFeature.id_feature : undefined
+            "
+            :feature-value-id="
+              leftSelectedFeatureValue
+                ? leftSelectedFeatureValue.id_feature_value
+                : undefined
+            "
+            :product-ids="[data.id_product]"
+          />
+        </template>
+      </Column>
+      <Column header="Relocate">
+        <template #body="{ data }">
+          <ProductRelocate
+            :new-feature-id="
+              rightSelectedFeature ? rightSelectedFeature.id_feature : undefined
+            "
+            :new-feature-value-id="
+              rightSelectedFeatureValue
+                ? rightSelectedFeatureValue.id_feature_value
+                : undefined
+            "
             :feature-id="
               leftSelectedFeature ? leftSelectedFeature.id_feature : undefined
             "

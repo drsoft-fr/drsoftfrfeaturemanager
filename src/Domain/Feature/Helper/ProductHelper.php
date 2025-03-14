@@ -76,4 +76,51 @@ final class ProductHelper
 
         return $stmt->execute();
     }
+
+    /**
+     * @param FeatureId $featureId
+     * @param FeatureValueId $featureValueId
+     * @param array $productIds
+     *
+     * @return bool
+     *
+     * @throws ProductConstraintException
+     */
+    public function bulkInsert(
+        FeatureId      $featureId,
+        FeatureValueId $featureValueId,
+        array          $productIds
+    ): bool
+    {
+        if (empty($productIds)) {
+            return true;
+        }
+
+        $values = "";
+
+        foreach ($productIds as $productId) {
+            if ($productId <= 0) {
+                throw new ProductConstraintException(
+                    sprintf('Product id %s is invalid. Product id must be number that is greater than zero.', var_export($productId, true)),
+                    ProductConstraintException::INVALID_ID
+                );
+            }
+
+            if (strlen($values)) {
+                $values .= ",";
+            }
+
+            $values .= "({$featureId->getValue()},{$productId},{$featureValueId->getValue()})";
+        }
+
+        $query = str_replace(
+            '{table_prefix}',
+            $this->tablePrefix,
+            'INSERT IGNORE INTO `{table_prefix}feature_product` (id_feature, id_product, id_feature_value) VALUES ' . pSQL($values) . ';'
+        );
+
+        $stmt = $this->connection->prepare($query);
+
+        return $stmt->execute();
+    }
 }
