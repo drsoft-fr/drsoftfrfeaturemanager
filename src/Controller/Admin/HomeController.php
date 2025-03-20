@@ -70,6 +70,7 @@ final class HomeController extends FrameworkBundleAdminController
                     'featureValueDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete'),
                     'featureValueDuplicate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_duplicate'),
                     'featureValueGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_get'),
+                    'productAddToRightColumn' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_add_to_right_column'),
                     'productDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_delete'),
                     'productGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_get'),
                     'productRelocate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_relocate'),
@@ -570,6 +571,75 @@ final class HomeController extends FrameworkBundleAdminController
                     ),
                 'id_feature' => $featureId ?? 0,
                 'id_feature_value' => $featureValueId ?? 0,
+                'new_id_feature' => $newFeatureId ?? 0,
+                'new_id_feature_value' => $newFeatureValueId ?? 0,
+                'id_products' => $productIds ?? [],
+            ]);
+        }
+    }
+
+    /**
+     * Controller action to add products to the right column via AJAX request.
+     *
+     * @param Request $request The request object containing product data
+     *
+     * @return JsonResponse JSON response indicating success or failure of the operation
+     */
+    public function ajaxProductAddToRightColumnAction(Request $request): JsonResponse
+    {
+        try {
+            $formattedProductIds = [];
+            $productIds = explode(',', $request->request->get('id_products', ''));
+            $newFeatureValueId = $request->request->getInt('new_id_feature_value', 0);
+            $newFeatureId = $request->request->getInt('new_id_feature', 0);
+
+            foreach ($productIds as $productId) {
+                $productId = (int)$productId;
+
+                if (0 >= $productId) {
+                    continue;
+                }
+
+                $formattedProductIds[] = $productId;
+            }
+
+            if (0 >= $newFeatureId || 0 >= $newFeatureValueId || empty($formattedProductIds)) {
+                return $this->json([]);
+            }
+
+            $helper = $this->getProductHelper();
+
+            if (!$helper->bulkInsert(
+                new FeatureId($newFeatureId),
+                new FeatureValueId($newFeatureValueId),
+                $formattedProductIds
+            )) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Failed to insert new products',
+                    'id_feature' => $featureId ?? 0,
+                    'id_feature_value' => $featureValueId ?? 0,
+                    'new_id_feature' => $newFeatureId ?? 0,
+                    'new_id_feature_value' => $newFeatureValueId ?? 0,
+                    'id_products' => $productIds ?? [],
+                ]);
+            }
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Products added to right-hand column',
+                'new_id_feature' => $newFeatureId,
+                'new_id_feature_value' => $newFeatureValueId,
+                'id_products' => $productIds,
+            ]);
+        } catch (\Throwable $t) {
+            return $this->json([
+                'success' => false,
+                'message' =>
+                    sprintf(
+                        'Error when trying to add products [%s]',
+                        $t->getMessage()
+                    ),
                 'new_id_feature' => $newFeatureId ?? 0,
                 'new_id_feature_value' => $newFeatureValueId ?? 0,
                 'id_products' => $productIds ?? [],

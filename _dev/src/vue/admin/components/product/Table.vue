@@ -5,6 +5,7 @@ import Toolbar from 'primevue/toolbar'
 import Column from 'primevue/column'
 import { FilterMatchMode } from '@primevue/core/api'
 import InputText from 'primevue/inputtext'
+import ProductAddToRightColumn from '@/vue/admin/components/product/AddToRightColumn.vue'
 import ProductDelete from '@/vue/admin/components/product/Delete.vue'
 import ProductRelocate from '@/vue/admin/components/product/Relocate.vue'
 
@@ -82,43 +83,61 @@ const filters = ref({
             />
           </template>
           <template #end>
-              <ProductDelete
-                :feature-id="
-                  leftSelectedFeature
-                    ? leftSelectedFeature.id_feature
-                    : undefined
-                "
-                :feature-value-id="
-                  leftSelectedFeatureValue
-                    ? leftSelectedFeatureValue.id_feature_value
-                    : undefined
-                "
-                :product-ids="selectedProductIds"
-              />
-              <ProductRelocate
-                class="ml-3"
-                :new-feature-id="
-                  rightSelectedFeature
-                    ? rightSelectedFeature.id_feature
-                    : undefined
-                "
-                :new-feature-value-id="
-                  rightSelectedFeatureValue
-                    ? rightSelectedFeatureValue.id_feature_value
-                    : undefined
-                "
-                :feature-id="
-                  leftSelectedFeature
-                    ? leftSelectedFeature.id_feature
-                    : undefined
-                "
-                :feature-value-id="
-                  leftSelectedFeatureValue
-                    ? leftSelectedFeatureValue.id_feature_value
-                    : undefined
-                "
-                :product-ids="selectedProductIds"
-              />
+            <ProductDelete
+              :feature-id="
+                leftSelectedFeature ? leftSelectedFeature.id_feature : undefined
+              "
+              :feature-value-id="
+                leftSelectedFeatureValue
+                  ? leftSelectedFeatureValue.id_feature_value
+                  : undefined
+              "
+              :product-ids="selectedProductIds"
+            />
+            <ProductRelocate
+              class="ml-3"
+              :new-feature-id="
+                rightSelectedFeature
+                  ? rightSelectedFeature.id_feature
+                  : undefined
+              "
+              :new-feature-value-id="
+                rightSelectedFeatureValue
+                  ? rightSelectedFeatureValue.id_feature_value
+                  : undefined
+              "
+              :feature-id="
+                leftSelectedFeature ? leftSelectedFeature.id_feature : undefined
+              "
+              :feature-value-id="
+                leftSelectedFeatureValue
+                  ? leftSelectedFeatureValue.id_feature_value
+                  : undefined
+              "
+              :product-ids="selectedProductIds"
+            />
+            <ProductAddToRightColumn
+              class="ml-3"
+              :new-feature-id="
+                rightSelectedFeature
+                  ? rightSelectedFeature.id_feature
+                  : undefined
+              "
+              :new-feature-value-id="
+                rightSelectedFeatureValue
+                  ? rightSelectedFeatureValue.id_feature_value
+                  : undefined
+              "
+              :feature-id="
+                leftSelectedFeature ? leftSelectedFeature.id_feature : undefined
+              "
+              :feature-value-id="
+                leftSelectedFeatureValue
+                  ? leftSelectedFeatureValue.id_feature_value
+                  : undefined
+              "
+              :product-ids="selectedProductIds"
+            />
           </template>
         </Toolbar>
       </template>
@@ -171,6 +190,29 @@ const filters = ref({
       <Column header="Relocate">
         <template #body="{ data }">
           <ProductRelocate
+            :new-feature-id="
+              rightSelectedFeature ? rightSelectedFeature.id_feature : undefined
+            "
+            :new-feature-value-id="
+              rightSelectedFeatureValue
+                ? rightSelectedFeatureValue.id_feature_value
+                : undefined
+            "
+            :feature-id="
+              leftSelectedFeature ? leftSelectedFeature.id_feature : undefined
+            "
+            :feature-value-id="
+              leftSelectedFeatureValue
+                ? leftSelectedFeatureValue.id_feature_value
+                : undefined
+            "
+            :product-ids="[data.id_product]"
+          />
+        </template>
+      </Column>
+      <Column header="Add to right column">
+        <template #body="{ data }">
+          <ProductAddToRightColumn
             :new-feature-id="
               rightSelectedFeature ? rightSelectedFeature.id_feature : undefined
             "

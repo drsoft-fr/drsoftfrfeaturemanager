@@ -268,6 +268,37 @@ const productRelocate = async (
   return await res.json()
 }
 
+/**
+ * Adds a product to the right column with the specified feature values.
+ *
+ * @param {Array<number>} productIds - The array of product IDs to which to add the new feature value.
+ * @param {number} newFeatureValueId - The ID of the new feature value to add to the products.
+ * @param {number} newFeatureId - The ID of the feature to which the new feature value belongs.
+ *
+ * @returns {Promise<Object>} - A Promise that resolves to the response JSON object from the server.
+ */
+const productAddToRightColumn = async (
+  productIds,
+  newFeatureValueId,
+  newFeatureId,
+) => {
+  const form = new FormData()
+
+  form.append('id_products', productIds.join(','))
+  form.append('new_id_feature_value', newFeatureValueId.toString())
+  form.append('new_id_feature', newFeatureId.toString())
+
+  const res = await fetch(
+    drsoftfrfeaturemanager.routes.productAddToRightColumn,
+    {
+      method: 'POST',
+      body: form,
+    },
+  )
+
+  return await res.json()
+}
+
 provide('feature', {
   create: readonly(featureCreate),
   delete: readonly(featureDelete),
@@ -298,6 +329,7 @@ provide('product', {
   productTableLoading,
   get: readonly(productGet),
   relocate: readonly(productRelocate),
+  addToRightColumn: readonly(productAddToRightColumn),
   selectedProductIds: readonly(selectedProductIds),
   selectedProducts,
 })

@@ -87,3 +87,11 @@ admin_drsoft_fr_feature_manager_home_ajax_product_relocate:
         _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxProductRelocateAction
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
         _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductRelocate
+
+admin_drsoft_fr_feature_manager_home_ajax_product_add_to_right_column:
+    path: /ajax/product/add-to-right-column
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxProductAddToRightColumnAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductAddToRightColumn
