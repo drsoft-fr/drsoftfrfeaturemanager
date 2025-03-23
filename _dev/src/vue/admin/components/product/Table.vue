@@ -5,7 +5,7 @@ import Toolbar from 'primevue/toolbar'
 import Column from 'primevue/column'
 import { FilterMatchMode } from '@primevue/core/api'
 import InputText from 'primevue/inputtext'
-import ProductAddToRightColumn from '@/vue/admin/components/product/AddToRightColumn.vue'
+import ProductCopy from '@/vue/admin/components/product/Copy.vue'
 import ProductDelete from '@/vue/admin/components/product/Delete.vue'
 import ProductRelocate from '@/vue/admin/components/product/Relocate.vue'
 
@@ -116,7 +116,7 @@ const filters = ref({
               "
               :product-ids="selectedProductIds"
             />
-            <ProductAddToRightColumn
+            <ProductCopy
               class="ml-3"
               :new-feature-id="
                 rightSelectedFeature
@@ -212,7 +212,7 @@ const filters = ref({
       </Column>
       <Column header="Add to right column">
         <template #body="{ data }">
-          <ProductAddToRightColumn
+          <ProductCopy
             :new-feature-id="
               rightSelectedFeature ? rightSelectedFeature.id_feature : undefined
             "

@@ -11,13 +11,13 @@ const props = defineProps({
   productIds: Array,
 })
 
-const { addToRightColumn, get } = inject('product')
+const { copy, get } = inject('product')
 const loading = ref(false)
 const toast = useToast()
 const handleProductAddToRightColumn = async () => {
   loading.value = true
 
-  const res = await addToRightColumn(
+  const res = await copy(
     props.productIds,
     props.newFeatureValueId,
     props.newFeatureId,
@@ -37,7 +37,7 @@ const handleProductAddToRightColumn = async () => {
 <template>
   <div>
     <Button
-      label="Add to right column"
+      label="Copy"
       type="button"
       :loading="loading"
       @click="handleProductAddToRightColumn"
