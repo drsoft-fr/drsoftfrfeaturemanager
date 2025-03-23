@@ -58,8 +58,8 @@ class DrsoftFrFeatureManager extends Module
         ];
         $this->version = '0.0.1';
         $this->authorEmail = 'contact@drsoft.fr';
-        $this->moduleGithubRepositoryUrl = 'https://github.com/drsoft-fr/prestashop-module-drsoftfrfeaturemanager';
-        $this->moduleGithubIssuesUrl = 'https://github.com/drsoft-fr/prestashop-module-drsoftfrfeaturemanager/issues';
+        $this->moduleGithubRepositoryUrl = 'https://github.com/drsoft-fr/drsoftfrfeaturemanager';
+        $this->moduleGithubIssuesUrl = 'https://github.com/drsoft-fr/drsoftfrfeaturemanager/issues';
 
         parent::__construct();
 

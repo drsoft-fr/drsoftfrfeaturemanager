@@ -1,5 +1,5 @@
 {
-  "name": "drsoft-fr/prestashop-module-drsoftfrfeaturemanager",
+  "name": "drsoft-fr/drsoftfrfeaturemanager",
   "license": "MIT",
   "type": "prestashop-module",
   "authors": [
@@ -28,7 +28,7 @@
     "sort-packages": true,
     "prepend-autoloader": false
   },
-  "homepage": "https://github.com/drsoft-fr/prestashop-module-drsoftfrfeaturemanager",
+  "homepage": "https://github.com/drsoft-fr/drsoftfrfeaturemanager",
   "require": {
     "php": ">=8.1",
     "drsoft-fr/prestashop-module-helper": "^1.0"
@@ -36,6 +36,6 @@
   "scripts": {},
   "scripts-descriptions": {},
   "support": {
-    "issues": "https://github.com/drsoft-fr/prestashop-module-drsoftfrfeaturemanager/issues"
+    "issues": "https://github.com/drsoft-fr/drsoftfrfeaturemanager/issues"
   }
 }

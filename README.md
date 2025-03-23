@@ -43,8 +43,7 @@ for development :
 
 ```bash
 $ cd {PRESTASHOP_FOLDER}/modules
-$ git clone git@github.com:drsoft-fr/prestashop-module-drsoftfrfeaturemanager.git
-$ mv prestashop-module-drsoftfrfeaturemanager drsoftfrfeaturemanager
+$ git clone git@github.com:drsoft-fr/drsoftfrfeaturemanager.git
 $ cd drsoftfrfeaturemanager
 $ composer install -o --no-dev
 $ cd {PRESTASHOP_FOLDER}
@@ -70,8 +69,8 @@ $ npm run watch
 ## Links
 
 - [drSoft.fr on GitHub](https://github.com/drsoft-fr)
-- [GitHub](https://github.com/drsoft-fr/prestashop-module-drsoftfrfeaturemanager)
-- [Issues](https://github.com/drsoft-fr/prestashop-module-drsoftfrfeaturemanager/issues)
+- [GitHub](https://github.com/drsoft-fr/drsoftfrfeaturemanager)
+- [Issues](https://github.com/drsoft-fr/drsoftfrfeaturemanager/issues)
 
 ## Authors
 
