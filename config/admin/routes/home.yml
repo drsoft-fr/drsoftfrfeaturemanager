@@ -64,6 +64,14 @@ admin_drsoft_fr_feature_manager_home_ajax_feature_value_get:
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
         _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueGet
 
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_relocate:
+    path: /ajax/feature-value/relocate
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueRelocateAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueRelocate
+
 admin_drsoft_fr_feature_manager_home_ajax_product_delete:
     path: /ajax/product/delete
     methods: [ POST ]

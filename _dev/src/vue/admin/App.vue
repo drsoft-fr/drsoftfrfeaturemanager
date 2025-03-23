@@ -6,6 +6,7 @@ import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
 import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
 import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
 import FeatureValueDuplicate from '@/vue/admin/components/feature-value/Duplicate.vue'
+import FeatureValueRelocate from '@/vue/admin/components/feature-value/Relocate.vue'
 import FeatureValueTable from '@/vue/admin/components/feature-value/Table.vue'
 import ProductTable from '@/vue/admin/components/product/Table.vue'
 import Toast from 'primevue/toast'
@@ -193,6 +194,34 @@ const featureValueGet = async (featureId, selection, all = false) => {
 }
 
 /**
+ * Relocates a specific feature value to a new feature within the system.
+ *
+ * @param {number} featureValueId - The ID of the feature value to be relocated.
+ * @param {number} featureId - The ID of the current feature that the value belongs to.
+ * @param {number} newFeatureId - The ID of the new feature that the value will be moved to.
+ *
+ * @returns {Promise<object>} - A Promise that resolves to the JSON response of the relocation operation.
+ */
+const featureValueRelocate = async (
+  featureValueId,
+  featureId,
+  newFeatureId,
+) => {
+  const form = new FormData()
+
+  form.append('id_feature_value', featureValueId.toString())
+  form.append('id_feature', featureId.toString())
+  form.append('new_id_feature', newFeatureId.toString())
+
+  const res = await fetch(drsoftfrfeaturemanager.routes.featureValueRelocate, {
+    method: 'POST',
+    body: form,
+  })
+
+  return await res.json()
+}
+
+/**
  * Asynchronously deletes a product by sending a POST request with the specified product ids, feature value id, and feature id.
  *
  * @param {Array<number>} productIds - An array of product IDs to be deleted.
@@ -322,6 +351,7 @@ provide('featureValue', {
   rightSelectedFeatureValueId: readonly(rightSelectedFeatureValueId),
   leftSelectedFeatureValue,
   rightSelectedFeatureValue,
+  relocate: readonly(featureValueRelocate),
 })
 provide('product', {
   delete: readonly(productDelete),
@@ -366,6 +396,7 @@ featureGetAll()
         </h2>
         <div class="flex flex-col gap-8 justify-between">
           <FeatureValueDuplicate />
+          <FeatureValueRelocate />
         </div>
       </div>
       <div class="col-span-2">
