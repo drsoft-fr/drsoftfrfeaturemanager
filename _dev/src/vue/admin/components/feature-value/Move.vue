@@ -5,7 +5,7 @@ import { useToast } from 'primevue/usetoast'
 import Message from 'primevue/message'
 
 const {
-  relocate: featureValueRelocate,
+  move,
   get,
   leftSelectedFeatureValueId,
   leftSelectedFeatureValue,
@@ -18,13 +18,13 @@ const { products, productTableLoading, selectedProducts } = inject('product')
 const { lifetime } = inject('toast')
 const loading = ref(false)
 const toast = useToast()
-const handleFeatureValueRelocate = async () => {
+const handleFeatureValueMove = async () => {
   loading.value = true
   leftFeatureValueTableLoading.value = true
   rightFeatureValueTableLoading.value = true
   productTableLoading.value = true
 
-  const res = await featureValueRelocate(
+  const res = await move(
     leftSelectedFeatureValueId.value,
     leftSelectedFeatureId.value,
     rightSelectedFeatureId.value,
@@ -56,10 +56,10 @@ const handleFeatureValueRelocate = async () => {
   <div>
     <Button
       class="w-full"
-      label="Relocate"
+      label="Move"
       type="button"
       :loading="loading"
-      @click="handleFeatureValueRelocate"
+      @click="handleFeatureValueMove"
       severity="warn"
       :disabled="
         !(
@@ -70,7 +70,7 @@ const handleFeatureValueRelocate = async () => {
       "
     />
     <Message class="mt-2" size="small" severity="secondary" variant="simple"
-      >Would you like to relocate the value (and products) from the left-hand
+      >Would you like to move the value (and products) from the left-hand
       column to the right-hand column?
     </Message>
   </div>

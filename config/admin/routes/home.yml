@@ -72,13 +72,13 @@ admin_drsoft_fr_feature_manager_home_ajax_feature_value_get:
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
         _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueGet
 
-admin_drsoft_fr_feature_manager_home_ajax_feature_value_relocate:
-    path: /ajax/feature-value/relocate
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_move:
+    path: /ajax/feature-value/move
     methods: [ POST ]
     defaults:
-        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueRelocateAction
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueMoveAction
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
-        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueRelocate
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueMove
 
 admin_drsoft_fr_feature_manager_home_ajax_product_copy:
   path: /ajax/product/copy
@@ -104,10 +104,10 @@ admin_drsoft_fr_feature_manager_home_ajax_product_get:
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
         _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductGet
 
-admin_drsoft_fr_feature_manager_home_ajax_product_relocate:
-    path: /ajax/product/relocate
+admin_drsoft_fr_feature_manager_home_ajax_product_move:
+    path: /ajax/product/move
     methods: [ POST ]
     defaults:
-        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxProductRelocateAction
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxProductMoveAction
         _legacy_controller: AdminDrSoftFrFeatureManagerHome
-        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductRelocate
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductMove

@@ -71,11 +71,11 @@ final class HomeController extends FrameworkBundleAdminController
                     'featureValueDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete'),
                     'featureValueDuplicate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_duplicate'),
                     'featureValueGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_get'),
-                    'featureValueRelocate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_relocate'),
+                    'featureValueMove' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_move'),
                     'productCopy' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_copy'),
                     'productDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_delete'),
                     'productGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_get'),
-                    'productRelocate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_relocate'),
+                    'productMove' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_move'),
                 ]
             ]
         ]);
@@ -521,13 +521,13 @@ final class HomeController extends FrameworkBundleAdminController
      *     message="Access denied."
      * )
      *
-     * Handles AJAX request to relocate a feature value.
+     * Handles AJAX request to move a feature value.
      *
      * @param Request $request The HTTP request object
      *
      * @return JsonResponse JSON response indicating success or failure of the relocation process
      */
-    public function ajaxFeatureValueRelocateAction(Request $request): JsonResponse
+    public function ajaxFeatureValueMoveAction(Request $request): JsonResponse
     {
         try {
             $featureId = $request->request->getInt('id_feature', 0);
@@ -569,7 +569,7 @@ final class HomeController extends FrameworkBundleAdminController
             if (!$obj->save()) {
                 return $this->json([
                     'success' => false,
-                    'message' => 'Failed to relocate FeatureValue',
+                    'message' => 'Failed to move FeatureValue',
                     'id_feature_value' => $featureValueId ?? 0,
                     'new_id_feature' => $newFeatureId ?? 0,
                     'id_feature' => $featureId ?? 0,
@@ -630,7 +630,7 @@ final class HomeController extends FrameworkBundleAdminController
 
             return $this->json([
                 'success' => true,
-                'message' => 'Feature value relocated',
+                'message' => 'Feature value moved',
                 'id_feature' => $obj->feature_id ?? 0,
                 'value' => $obj->value ?? '',
                 'id_feature_value' => $obj->id ?? 0,
@@ -642,7 +642,7 @@ final class HomeController extends FrameworkBundleAdminController
                 'success' => false,
                 'message' =>
                     sprintf(
-                        'Error occurred when trying to relocate FeatureValue [%s]',
+                        'Error occurred when trying to move FeatureValue [%s]',
                         $t->getMessage()
                     ),
                 'id_feature' => $featureId ?? 0,
@@ -827,13 +827,19 @@ final class HomeController extends FrameworkBundleAdminController
     }
 
     /**
-     * Handles AJAX request to relocate products to new feature and feature value.
+     * @AdminSecurity(
+     *      "is_granted(['read'], request.get('_legacy_controller'))",
+     *      redirectRoute="admin_module_manage",
+     *      message="Access denied."
+     *  )
+     *
+     * Handles AJAX request to move products to new feature and feature value.
      *
      * @param Request $request The request object
      *
      * @return JsonResponse JSON response indicating the success or failure of the operation
      */
-    public function ajaxProductRelocateAction(Request $request): JsonResponse
+    public function ajaxProductMoveAction(Request $request): JsonResponse
     {
         try {
             $formattedProductIds = [];
@@ -893,7 +899,7 @@ final class HomeController extends FrameworkBundleAdminController
 
             return $this->json([
                 'success' => true,
-                'message' => 'Products relocated',
+                'message' => 'Products moved',
                 'id_feature' => $featureId,
                 'id_feature_value' => $featureValueId,
                 'new_id_feature' => $newFeatureId,
@@ -905,7 +911,7 @@ final class HomeController extends FrameworkBundleAdminController
                 'success' => false,
                 'message' =>
                     sprintf(
-                        'Error occurred when trying to delete Products [%s]',
+                        'Error occurred when trying to move Products [%s]',
                         $t->getMessage()
                     ),
                 'id_feature' => $featureId ?? 0,

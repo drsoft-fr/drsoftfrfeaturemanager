@@ -7,7 +7,7 @@ import { FilterMatchMode } from '@primevue/core/api'
 import InputText from 'primevue/inputtext'
 import ProductCopy from '@/vue/admin/components/product/Copy.vue'
 import ProductDelete from '@/vue/admin/components/product/Delete.vue'
-import ProductRelocate from '@/vue/admin/components/product/Relocate.vue'
+import ProductMove from '@/vue/admin/components/product/Move.vue'
 
 const { leftSelectedFeature, rightSelectedFeature } = inject('feature')
 const { leftSelectedFeatureValue, rightSelectedFeatureValue } =
@@ -94,7 +94,7 @@ const filters = ref({
               "
               :product-ids="selectedProductIds"
             />
-            <ProductRelocate
+            <ProductMove
               class="ml-3"
               :new-feature-id="
                 rightSelectedFeature
@@ -187,9 +187,9 @@ const filters = ref({
           />
         </template>
       </Column>
-      <Column header="Relocate">
+      <Column header="Move">
         <template #body="{ data }">
-          <ProductRelocate
+          <ProductMove
             :new-feature-id="
               rightSelectedFeature ? rightSelectedFeature.id_feature : undefined
             "

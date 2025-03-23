@@ -8,7 +8,7 @@ import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
 import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
 import FeatureValueCopy from '@/vue/admin/components/feature-value/Copy.vue'
 import FeatureValueDuplicate from '@/vue/admin/components/feature-value/Duplicate.vue'
-import FeatureValueRelocate from '@/vue/admin/components/feature-value/Relocate.vue'
+import FeatureValueMove from '@/vue/admin/components/feature-value/Move.vue'
 import FeatureValueTable from '@/vue/admin/components/feature-value/Table.vue'
 import ProductTable from '@/vue/admin/components/product/Table.vue'
 import Toast from 'primevue/toast'
@@ -221,7 +221,7 @@ const featureValueGet = async (featureId, selection, all = false) => {
 }
 
 /**
- * Relocates a specific feature value to a new feature within the system.
+ * Moves a specific feature value to a new feature within the system.
  *
  * @param {number} featureValueId - The ID of the feature value to be relocated.
  * @param {number} featureId - The ID of the current feature that the value belongs to.
@@ -229,7 +229,7 @@ const featureValueGet = async (featureId, selection, all = false) => {
  *
  * @returns {Promise<object>} - A Promise that resolves to the JSON response of the relocation operation.
  */
-const featureValueRelocate = async (
+const featureValueMove = async (
   featureValueId,
   featureId,
   newFeatureId,
@@ -240,7 +240,7 @@ const featureValueRelocate = async (
   form.append('id_feature', featureId.toString())
   form.append('new_id_feature', newFeatureId.toString())
 
-  const res = await fetch(drsoftfrfeaturemanager.routes.featureValueRelocate, {
+  const res = await fetch(drsoftfrfeaturemanager.routes.featureValueMove, {
     method: 'POST',
     body: form,
   })
@@ -291,7 +291,7 @@ const productGet = async (featureId, featureValueId) => {
 }
 
 /**
- * Relocates a product to a new feature value within a given feature.
+ * Moves a product to a new feature value within a given feature.
  *
  * @param {Array<number>} productIds - Array of product IDs to relocate.
  * @param {number} newFeatureValueId - ID of the new feature value to assign to the product.
@@ -301,7 +301,7 @@ const productGet = async (featureId, featureValueId) => {
  *
  * @returns {Promise<Object>} - A promise that resolves to the JSON response from the API after relocating the product.
  */
-const productRelocate = async (
+const productMove = async (
   productIds,
   newFeatureValueId,
   newFeatureId,
@@ -316,7 +316,7 @@ const productRelocate = async (
   form.append('id_feature_value', featureValueId.toString())
   form.append('id_feature', featureId.toString())
 
-  const res = await fetch(drsoftfrfeaturemanager.routes.productRelocate, {
+  const res = await fetch(drsoftfrfeaturemanager.routes.productMove, {
     method: 'POST',
     body: form,
   })
@@ -372,7 +372,7 @@ provide('featureValue', {
   rightSelectedFeatureValueId: readonly(rightSelectedFeatureValueId),
   leftSelectedFeatureValue,
   rightSelectedFeatureValue,
-  relocate: readonly(featureValueRelocate),
+  move: readonly(featureValueMove),
 })
 provide('product', {
   copy: readonly(productCopy),
@@ -380,7 +380,7 @@ provide('product', {
   products: readonly(products),
   productTableLoading,
   get: readonly(productGet),
-  relocate: readonly(productRelocate),
+  move: readonly(productMove),
   selectedProductIds: readonly(selectedProductIds),
   selectedProducts,
 })
@@ -423,7 +423,7 @@ featureGetAll()
           <Divider />
           <FeatureValueDuplicate />
           <Divider />
-          <FeatureValueRelocate />
+          <FeatureValueMove />
         </div>
       </div>
       <div class="col-span-2">

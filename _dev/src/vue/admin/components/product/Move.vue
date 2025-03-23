@@ -11,14 +11,14 @@ const props = defineProps({
   productIds: Array,
 })
 
-const { relocate, get } = inject('product')
+const { move, get } = inject('product')
 const { lifetime } = inject('toast')
 const loading = ref(false)
 const toast = useToast()
-const handleProductRelocate = async () => {
+const handleProductMove = async () => {
   loading.value = true
 
-  const res = await relocate(
+  const res = await move(
     props.productIds,
     props.newFeatureValueId,
     props.newFeatureId,
@@ -40,10 +40,10 @@ const handleProductRelocate = async () => {
 <template>
   <div>
     <Button
-      label="Relocate"
+      label="Move"
       type="button"
       :loading="loading"
-      @click="handleProductRelocate"
+      @click="handleProductMove"
       severity="warn"
       :disabled="
         !(
