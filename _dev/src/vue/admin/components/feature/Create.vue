@@ -41,7 +41,7 @@ const handleFeatureCreate = async (event) => {
       <Message size="small" severity="secondary" variant="simple"
         >Would you like to create a new feature?</Message
       >
-      <Button label="Create" type="submit" :loading="loading" severity="info" />
+      <Button label="Create" type="submit" :loading="loading" severity="success" />
     </div>
   </form>
 </template>

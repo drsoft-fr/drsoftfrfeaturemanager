@@ -84,7 +84,7 @@ const handleFeatureValueCreate = async (event) => {
           label="Create"
           type="submit"
           :loading="loading"
-          severity="info"
+          severity="success"
         />
       </div>
     </form>
