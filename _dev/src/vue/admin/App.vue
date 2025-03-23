@@ -5,6 +5,7 @@ import FeatureCreate from '@/vue/admin/components/feature/Create.vue'
 import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
 import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
 import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
+import FeatureValueCopy from '@/vue/admin/components/feature-value/Copy.vue'
 import FeatureValueDuplicate from '@/vue/admin/components/feature-value/Duplicate.vue'
 import FeatureValueRelocate from '@/vue/admin/components/feature-value/Relocate.vue'
 import FeatureValueTable from '@/vue/admin/components/feature-value/Table.vue'
@@ -104,6 +105,30 @@ const featureGetAll = async () => {
   rightFeatureValues.value = []
 
   return features
+}
+
+/**
+ * Copies a feature value to a new feature for a given feature ID and value ID.
+ *
+ * @param {number} featureValueId - The ID of the feature value to be copied.
+ * @param {number} featureId - The ID of the feature associated with the feature value.
+ * @param {number} newFeatureId - The ID of the new feature to copy the value to.
+ *
+ * @returns {Promise<Object>} - A promise that resolves with the copied feature value data.
+ */
+const featureValueCopy = async (featureValueId, featureId, newFeatureId) => {
+  const form = new FormData()
+
+  form.append('id_feature_value', featureValueId.toString())
+  form.append('id_feature', featureId.toString())
+  form.append('new_id_feature', newFeatureId.toString())
+
+  const res = await fetch(drsoftfrfeaturemanager.routes.featureValueCopy, {
+    method: 'POST',
+    body: form,
+  })
+
+  return await res.json()
 }
 
 const featureValueCreate = async (elm) => {
@@ -339,6 +364,7 @@ provide('feature', {
   getAll: readonly(featureGetAll),
 })
 provide('featureValue', {
+  copy: readonly(featureValueCopy),
   create: readonly(featureValueCreate),
   delete: readonly(featureValueDelete),
   duplicate: readonly(featureValueDuplicate),
@@ -395,6 +421,7 @@ featureGetAll()
           Action
         </h2>
         <div class="flex flex-col gap-8 justify-between">
+          <FeatureValueCopy />
           <FeatureValueDuplicate />
           <FeatureValueRelocate />
         </div>

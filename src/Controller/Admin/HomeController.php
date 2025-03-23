@@ -66,6 +66,7 @@ final class HomeController extends FrameworkBundleAdminController
                     'featureCreate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_create'),
                     'featureDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_delete'),
                     'featureGetAll' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_get_all'),
+                    'featureValueCopy' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_copy'),
                     'featureValueCreate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_create'),
                     'featureValueDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete'),
                     'featureValueDuplicate' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_feature_value_duplicate'),
@@ -190,6 +191,130 @@ final class HomeController extends FrameworkBundleAdminController
         }
 
         return $this->json($datas);
+    }
+
+    /**
+     * @AdminSecurity(
+     *      "is_granted(['read'], request.get('_legacy_controller'))",
+     *      redirectRoute="admin_module_manage",
+     *      message="Access denied."
+     *  )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function ajaxFeatureValueCopyAction(Request $request): JsonResponse
+    {
+        try {
+            $featureId = $request->request->getInt('id_feature', 0);
+            $newFeatureId = $request->request->getInt('new_id_feature', 0);
+            $featureValueId = $request->request->getInt('id_feature_value', 0);
+
+            if (0 >= $featureId || 0 >= $newFeatureId || 0 >= $featureValueId) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Invalid feature_id, new_feature_id or id_feature_value',
+                    'id_feature' => $featureId ?? 0,
+                    'new_id_feature' => $newFeatureId ?? 0,
+                    'id_feature_value' => $featureValueId ?? 0,
+                ]);
+            }
+
+            $obj = new \FeatureValue($featureValueId);
+
+            if (!\Validate::isLoadedObject($obj)) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Feature value not found',
+                    'id_feature_value' => $featureValueId ?? 0,
+                ]);
+            }
+
+            if ($obj->id_feature !== $featureId) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Feature ID incorrect',
+                    'id_feature_value' => $featureValueId ?? 0,
+                    'new_id_feature' => $newFeatureId ?? 0,
+                    'id_feature' => $featureId ?? 0,
+                ]);
+            }
+
+            $obj->id = null;
+            $obj->id_feature_value = null;
+            $obj->id_feature = $newFeatureId;
+            $obj->force_id = false;
+
+            if (!$obj->add()) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Failed to copy FeatureValue',
+                    'id_feature_value' => $featureValueId ?? 0,
+                    'new_id_feature' => $newFeatureId ?? 0,
+                    'id_feature' => $featureId ?? 0,
+                ]);
+            }
+
+            $query = $this->getGetProductsByFeatureValueIdQuery();
+            $products = $this
+                ->getGetProductsByFeatureValueIdQueryHandler()
+                ->handle(
+                    new FeatureId($featureId),
+                    new FeatureValueId($featureValueId),
+                    $query
+                );
+            $formattedProductIds = [];
+
+            foreach ($products as $product) {
+                $product = (int)$product['id_product'];
+
+                if (0 >= $product) {
+                    continue;
+                }
+
+                $formattedProductIds[] = $product;
+            }
+
+            $helper = $this->getProductHelper();
+
+            if (!$helper->bulkInsert(
+                new FeatureId((int)$obj->id_feature),
+                new FeatureValueId((int)$obj->id),
+                $formattedProductIds
+            )) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Failed to insert new products',
+                    'id_feature' => $featureId ?? 0,
+                    'id_feature_value' => $obj->id ?? 0,
+                    'new_id_feature' => $obj->id_feature ?? 0,
+                    'id_products' => $formattedProductIds ?? [],
+                ]);
+            }
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Feature value relocated',
+                'id_feature' => $obj->feature_id ?? 0,
+                'value' => $obj->value ?? '',
+                'id_feature_value' => $obj->id ?? 0,
+                'old_id_feature' => $featureId ?? 0,
+                'id_products' => $formattedProductIds ?? [],
+            ]);
+        } catch (\Throwable $t) {
+            return $this->json([
+                'success' => false,
+                'message' =>
+                    sprintf(
+                        'Error occurred when trying to copy FeatureValue [%s]',
+                        $t->getMessage()
+                    ),
+                'id_feature' => $featureId ?? 0,
+                'new_id_feature' => $newFeatureId ?? 0,
+                'id_feature_value' => $featureValueId ?? 0,
+            ]);
+        }
     }
 
     public function ajaxFeatureValueCreateAction(Request $request): JsonResponse
