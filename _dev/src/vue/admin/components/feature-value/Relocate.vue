@@ -68,7 +68,7 @@ const handleFeatureValueRelocate = async () => {
         )
       "
     />
-    <Message size="small" severity="secondary" variant="simple"
+    <Message class="mt-2" size="small" severity="secondary" variant="simple"
       >Would you like to relocate the value (and products) from the left-hand
       column to the right-hand column?
     </Message>

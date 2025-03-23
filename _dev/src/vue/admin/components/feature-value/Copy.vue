@@ -58,9 +58,9 @@ const handleFeatureValueCopy = async () => {
         )
       "
     />
-    <Message size="small" severity="secondary" variant="simple"
-      >Would you like to copy the value (and products) from the left-hand
-      column to the right-hand column?
+    <Message class="mt-2" size="small" severity="secondary" variant="simple"
+      >Would you like to copy the value (and products) from the left-hand column
+      to the right-hand column?
     </Message>
   </div>
 </template>

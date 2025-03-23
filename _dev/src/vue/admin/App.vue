@@ -1,6 +1,7 @@
 <script setup>
 import { computed, provide, readonly, ref, watch } from 'vue'
 import ConfirmDialog from 'primevue/confirmdialog'
+import Divider from 'primevue/divider'
 import FeatureCreate from '@/vue/admin/components/feature/Create.vue'
 import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
 import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
@@ -389,10 +390,10 @@ featureGetAll()
 <template>
   <main class="sm:text-lg">
     <div
-      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto grid grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:grid-cols-5 bg-white dark:bg-gray-900 rounded-md"
+      class="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-5 py-8 px-4 lg:py-16 lg:px-6 mx-auto lg:mx-0 bg-white dark:bg-gray-900 rounded-md"
     >
       <div class="col-span-2">
-        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl">
+        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl mb-5 sm:mb-8">
           Source
         </h2>
         <div class="flex flex-col gap-8">
@@ -410,17 +411,19 @@ featureGetAll()
         </div>
       </div>
       <div>
-        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl">
+        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl mb-5 sm:mb-8">
           Action
         </h2>
-        <div class="flex flex-col gap-8 justify-between">
+        <div class="flex flex-col gap-8 justify-center">
           <FeatureValueCopy />
+          <Divider />
           <FeatureValueDuplicate />
+          <Divider />
           <FeatureValueRelocate />
         </div>
       </div>
       <div class="col-span-2">
-        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl">
+        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl mb-5 sm:mb-8">
           Destination
         </h2>
         <div class="flex flex-col gap-8 justify-between">
@@ -431,15 +434,15 @@ featureGetAll()
       </div>
     </div>
     <div
-      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto mt-10 sm:mt-16 lg:mx-0 bg-white dark:bg-gray-900 rounded-md"
+      class="mt-10 sm:mt-16 py-8 px-4 lg:py-16 lg:px-6 mx-auto lg:mx-0 bg-white dark:bg-gray-900 rounded-md"
     >
-      <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl">
+      <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl mb-5 sm:mb-8">
         Products
       </h2>
       <ProductTable />
     </div>
     <div
-      class="py-8 px-4 lg:py-16 lg:px-6 mx-auto mt-10 grid grid-cols-1 gap-x-8 gap-y-16 sm:mt-16 lg:mx-0 lg:grid-cols-4 bg-white dark:bg-gray-900 rounded-md"
+      class="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-4 mt-10 sm:mt-16 py-8 px-4 lg:py-16 lg:px-6 mx-auto lg:mx-0 bg-white dark:bg-gray-900 rounded-md"
     >
       <div class="flex flex-col items-start">
         <h3
