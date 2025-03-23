@@ -12,6 +12,7 @@ const {
   rightFeatureValueTableLoading,
 } = inject('featureValue')
 const { leftSelectedFeatureId, rightSelectedFeatureId } = inject('feature')
+const { lifetime } = inject('toast')
 const loading = ref(false)
 const toast = useToast()
 const handleFeatureValueCopy = async () => {
@@ -36,7 +37,7 @@ const handleFeatureValueCopy = async () => {
     severity: res.success ? 'success' : 'error',
     summary: res.success ? 'Confirmed' : 'Error',
     detail: res.message,
-    life: 5000,
+    life: lifetime.value,
   })
 }
 </script>

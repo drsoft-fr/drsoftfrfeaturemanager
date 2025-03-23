@@ -8,6 +8,7 @@ import { useToast } from 'primevue/usetoast'
 const { create, getAll } = inject('feature')
 const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
   inject('featureValue')
+const { lifetime } = inject('toast')
 const loading = ref(false)
 const toast = useToast()
 const handleFeatureCreate = async (event) => {
@@ -23,7 +24,7 @@ const handleFeatureCreate = async (event) => {
     severity: 'success',
     summary: 'Confirmed',
     detail: 'Feature created',
-    life: 3000,
+    life: lifetime.value,
   })
 }
 </script>
@@ -41,7 +42,12 @@ const handleFeatureCreate = async (event) => {
       <Message size="small" severity="secondary" variant="simple"
         >Would you like to create a new feature?</Message
       >
-      <Button label="Create" type="submit" :loading="loading" severity="success" />
+      <Button
+        label="Create"
+        type="submit"
+        :loading="loading"
+        severity="success"
+      />
     </div>
   </form>
 </template>

@@ -12,6 +12,7 @@ const {
   rightFeatureValueTableLoading,
 } = inject('featureValue')
 const { leftSelectedFeatureId, rightSelectedFeatureId } = inject('feature')
+const { lifetime } = inject('toast')
 const loading = ref(false)
 const toast = useToast()
 const handleFeatureValueDuplicate = async () => {
@@ -35,7 +36,7 @@ const handleFeatureValueDuplicate = async () => {
     severity: 'success',
     summary: 'Confirmed',
     detail: 'Feature value duplicated',
-    life: 3000,
+    life: lifetime.value,
   })
 }
 </script>

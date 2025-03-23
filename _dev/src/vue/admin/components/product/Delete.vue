@@ -11,6 +11,7 @@ const props = defineProps({
 })
 
 const { delete: productUnlink, get } = inject('product')
+const { lifetime } = inject('toast')
 const loading = ref(false)
 const confirm = useConfirm()
 const toast = useToast()
@@ -44,7 +45,7 @@ const handleProductDelete = async () => {
         severity: 'success',
         summary: 'Confirmed',
         detail: 'Product unlink',
-        life: 3000,
+        life: lifetime.value,
       })
     },
     reject: () => {
@@ -52,7 +53,7 @@ const handleProductDelete = async () => {
         severity: 'warn',
         summary: 'Rejected',
         detail: 'You have rejected',
-        life: 3000,
+        life: lifetime.value,
       })
     },
   })

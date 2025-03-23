@@ -12,6 +12,7 @@ const props = defineProps({
 })
 
 const { copy, get } = inject('product')
+const { lifetime } = inject('toast')
 const loading = ref(false)
 const toast = useToast()
 const handleProductAddToRightColumn = async () => {
@@ -29,7 +30,7 @@ const handleProductAddToRightColumn = async () => {
     severity: res.success ? 'success' : 'error',
     summary: res.success ? 'Confirmed' : 'Error',
     detail: res.message,
-    life: 3000,
+    life: lifetime.value,
   })
 }
 </script>

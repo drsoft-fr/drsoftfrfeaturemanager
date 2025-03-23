@@ -18,6 +18,7 @@ const props = defineProps({
 
 const { delete: featureValueDelete, get } = inject('featureValue')
 const { leftSelectedFeature, rightSelectedFeature } = inject('feature')
+const { lifetime } = inject('toast')
 const loading = ref(false)
 const confirm = useConfirm()
 const toast = useToast()
@@ -52,7 +53,7 @@ const handleFeatureValueDelete = async () => {
         severity: 'success',
         summary: 'Confirmed',
         detail: 'Feature value deleted',
-        life: 3000,
+        life: lifetime.value,
       })
     },
     reject: () => {
@@ -60,7 +61,7 @@ const handleFeatureValueDelete = async () => {
         severity: 'warn',
         summary: 'Rejected',
         detail: 'You have rejected',
-        life: 3000,
+        life: lifetime.value,
       })
     },
   })

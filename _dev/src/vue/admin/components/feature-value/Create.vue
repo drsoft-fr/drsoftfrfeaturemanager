@@ -9,6 +9,7 @@ const { leftSelectedFeature, rightSelectedFeature } = inject('feature')
 const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
   inject('featureValue')
 const { create, get } = inject('featureValue')
+const { lifetime } = inject('toast')
 
 const props = defineProps({
   selection: {
@@ -51,7 +52,7 @@ const handleFeatureValueCreate = async (event) => {
     severity: 'success',
     summary: 'Confirmed',
     detail: 'Feature value created',
-    life: 3000,
+    life: lifetime.value,
   })
 }
 </script>

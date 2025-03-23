@@ -11,6 +11,7 @@ const {
 } = inject('feature')
 const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
   inject('featureValue')
+const { lifetime } = inject('toast')
 const loading = ref(false)
 const confirm = useConfirm()
 const toast = useToast()
@@ -40,7 +41,7 @@ const handleFeatureDelete = async () => {
           severity: 'error',
           summary: 'Info',
           detail: 'invalid id_feature',
-          life: 3000,
+          life: lifetime.value,
         })
 
         loading.value = false
@@ -60,7 +61,7 @@ const handleFeatureDelete = async () => {
         severity: 'success',
         summary: 'Confirmed',
         detail: 'Feature deleted',
-        life: 3000,
+        life: lifetime.value,
       })
     },
     reject: () => {
@@ -68,7 +69,7 @@ const handleFeatureDelete = async () => {
         severity: 'warn',
         summary: 'Rejected',
         detail: 'You have rejected',
-        life: 3000,
+        life: lifetime.value,
       })
     },
   })

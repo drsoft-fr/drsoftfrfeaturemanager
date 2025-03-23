@@ -12,6 +12,7 @@ const props = defineProps({
 })
 
 const { relocate, get } = inject('product')
+const { lifetime } = inject('toast')
 const loading = ref(false)
 const toast = useToast()
 const handleProductRelocate = async () => {
@@ -31,7 +32,7 @@ const handleProductRelocate = async () => {
     severity: res.success ? 'success' : 'error',
     summary: res.success ? 'Confirmed' : 'Error',
     detail: res.message,
-    life: 3000,
+    life: lifetime.value,
   })
 }
 </script>

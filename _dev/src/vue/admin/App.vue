@@ -45,6 +45,7 @@ const selectedProductIds = computed(() =>
 const leftFeatureValueTableLoading = ref(false)
 const rightFeatureValueTableLoading = ref(false)
 const productTableLoading = ref(false)
+const toastLifetime = ref(5000)
 
 watch(leftSelectedFeature, async () => {
   leftFeatureValueTableLoading.value = true
@@ -382,6 +383,9 @@ provide('product', {
   relocate: readonly(productRelocate),
   selectedProductIds: readonly(selectedProductIds),
   selectedProducts,
+})
+provide('toast', {
+  lifetime: readonly(toastLifetime),
 })
 
 featureGetAll()
