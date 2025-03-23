@@ -43,7 +43,7 @@ const handleProductRelocate = async () => {
       type="button"
       :loading="loading"
       @click="handleProductRelocate"
-      severity="info"
+      severity="warn"
       :disabled="
         !(
           newFeatureId &&

@@ -59,7 +59,7 @@ const handleFeatureValueRelocate = async () => {
       type="button"
       :loading="loading"
       @click="handleFeatureValueRelocate"
-      severity="info"
+      severity="warn"
       :disabled="
         !(
           leftSelectedFeatureId &&
