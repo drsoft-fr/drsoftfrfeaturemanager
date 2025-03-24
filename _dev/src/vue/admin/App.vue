@@ -79,41 +79,6 @@ watch(leftSelectedFeatureValue, async () => {
 })
 
 /**
- * Deletes a feature by its ID and updates the selected feature based on the selection value.
- *
- * @param {number} featureId - The ID of the feature to be deleted.
- * @param {string} selection - The selection value indicating the side of selection ('left' or 'right').
- *
- * @returns {Promise<Object>} - A Promise that resolves with the response data after deleting the feature.
- */
-const featureDelete = async (featureId, selection) => {
-  const form = new FormData()
-
-  form.append('id_feature', featureId.toString())
-
-  const res = await fetch(drsoftfrfeaturemanager.routes.featureDelete, {
-    method: 'POST',
-    body: form,
-  })
-
-  if ('left' === selection) {
-    leftSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
-
-    if (featureId === rightSelectedFeature.value.id_feature) {
-      rightSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
-    }
-  } else {
-    rightSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
-
-    if (featureId === leftSelectedFeature.value.id_feature) {
-      leftSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
-    }
-  }
-
-  return await res.json()
-}
-
-/**
  * Asynchronously fetches all features from a specific route and populates the leftFeatureValues and rightFeatureValues arrays with the results.
  *
  * @returns {Promise<Object>} A Promise that resolves with the JSON response containing the features.
@@ -365,7 +330,6 @@ const productCopy = async (productIds, newFeatureValueId, newFeatureId) => {
 }
 
 provide('feature', {
-  delete: readonly(featureDelete),
   leftSelectedFeature,
   rightSelectedFeature,
   leftSelectedFeatureId: readonly(leftSelectedFeatureId),

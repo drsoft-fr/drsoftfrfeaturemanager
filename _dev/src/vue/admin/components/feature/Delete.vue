@@ -14,30 +14,69 @@ const props = defineProps({
   },
 })
 
-const {
-  delete: featureDelete,
-  leftSelectedFeature,
-  rightSelectedFeature,
-  getAll,
-} = inject('feature')
+const { leftSelectedFeature, rightSelectedFeature, getAll } = inject('feature')
 const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
   inject('featureValue')
+const { featureDelete: featureDeleteRoute } = inject('routes')
 const { lifetime } = inject('toast')
+
 const loading = ref(false)
+
 const confirm = useConfirm()
 const toast = useToast()
 
 let feature
+let otherFeature
 let tableLoading
 
 if ('left' === props.selection) {
   feature = leftSelectedFeature
+  otherFeature = rightSelectedFeature
   tableLoading = leftFeatureValueTableLoading
 } else {
   feature = rightSelectedFeature
+  otherFeature = leftSelectedFeature
   tableLoading = rightFeatureValueTableLoading
 }
 
+/**
+ * Deletes a feature by its ID and updates the selected feature based on the selection value.
+ *
+ * @param {number} featureId - The ID of the feature to be deleted.
+ *
+ * @returns {Promise<Object>} - A Promise that resolves with the response data after deleting the feature.
+ */
+const featureDelete = async (featureId) => {
+  const form = new FormData()
+
+  form.append('id_feature', featureId.toString())
+
+  const res = await fetch(featureDeleteRoute, {
+    method: 'POST',
+    body: form,
+  })
+
+  feature.value = { id_feature: 0, name: 'Sample feature' }
+
+  if (featureId === otherFeature.value.id_feature) {
+    otherFeature.value = { id_feature: 0, name: 'Sample feature' }
+  }
+
+  return await res.json()
+}
+
+/**
+ * Asynchronously handles the deletion of a feature.
+ *
+ * This method confirms with the user before deleting the feature and performs the following actions:
+ * 1. Sets loading indicators.
+ * 2. Validates the feature ID.
+ * 3. Calls the featureDelete API to delete the feature.
+ * 4. Calls the getAll API to refresh the data.
+ * 5. Displays toast messages based on the API responses.
+ *
+ * If the user rejects the delete operation, a toast message will be displayed indicating rejection.
+ */
 const handleFeatureDelete = async () => {
   confirm.require({
     message: `Do you want to delete this feature (${feature.value.name})?`,
