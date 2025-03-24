@@ -1,6 +1,8 @@
 <script setup>
 import { inject } from 'vue'
 import Select from 'primevue/select'
+import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
+import Message from 'primevue/message'
 
 const { features, leftSelectedFeature, rightSelectedFeature } =
   inject('feature')
@@ -25,7 +27,7 @@ if ('left' === props.selection) {
 
 <template>
   <div class="flex flex-col gap-2">
-    <label for="features">Features</label>
+    <label for="features">Select {{ selection }} features</label>
     <Select
       v-model="model"
       :options="features"
@@ -34,6 +36,10 @@ if ('left' === props.selection) {
       placeholder="Select a Feature"
       id="features"
     />
+    <Message size="small" severity="secondary" variant="simple"
+      >Would you like to delete this feature ({{ model.name }})?</Message
+    >
+    <FeatureDelete :selection />
   </div>
 </template>
 

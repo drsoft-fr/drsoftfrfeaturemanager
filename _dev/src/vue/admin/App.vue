@@ -2,8 +2,9 @@
 import { computed, provide, readonly, ref, watch } from 'vue'
 import ConfirmDialog from 'primevue/confirmdialog'
 import Divider from 'primevue/divider'
+import Splitter from 'primevue/splitter'
+import SplitterPanel from 'primevue/splitterpanel'
 import FeatureCreate from '@/vue/admin/components/feature/Create.vue'
-import FeatureDelete from '@/vue/admin/components/feature/Delete.vue'
 import FeatureSelect from '@/vue/admin/components/feature/Select.vue'
 import FeatureValueCreate from '@/vue/admin/components/feature-value/Create.vue'
 import FeatureValueCopy from '@/vue/admin/components/feature-value/Copy.vue'
@@ -229,11 +230,7 @@ const featureValueGet = async (featureId, selection, all = false) => {
  *
  * @returns {Promise<object>} - A Promise that resolves to the JSON response of the relocation operation.
  */
-const featureValueMove = async (
-  featureValueId,
-  featureId,
-  newFeatureId,
-) => {
+const featureValueMove = async (featureValueId, featureId, newFeatureId) => {
   const form = new FormData()
 
   form.append('id_feature_value', featureValueId.toString())
@@ -393,56 +390,48 @@ featureGetAll()
 
 <template>
   <main class="sm:text-lg">
-    <div
-      class="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-5 py-8 px-4 lg:py-16 lg:px-6 mx-auto lg:mx-0 bg-white dark:bg-gray-900 rounded-md"
-    >
-      <div class="col-span-2">
-        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl mb-5 sm:mb-8">
-          Source
-        </h2>
-        <div class="flex flex-col gap-8">
-          <div class="grid grid-cols-2 gap-8 justify-between">
-            <div>
-              <FeatureSelect selection="left" />
-              <div class="mt-3 text-right">
-                <FeatureDelete />
+    <Splitter class="bg-white dark:bg-gray-900 rounded-md" layout="vertical">
+      <SplitterPanel :size="80">
+        <Splitter>
+          <SplitterPanel class="py-8 px-4 lg:py-16 lg:px-6 mx-auto lg:mx-0">
+            <div class="flex flex-col gap-8 justify-between h-100">
+              <h2 class="flex-none">Source</h2>
+              <div class="flex-none grid grid-cols-2 gap-8 justify-between">
+                <FeatureSelect selection="left" />
+                <FeatureCreate />
               </div>
+              <FeatureValueTable class="grow" selection="left" />
+              <FeatureValueCreate class="flex-none" selection="left" />
             </div>
-            <FeatureCreate />
-          </div>
-          <FeatureValueTable selection="left" />
-          <FeatureValueCreate selection="left" />
-        </div>
-      </div>
-      <div>
-        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl mb-5 sm:mb-8">
-          Action
-        </h2>
-        <div class="flex flex-col gap-8 justify-center">
+          </SplitterPanel>
+          <SplitterPanel class="py-8 px-4 lg:py-16 lg:px-6 mx-auto lg:mx-0">
+            <div class="flex flex-col gap-8 justify-between h-100">
+              <h2 class="flex-none">Destination</h2>
+              <FeatureSelect class="flex-none" selection="right" />
+              <FeatureValueTable class="grow" selection="right" />
+              <FeatureValueCreate class="flex-none" selection="right" />
+            </div>
+          </SplitterPanel>
+        </Splitter>
+      </SplitterPanel>
+      <SplitterPanel
+        class="py-8 px-4 lg:py-16 lg:px-6 mx-auto lg:mx-0"
+        :size="20"
+      >
+        <h2 class="mb-8">Action</h2>
+        <div class="flex flex-row gap-8 justify-between">
           <FeatureValueCopy />
-          <Divider />
+          <Divider layout="vertical" />
           <FeatureValueDuplicate />
-          <Divider />
+          <Divider layout="vertical" />
           <FeatureValueMove />
         </div>
-      </div>
-      <div class="col-span-2">
-        <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl mb-5 sm:mb-8">
-          Destination
-        </h2>
-        <div class="flex flex-col gap-8 justify-between">
-          <FeatureSelect selection="right" />
-          <FeatureValueTable selection="right" />
-          <FeatureValueCreate selection="right" />
-        </div>
-      </div>
-    </div>
+      </SplitterPanel>
+    </Splitter>
     <div
       class="mt-10 sm:mt-16 py-8 px-4 lg:py-16 lg:px-6 mx-auto lg:mx-0 bg-white dark:bg-gray-900 rounded-md"
     >
-      <h2 class="text-5xl font-semibold tracking-tight sm:text-7xl mb-5 sm:mb-8">
-        Products
-      </h2>
+      <h2 class="mb-5 sm:mb-8">Products</h2>
       <ProductTable />
     </div>
     <div

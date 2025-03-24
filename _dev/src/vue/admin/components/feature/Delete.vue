@@ -4,9 +4,20 @@ import Button from 'primevue/button'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
 
+const props = defineProps({
+  selection: {
+    type: String,
+    required: true,
+    validator(value, props) {
+      return ['left', 'right'].includes(value)
+    },
+  },
+})
+
 const {
   delete: featureDelete,
-  leftSelectedFeature: feature,
+  leftSelectedFeature,
+  rightSelectedFeature,
   getAll,
 } = inject('feature')
 const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
@@ -15,9 +26,21 @@ const { lifetime } = inject('toast')
 const loading = ref(false)
 const confirm = useConfirm()
 const toast = useToast()
+
+let feature
+let tableLoading
+
+if ('left' === props.selection) {
+  feature = leftSelectedFeature
+  tableLoading = leftFeatureValueTableLoading
+} else {
+  feature = rightSelectedFeature
+  tableLoading = rightFeatureValueTableLoading
+}
+
 const handleFeatureDelete = async () => {
   confirm.require({
-    message: 'Do you want to delete this feature?',
+    message: `Do you want to delete this feature (${feature.value.name})?`,
     header: 'Danger Zone',
     icon: 'pi pi-info-circle',
     rejectLabel: 'Cancel',
@@ -32,8 +55,8 @@ const handleFeatureDelete = async () => {
     },
     accept: async () => {
       loading.value = true
-      leftFeatureValueTableLoading.value = true
-      rightFeatureValueTableLoading.value = true
+      tableLoading.value = true
+
       const featureId = parseInt(feature.value.id_feature || '')
 
       if (0 >= featureId || isNaN(featureId)) {
@@ -45,8 +68,7 @@ const handleFeatureDelete = async () => {
         })
 
         loading.value = false
-        leftFeatureValueTableLoading.value = false
-        rightFeatureValueTableLoading.value = false
+        tableLoading.value = false
 
         return
       }
@@ -55,8 +77,7 @@ const handleFeatureDelete = async () => {
       await getAll()
 
       loading.value = false
-      leftFeatureValueTableLoading.value = false
-      rightFeatureValueTableLoading.value = false
+      tableLoading.value = false
       toast.add({
         severity: 'success',
         summary: 'Confirmed',
