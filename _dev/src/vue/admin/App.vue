@@ -79,25 +79,6 @@ watch(leftSelectedFeatureValue, async () => {
 })
 
 /**
- * Asynchronously creates a new feature by sending a POST request to the specified route.
- *
- * @param {Element} elm - The HTML element containing the data to be submitted for feature creation.
- *
- * @returns {Promise} A Promise that resolves to the JSON response containing information about the created feature.
- */
-const featureCreate = async (elm) => {
-  const res = await fetch(drsoftfrfeaturemanager.routes.featureCreate, {
-    method: 'POST',
-    body: new FormData(elm),
-  })
-  const json = await res.json()
-
-  leftSelectedFeature.value = { id_feature: json.id_feature, name: json.name }
-
-  return json
-}
-
-/**
  * Deletes a feature by its ID and updates the selected feature based on the selection value.
  *
  * @param {number} featureId - The ID of the feature to be deleted.
@@ -384,7 +365,6 @@ const productCopy = async (productIds, newFeatureValueId, newFeatureId) => {
 }
 
 provide('feature', {
-  create: readonly(featureCreate),
   delete: readonly(featureDelete),
   leftSelectedFeature,
   rightSelectedFeature,
