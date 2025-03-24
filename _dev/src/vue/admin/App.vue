@@ -146,9 +146,20 @@ const featureValueDuplicate = async (featureValueId, featureId) => {
   })
 }
 
+/**
+ * Asynchronously fetches feature values based on the specified feature ID and selection.
+ *
+ * @param {number} featureId - The ID of the feature to retrieve values for.
+ * @param {string} selection - The selection indicating whether to update 'left' or 'right' feature values.
+ * @param {boolean} [all=false] - Indicates whether to update both 'left' and 'right' feature values.
+ *
+ * @returns {object} Returns the updated feature values based on the selection and optional 'all' parameter.
+ *
+ * @throws {Error} Throws an error if featureId is not a number or is less than or equal to 0.
+ */
 const featureValueGet = async (featureId, selection, all = false) => {
   if (typeof featureId !== 'number' || isNaN(featureId) || 0 >= featureId) {
-    return []
+    throw new Error('featureId must be a number')
   }
 
   const form = new FormData()
@@ -159,26 +170,23 @@ const featureValueGet = async (featureId, selection, all = false) => {
     method: 'POST',
     body: form,
   })
-
   const json = await res.json()
 
   if ('left' === selection) {
-    leftFeatureValues.value = json
+    leftFeatureValues.value = json.feature_values
 
     if (true === all) {
-      rightFeatureValues.value = json
+      rightFeatureValues.value = json.feature_values
     }
-
-    return leftFeatureValues
   } else {
-    rightFeatureValues.value = json
+    rightFeatureValues.value = json.feature_values
 
     if (true === all) {
-      leftFeatureValues.value = json
+      leftFeatureValues.value = json.feature_values
     }
-
-    return rightFeatureValues
   }
+
+  return json
 }
 
 /**

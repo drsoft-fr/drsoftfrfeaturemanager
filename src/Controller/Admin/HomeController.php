@@ -518,20 +518,49 @@ final class HomeController extends FrameworkBundleAdminController
      */
     public function ajaxFeatureValueGetAction(Request $request): JsonResponse
     {
-        $featureId = $request->request->getInt('id_feature', 0);
-        $datas = [];
-        $featureValueRepository = $this->getFeatureValueRepository();
-        $featureValues = $featureValueRepository->getFeatureValuesByLang(1, ['id_feature' => $featureId]);
+        try {
+            $featureId = $request->request->getInt('id_feature', 0);
 
-        foreach ($featureValues as $featureValue) {
-            $datas[] = [
-                'id_feature_value' => $featureValue['id_feature_value'],
-                'value' => $featureValue['value'],
-                'custom' => (bool)$featureValue['custom']
-            ];
+            if (0 >= $featureId) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Invalid FeatureId',
+                    'feature_values' => []
+                ]);
+            }
+
+            $datas = [];
+            $featureValueRepository = $this->getFeatureValueRepository();
+            $featureValues = $featureValueRepository
+                ->getFeatureValuesByLang(
+                    $this->getContext()->language->id,
+                    ['id_feature' => $featureId]
+                );
+
+            foreach ($featureValues as $featureValue) {
+                $datas[] = [
+                    'id_feature_value' => $featureValue['id_feature_value'],
+                    'value' => $featureValue['value'],
+                    'custom' => (bool)$featureValue['custom']
+                ];
+            }
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Feature values retrieved',
+                'feature_values' => $datas
+            ]);
+        } catch (\Throwable $t) {
+            return $this->json([
+                'success' => false,
+                'message' =>
+                    sprintf(
+                        'Error occurred when trying to get all Feature values [%s]',
+                        $t->getMessage()
+                    ),
+                'feature_values' => [],
+            ]);
         }
-
-        return $this->json($datas);
     }
 
     /**
