@@ -75,14 +75,23 @@ watch(leftSelectedFeatureValue, async () => {
   productTableLoading.value = false
 })
 
+/**
+ * Asynchronously creates a new feature by sending a POST request to the specified route.
+ *
+ * @param {Element} elm - The HTML element containing the data to be submitted for feature creation.
+ *
+ * @returns {Promise} A Promise that resolves to the JSON response containing information about the created feature.
+ */
 const featureCreate = async (elm) => {
   const res = await fetch(drsoftfrfeaturemanager.routes.featureCreate, {
     method: 'POST',
     body: new FormData(elm),
   })
-  const { id_feature, name } = await res.json()
+  const json = await res.json()
 
-  leftSelectedFeature.value = { id_feature, name }
+  leftSelectedFeature.value = { id_feature: json.id_feature, name: json.name }
+
+  return json
 }
 
 const featureDelete = async (featureId) => {

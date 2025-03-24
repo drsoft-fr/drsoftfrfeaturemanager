@@ -9,21 +9,27 @@ const { create, getAll } = inject('feature')
 const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
   inject('featureValue')
 const { lifetime } = inject('toast')
+
 const loading = ref(false)
+
 const toast = useToast()
+
 const handleFeatureCreate = async (event) => {
   loading.value = true
   leftFeatureValueTableLoading.value = true
   rightFeatureValueTableLoading.value = true
-  await create(event.currentTarget)
+
+  const res = await create(event.currentTarget)
   await getAll()
+
   loading.value = false
   leftFeatureValueTableLoading.value = false
   rightFeatureValueTableLoading.value = false
+
   toast.add({
-    severity: 'success',
-    summary: 'Confirmed',
-    detail: 'Feature created',
+    severity: res.success ? 'success' : 'error',
+    summary: res.success ? 'Confirmed' : 'Error',
+    detail: res.message,
     life: lifetime.value,
   })
 }
