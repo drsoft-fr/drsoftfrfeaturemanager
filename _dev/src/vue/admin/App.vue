@@ -16,6 +16,7 @@ import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 
 const { drsoftfrfeaturemanager } = window
+const routes = drsoftfrfeaturemanager.routes || {}
 const features = ref([])
 const leftFeatureValues = ref([])
 const rightFeatureValues = ref([])
@@ -418,6 +419,7 @@ provide('product', {
   selectedProductIds: readonly(selectedProductIds),
   selectedProducts,
 })
+provide('routes', routes)
 provide('toast', {
   lifetime: readonly(toastLifetime),
 })
