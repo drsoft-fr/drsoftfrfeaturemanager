@@ -427,7 +427,7 @@ final class HomeController extends FrameworkBundleAdminController
     public function ajaxFeatureValueDeleteAction(Request $request): JsonResponse
     {
         try {
-            $featureValueId = $request->request->getInt('id_feature_value');
+            $featureValueId = $request->request->getInt('id_feature_value', 0);
             $obj = new \FeatureValue($featureValueId);
 
             if (!\Validate::isLoadedObject($obj)) {

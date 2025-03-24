@@ -94,31 +94,6 @@ const featureGetAll = async () => {
   return json
 }
 
-const featureValueDelete = async (featureValueId) => {
-  const form = new FormData()
-
-  form.append('id_feature_value', featureValueId.toString())
-
-  await fetch(drsoftfrfeaturemanager.routes.featureValueDelete, {
-    method: 'POST',
-    body: form,
-  })
-
-  if (
-    typeof leftSelectedFeatureValue.value !== 'undefined' &&
-    featureValueId === leftSelectedFeatureValue.value.id_feature_value
-  ) {
-    leftSelectedFeatureValue.value = undefined
-  }
-
-  if (
-    typeof rightSelectedFeatureValue.value !== 'undefined' &&
-    featureValueId === rightSelectedFeatureValue.value.id_feature_value
-  ) {
-    rightSelectedFeatureValue.value = undefined
-  }
-}
-
 /**
  * Duplicates a feature value by sending a POST request to the server.
  *
@@ -315,7 +290,6 @@ provide('feature', {
   getAll: readonly(featureGetAll),
 })
 provide('featureValue', {
-  delete: readonly(featureValueDelete),
   duplicate: readonly(featureValueDuplicate),
   leftFeatureValues: readonly(leftFeatureValues),
   rightFeatureValues: readonly(rightFeatureValues),
