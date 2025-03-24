@@ -94,20 +94,39 @@ const featureCreate = async (elm) => {
   return json
 }
 
-const featureDelete = async (featureId) => {
+/**
+ * Deletes a feature by its ID and updates the selected feature based on the selection value.
+ *
+ * @param {number} featureId - The ID of the feature to be deleted.
+ * @param {string} selection - The selection value indicating the side of selection ('left' or 'right').
+ *
+ * @returns {Promise<Object>} - A Promise that resolves with the response data after deleting the feature.
+ */
+const featureDelete = async (featureId, selection) => {
   const form = new FormData()
 
   form.append('id_feature', featureId.toString())
 
-  await fetch(drsoftfrfeaturemanager.routes.featureDelete, {
+  const res = await fetch(drsoftfrfeaturemanager.routes.featureDelete, {
     method: 'POST',
     body: form,
   })
-  leftSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
 
-  if (featureId === rightSelectedFeature.value.id_feature) {
+  if ('left' === selection) {
+    leftSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
+
+    if (featureId === rightSelectedFeature.value.id_feature) {
+      rightSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
+    }
+  } else {
     rightSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
+
+    if (featureId === leftSelectedFeature.value.id_feature) {
+      leftSelectedFeature.value = { id_feature: 0, name: 'Sample feature' }
+    }
   }
+
+  return await res.json()
 }
 
 const featureGetAll = async () => {
