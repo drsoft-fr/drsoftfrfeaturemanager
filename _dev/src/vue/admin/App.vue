@@ -94,13 +94,6 @@ const featureGetAll = async () => {
   return json
 }
 
-const featureValueCreate = async (elm) => {
-  await fetch(drsoftfrfeaturemanager.routes.featureValueCreate, {
-    method: 'POST',
-    body: new FormData(elm),
-  })
-}
-
 const featureValueDelete = async (featureValueId) => {
   const form = new FormData()
 
@@ -322,7 +315,6 @@ provide('feature', {
   getAll: readonly(featureGetAll),
 })
 provide('featureValue', {
-  create: readonly(featureValueCreate),
   delete: readonly(featureValueDelete),
   duplicate: readonly(featureValueDuplicate),
   leftFeatureValues: readonly(leftFeatureValues),

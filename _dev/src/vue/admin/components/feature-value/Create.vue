@@ -5,12 +5,6 @@ import InputText from 'primevue/inputtext'
 import Message from 'primevue/message'
 import { useToast } from 'primevue/usetoast'
 
-const { leftSelectedFeature, rightSelectedFeature } = inject('feature')
-const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
-  inject('featureValue')
-const { create, get } = inject('featureValue')
-const { lifetime } = inject('toast')
-
 const props = defineProps({
   selection: {
     type: String,
@@ -20,6 +14,17 @@ const props = defineProps({
     },
   },
 })
+
+const { leftSelectedFeature, rightSelectedFeature } = inject('feature')
+const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
+  inject('featureValue')
+const { get } = inject('featureValue')
+const { featureValueCreate: featureValueCreateRoute } = inject('routes')
+const { lifetime } = inject('toast')
+
+const loading = ref(false)
+
+const toast = useToast()
 
 let tableLoading
 let selectedFeature
@@ -32,28 +37,58 @@ if ('left' === props.selection) {
   selectedFeature = rightSelectedFeature
 }
 
-const loading = ref(false)
-const toast = useToast()
+/**
+ * Asynchronously creates a new feature value based on the provided element.
+ *
+ * @param {Element} elm - The DOM element containing the data to be used for creating the feature value.
+ *
+ * @returns {Promise} A promise that resolves to the feature value data after it has been created.
+ */
+const featureValueCreate = async (elm) => {
+  const res = await fetch(featureValueCreateRoute, {
+    method: 'POST',
+    body: new FormData(elm),
+  })
 
+  return await res.json()
+}
+
+/**
+ * Asynchronously handles feature value creation based on the event triggered.
+ *
+ * @param {Event} event - The event triggering the function.
+ */
 const handleFeatureValueCreate = async (event) => {
   loading.value = true
   tableLoading.value = true
+
   const featureId = parseInt(selectedFeature.value.id_feature || '')
-  await create(event.currentTarget)
-  await get(
-    featureId,
-    props.selection,
+  const res = await featureValueCreate(event.currentTarget)
+  const all =
+    typeof leftSelectedFeature.value !== 'undefined' &&
+    typeof rightSelectedFeature.value !== 'undefined' &&
     leftSelectedFeature.value.id_feature ===
-      rightSelectedFeature.value.id_feature,
-  )
+      rightSelectedFeature.value.id_feature
+  const res2 = await get(featureId, props.selection, all)
+
   loading.value = false
   tableLoading.value = false
+
   toast.add({
-    severity: 'success',
-    summary: 'Confirmed',
-    detail: 'Feature value created',
+    severity: res.success ? 'success' : 'error',
+    summary: res.success ? 'Confirmed' : 'Error',
+    detail: res.message,
     life: lifetime.value,
   })
+
+  if (false === res2.success) {
+    toast.add({
+      severity: res2.success ? 'success' : 'error',
+      summary: res2.success ? 'Confirmed' : 'Error',
+      detail: res2.message,
+      life: lifetime.value,
+    })
+  }
 }
 </script>
 

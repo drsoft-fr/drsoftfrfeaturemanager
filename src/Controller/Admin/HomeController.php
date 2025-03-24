@@ -337,16 +337,55 @@ final class HomeController extends FrameworkBundleAdminController
         }
     }
 
+    /**
+     * @AdminSecurity(
+     *     "is_granted(['read'], request.get('_legacy_controller'))",
+     *     redirectRoute="admin_module_manage",
+     *     message="Access denied."
+     * )
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
     public function ajaxFeatureValueCreateAction(Request $request): JsonResponse
     {
         try {
-            $featureId = $request->request->getInt('id_feature');
+            $featureId = $request->request->getInt('id_feature', 0);
             $value = $request->request->get('value');
+
+            if (0 >= $featureId) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Invalid feature_id',
+                    'id_feature' => $featureId ?? 0,
+                    'value' => $value ?? '',
+                ]);
+            }
+
+            if ('' === $value) {
+                return $this->json([
+                    'success' => false,
+                    'message' => 'Value cannot be empty',
+                    'id_feature' => $featureId ?? 0,
+                    'value' => $value ?? '',
+                ]);
+            }
+
             $obj = new \FeatureValue();
             $obj->id_feature = $featureId;
-            $obj->value = [
-                1 => $value
-            ];
+            $langIds = $this->getContext()->language->getIDs();
+            $values = [];
+
+            foreach ($langIds as $langId) {
+                if (0 >= $langId) {
+                    continue;
+                }
+
+                $values[$langId] = $value;
+            }
+
+            $obj->value = $values;
 
             if (!$obj->save()) {
                 return $this->json([
