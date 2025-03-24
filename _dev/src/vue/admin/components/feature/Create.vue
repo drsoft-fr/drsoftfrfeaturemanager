@@ -20,7 +20,7 @@ const handleFeatureCreate = async (event) => {
   rightFeatureValueTableLoading.value = true
 
   const res = await create(event.currentTarget)
-  await getAll()
+  const res2 = await getAll()
 
   loading.value = false
   leftFeatureValueTableLoading.value = false
@@ -32,6 +32,15 @@ const handleFeatureCreate = async (event) => {
     detail: res.message,
     life: lifetime.value,
   })
+
+  if (false === res2.success) {
+    toast.add({
+      severity: res2.success ? 'success' : 'error',
+      summary: res2.success ? 'Confirmed' : 'Error',
+      detail: res2.message,
+      life: lifetime.value,
+    })
+  }
 }
 </script>
 

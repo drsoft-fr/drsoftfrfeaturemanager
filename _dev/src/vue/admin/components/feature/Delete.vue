@@ -74,7 +74,7 @@ const handleFeatureDelete = async () => {
       }
 
       const res = await featureDelete(featureId, props.selection)
-      await getAll()
+      const res2 = await getAll()
 
       loading.value = false
       tableLoading.value = false
@@ -84,6 +84,15 @@ const handleFeatureDelete = async () => {
         detail: res.message,
         life: lifetime.value,
       })
+
+      if (false === res2.success) {
+        toast.add({
+          severity: res2.success ? 'success' : 'error',
+          summary: res2.success ? 'Confirmed' : 'Error',
+          detail: res2.message,
+          life: lifetime.value,
+        })
+      }
     },
     reject: () => {
       toast.add({

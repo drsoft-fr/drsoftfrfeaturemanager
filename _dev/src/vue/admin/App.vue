@@ -13,6 +13,7 @@ import FeatureValueMove from '@/vue/admin/components/feature-value/Move.vue'
 import FeatureValueTable from '@/vue/admin/components/feature-value/Table.vue'
 import ProductTable from '@/vue/admin/components/product/Table.vue'
 import Toast from 'primevue/toast'
+import { useToast } from 'primevue/usetoast'
 
 const { drsoftfrfeaturemanager } = window
 const features = ref([])
@@ -47,6 +48,7 @@ const leftFeatureValueTableLoading = ref(false)
 const rightFeatureValueTableLoading = ref(false)
 const productTableLoading = ref(false)
 const toastLifetime = ref(5000)
+const toast = useToast()
 
 watch(leftSelectedFeature, async () => {
   leftFeatureValueTableLoading.value = true
@@ -129,13 +131,20 @@ const featureDelete = async (featureId, selection) => {
   return await res.json()
 }
 
+/**
+ * Asynchronously fetches all features from a specific route and populates the leftFeatureValues and rightFeatureValues arrays with the results.
+ *
+ * @returns {Promise<Object>} A Promise that resolves with the JSON response containing the features.
+ */
 const featureGetAll = async () => {
   const res = await fetch(drsoftfrfeaturemanager.routes.featureGetAll)
-  features.value = await res.json()
+  const json = await res.json()
+
+  features.value = json.features
   leftFeatureValues.value = []
   rightFeatureValues.value = []
 
-  return features
+  return json
 }
 
 /**
@@ -413,7 +422,20 @@ provide('toast', {
   lifetime: readonly(toastLifetime),
 })
 
-featureGetAll()
+toast.add({
+  severity: 'info',
+  summary: 'Loading',
+  detail: 'Loading features in progress ...',
+  life: toastLifetime.value,
+})
+featureGetAll().then((res) =>
+  toast.add({
+    severity: res.success ? 'success' : 'error',
+    summary: res.success ? 'Confirmed' : 'Error',
+    detail: res.message,
+    life: toastLifetime.value,
+  }),
+)
 </script>
 
 <template>

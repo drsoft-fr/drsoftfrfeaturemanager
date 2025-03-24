@@ -178,19 +178,39 @@ final class HomeController extends FrameworkBundleAdminController
      */
     public function ajaxFeatureGetAllAction(): JsonResponse
     {
-        $datas = [];
-        $featureRepository = $this->getFeatureRepository();
-        /** @var array<int, array<string, mixed>> $features */
-        $features = $featureRepository->getFeaturesByLang(1);
+        try {
+            $datas = [];
+            $featureRepository = $this->getFeatureRepository();
+            /** @var array<int, array<string, mixed>> $features */
+            $features = $featureRepository->getFeaturesByLang($this->getContext()->language->id);
 
-        foreach ($features as $feature) {
-            $datas[] = [
-                'id_feature' => $feature['id_feature'],
-                'name' => $feature['localized_names'][1],
-            ];
+            foreach ($features as $feature) {
+                if (!isset($feature['id_feature'])) {
+                    continue;
+                }
+
+                $datas[] = [
+                    'id_feature' => $feature['id_feature'],
+                    'name' => $feature['localized_names'][$this->getContext()->language->id] ?? '',
+                ];
+            }
+
+            return $this->json([
+                'success' => true,
+                'message' => 'Features retrieved',
+                'features' => $datas
+            ]);
+        } catch (\Throwable $t) {
+            return $this->json([
+                'success' => false,
+                'message' =>
+                    sprintf(
+                        'Error occurred when trying to get all Features [%s]',
+                        $t->getMessage()
+                    ),
+                'features' => [],
+            ]);
         }
-
-        return $this->json($datas);
     }
 
     /**
