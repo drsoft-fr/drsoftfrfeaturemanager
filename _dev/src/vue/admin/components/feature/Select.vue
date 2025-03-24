@@ -37,7 +37,9 @@ if ('left' === props.selection) {
       id="features"
     />
     <Message size="small" severity="secondary" variant="simple"
-      >Would you like to delete this feature ({{ model.name }})?</Message
+      >Would you like to delete this feature{{
+        model ? ` (${model.name})` : ''
+      }}?</Message
     >
     <FeatureDelete :selection />
   </div>

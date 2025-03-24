@@ -56,10 +56,10 @@ const featureDelete = async (featureId) => {
     body: form,
   })
 
-  feature.value = { id_feature: 0, name: 'Sample feature' }
+  feature.value = undefined
 
   if (featureId === otherFeature.value.id_feature) {
-    otherFeature.value = { id_feature: 0, name: 'Sample feature' }
+    otherFeature.value = undefined
   }
 
   return await res.json()
@@ -79,7 +79,7 @@ const featureDelete = async (featureId) => {
  */
 const handleFeatureDelete = async () => {
   confirm.require({
-    message: `Do you want to delete this feature (${feature.value.name})?`,
+    message: `Do you want to delete this feature (${feature.value.name || ''})?`,
     header: 'Danger Zone',
     icon: 'pi pi-info-circle',
     rejectLabel: 'Cancel',
@@ -151,7 +151,7 @@ const handleFeatureDelete = async () => {
     type="button"
     :loading="loading"
     @click="handleFeatureDelete"
-    :disabled="!feature.id_feature"
+    :disabled="!feature"
     severity="danger"
   />
 </template>

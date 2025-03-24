@@ -59,10 +59,7 @@ const handleFeatureValueCreate = async (event) => {
 
 <template>
   <Transition name="fade" mode="out-in" appear>
-    <form
-      v-show="selectedFeature.id_feature"
-      @submit.prevent="handleFeatureValueCreate"
-    >
+    <form v-if="selectedFeature" @submit.prevent="handleFeatureValueCreate">
       <input
         type="hidden"
         name="id_feature"
@@ -89,6 +86,11 @@ const handleFeatureValueCreate = async (event) => {
         />
       </div>
     </form>
+    <div v-else>
+      <Message size="small" severity="warn" variant="simple"
+        >Select a feature to add a value to it
+      </Message>
+    </div>
   </Transition>
 </template>
 
