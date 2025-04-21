@@ -12,6 +12,7 @@ import FeatureValueDuplicate from '@/vue/admin/components/feature-value/Duplicat
 import FeatureValueMove from '@/vue/admin/components/feature-value/Move.vue'
 import FeatureValueTable from '@/vue/admin/components/feature-value/Table.vue'
 import ProductTable from '@/vue/admin/components/product/Table.vue'
+import Orphan from '@/vue/admin/components/orphan/Main.vue'
 import Toast from 'primevue/toast'
 import { useToast } from 'primevue/usetoast'
 
@@ -379,6 +380,7 @@ featureGetAll().then((res) =>
       <h2 class="mb-5 sm:mb-8">Products</h2>
       <ProductTable />
     </div>
+    <Orphan />
     <div
       class="grid grid-cols-1 gap-x-8 gap-y-16 lg:grid-cols-4 mt-10 sm:mt-16 py-8 px-4 lg:py-16 lg:px-6 mx-auto lg:mx-0 bg-white dark:bg-gray-900 rounded-md"
     >

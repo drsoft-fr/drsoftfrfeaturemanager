@@ -1,0 +1,31 @@
+admin_drsoft_fr_feature_manager_orphan_feature_ajax_orphan_feature_get_all:
+    path: /ajax/orphan/feature/get-all
+    methods: [ GET ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\OrphanFeatureController::ajaxOrphanFeatureGetAllAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerOrphanFeature
+        _legacy_link: AdminDrSoftFrFeatureManagerOrphanFeature:ajaxOrphanFeatureGetAll
+
+admin_drsoft_fr_feature_manager_orphan_feature_ajax_orphan_feature_bulk_delete:
+    path: /ajax/orphan/feature/bulk-delete
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\OrphanFeatureController::ajaxOrphanFeatureBulkDeleteAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerOrphanFeature
+        _legacy_link: AdminDrSoftFrFeatureManagerOrphanFeature:ajaxOrphanFeatureBulkDelete
+
+admin_drsoft_fr_feature_manager_orphan_feature_ajax_orphan_feature_value_get_all:
+    path: /ajax/orphan/feature-value/get-all
+    methods: [ GET ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\OrphanFeatureController::ajaxOrphanFeatureValueGetAllAction
+        _legacy_controller: AdminDrSoftFrFeatureManager
+        _legacy_link: AdminDrSoftFrFeatureManager:ajaxOrphanFeatureValueGetAll
+
+admin_drsoft_fr_feature_manager_orphan_feature_ajax_orphan_feature_value_bulk_delete:
+    path: /ajax/orphan/feature-value/bulk-delete
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\OrphanFeatureController::ajaxOrphanFeatureValueBulkDeleteAction
+        _legacy_controller: AdminDrSoftFrFeatureManager
+        _legacy_link: AdminDrSoftFrFeatureManager:ajaxOrphanFeatureValueBulkDelete

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController;
+use DrSoftFr\Module\FeatureManager\Controller\Admin\OrphanFeatureController;
 use PrestaShop\PrestaShop\Core\Cache\Clearer\CacheClearerChain;
 
 if (!defined('_PS_VERSION_') || !defined('_CAN_LOAD_FILES_')) {
@@ -54,6 +55,12 @@ class DrsoftFrFeatureManager extends Module
                 'parent_class_name' => 'AdminCatalog',
                 'route_name' => 'admin_drsoft_fr_feature_manager_home_index',
                 'visible' => true,
+            ],
+            [
+                'class_name' => OrphanFeatureController::TAB_CLASS_NAME,
+                'name' => 'Orphan feature',
+                'parent_class_name' => HomeController::TAB_CLASS_NAME,
+                'visible' => false,
             ],
         ];
         $this->version = '0.0.1';

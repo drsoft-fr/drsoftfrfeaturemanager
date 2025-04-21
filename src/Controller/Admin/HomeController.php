@@ -76,6 +76,10 @@ final class HomeController extends FrameworkBundleAdminController
                     'productDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_delete'),
                     'productGet' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_get'),
                     'productMove' => $this->generateUrl('admin_drsoft_fr_feature_manager_home_ajax_product_move'),
+                    'orphanFeatureGetAll' => $this->generateUrl('admin_drsoft_fr_feature_manager_orphan_feature_ajax_orphan_feature_get_all'),
+                    'orphanFeatureBulkDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_orphan_feature_ajax_orphan_feature_bulk_delete'),
+                    'orphanFeatureValueGetAll' => $this->generateUrl('admin_drsoft_fr_feature_manager_orphan_feature_ajax_orphan_feature_value_get_all'),
+                    'orphanFeatureValueBulkDelete' => $this->generateUrl('admin_drsoft_fr_feature_manager_orphan_feature_ajax_orphan_feature_value_bulk_delete'),
                 ]
             ]
         ]);
