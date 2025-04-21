@@ -11,9 +11,10 @@ import { useToast } from 'primevue/usetoast'
 
 const routes = inject('routes')
 const { lifetime } = inject('toast')
-const { leftSelectedFeature, rightSelectedFeature, getAll } = inject('feature')
+const { getAll } = inject('feature')
 const { leftFeatureValueTableLoading, rightFeatureValueTableLoading } =
   inject('featureValue')
+const { reset } = inject('core')
 
 const orphanFeatureValues = ref([])
 const selectedFeatureValues = ref([])
@@ -184,8 +185,8 @@ const deleteSelectedFeatureValues = async () => {
       loading.value = true
       leftFeatureValueTableLoading.value = true
       rightFeatureValueTableLoading.value = true
-      leftSelectedFeature.value = undefined
-      rightSelectedFeature.value = undefined
+
+      await reset()
 
       const featureValueIds = selectedFeatureValues.value.map(
         (featureValue) => featureValue.id_feature_value,

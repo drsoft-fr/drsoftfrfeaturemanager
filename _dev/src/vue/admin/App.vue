@@ -282,6 +282,24 @@ const productCopy = async (productIds, newFeatureValueId, newFeatureId) => {
   return await res.json()
 }
 
+/**
+ * Resets the state of selected products and related feature values.
+ *
+ * This asynchronous function clears the current selection state by:
+ * - Emptying the array of selected products.
+ * - Clearing the values of the left and right selected feature values.
+ * - Clearing the values of the left and right selected features.
+ *
+ * Designed to be called when a reset or reinitialization of the selection state is needed.
+ */
+const reset = async () => {
+  selectedProducts.value = []
+  leftSelectedFeatureValue.value = undefined
+  rightSelectedFeatureValue.value = undefined
+  leftSelectedFeature.value = undefined
+  rightSelectedFeature.value = undefined
+}
+
 provide('feature', {
   leftSelectedFeature,
   rightSelectedFeature,
@@ -316,6 +334,9 @@ provide('product', {
 provide('routes', routes)
 provide('toast', {
   lifetime: readonly(toastLifetime),
+})
+provide('core', {
+  reset: readonly(reset),
 })
 
 toast.add({
