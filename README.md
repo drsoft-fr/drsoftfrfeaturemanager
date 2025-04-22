@@ -48,8 +48,14 @@ their values, as well as manage their associations with products.
    repository: [https://github.com/drsoft-fr/drsoftfrfeaturemanager](https://github.com/drsoft-fr/drsoftfrfeaturemanager)
 2. Unzip the archive and rename the folder to `drsoftfrfeaturemanager`
 3. Copy this folder to the `/modules` directory of your PrestaShop installation
-4. Go to your store's back office, section "Modules > Module Manager"
-5. Search for "drSoft.fr Hook Manager" and click "Install"
+4. Compiler les assets du module :
+   ```bash
+   $ cd {PRESTASHOP_FOLDER}/modules/drsoftfrfeaturemanager/_dev
+   $ npm install
+   $ npm run build
+   ```
+5. Go to your store's back office, section "Modules > Module Manager"
+6. Search for "drSoft.fr Hook Manager" and click "Install"
 
 ### Option 2: Via Terminal (Git)
 
@@ -58,6 +64,9 @@ If you have access to your server's terminal and Git is installed:
 ```bash
 $ cd {PRESTASHOP_FOLDER}/modules
 $ git clone git@github.com:drsoft-fr/drsoftfrfeaturemanager.git
+$ cd drsoftfrfeaturemanager/_dev
+$ npm install
+$ npm run build
 $ cd {PRESTASHOP_FOLDER}
 $ php ./bin/console prestashop:module install drsoftfrfeaturemanager
 ```
