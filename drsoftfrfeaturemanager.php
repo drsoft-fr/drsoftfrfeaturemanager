@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController;
+use DrSoftFr\Module\FeatureManager\Controller\Admin\OrphanFeatureController;
 use PrestaShop\PrestaShop\Core\Cache\Clearer\CacheClearerChain;
 
 if (!defined('_PS_VERSION_') || !defined('_CAN_LOAD_FILES_')) {
@@ -46,11 +48,25 @@ class DrsoftFrFeatureManager extends Module
             'max' => _PS_VERSION_
         ];
         $this->tab = 'content_management';
-        $this->tabs = [];
-        $this->version = '0.0.1';
+        $this->tabs = [
+            [
+                'class_name' => HomeController::TAB_CLASS_NAME,
+                'name' => 'Feature manager',
+                'parent_class_name' => 'AdminCatalog',
+                'route_name' => 'admin_drsoft_fr_feature_manager_home_index',
+                'visible' => true,
+            ],
+            [
+                'class_name' => OrphanFeatureController::TAB_CLASS_NAME,
+                'name' => 'Orphan feature',
+                'parent_class_name' => HomeController::TAB_CLASS_NAME,
+                'visible' => false,
+            ],
+        ];
+        $this->version = '1.0.0';
         $this->authorEmail = 'contact@drsoft.fr';
-        $this->moduleGithubRepositoryUrl = 'https://github.com/drsoft-fr/prestashop-module-drsoftfrfeaturemanager';
-        $this->moduleGithubIssuesUrl = 'https://github.com/drsoft-fr/prestashop-module-drsoftfrfeaturemanager/issues';
+        $this->moduleGithubRepositoryUrl = 'https://github.com/drsoft-fr/drsoftfrfeaturemanager';
+        $this->moduleGithubIssuesUrl = 'https://github.com/drsoft-fr/drsoftfrfeaturemanager/issues';
 
         parent::__construct();
 
@@ -97,11 +113,15 @@ class DrsoftFrFeatureManager extends Module
     }
 
     /**
-     * @return string
+     * Redirects the user to the admin panel.
+     *
+     * @return void
      */
-    public function getContent(): string
+    public function getContent(): void
     {
-        return 'Hello world !';
+        Tools::redirectAdmin(
+            $this->context->link->getAdminLink(HomeController::TAB_CLASS_NAME)
+        );
     }
 
     /**

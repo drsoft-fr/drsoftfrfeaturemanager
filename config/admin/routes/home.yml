@@ -1,0 +1,113 @@
+admin_drsoft_fr_feature_manager_home_index:
+    path: /
+    methods: [ GET ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::indexAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link:
+            - AdminDrSoftFrFeatureManagerHome
+            - AdminDrSoftFrFeatureManagerHome:index
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_create:
+    path: /ajax/feature/create
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureCreateAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureCreate
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_delete:
+    path: /ajax/feature/delete
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureDeleteAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureDelete
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_get_all:
+    path: /ajax/feature/get-all
+    methods: [ GET ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureGetAllAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureGetAll
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_copy:
+    path: /ajax/feature-value/copy
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueCopyAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueCopy
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_create:
+    path: /ajax/feature-value/create
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueCreateAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueCreate
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_delete:
+    path: /ajax/feature-value/delete
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueDeleteAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueDelete
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_duplicate:
+    path: /ajax/feature-value/duplicate
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueDuplicateAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueDuplicate
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_get:
+    path: /ajax/feature-value/get
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueGetAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueGet
+
+admin_drsoft_fr_feature_manager_home_ajax_feature_value_move:
+    path: /ajax/feature-value/move
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxFeatureValueMoveAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxFeatureValueMove
+
+admin_drsoft_fr_feature_manager_home_ajax_product_copy:
+  path: /ajax/product/copy
+  methods: [ POST ]
+  defaults:
+    _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxProductCopyAction
+    _legacy_controller: AdminDrSoftFrFeatureManagerHome
+    _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductCopy
+
+admin_drsoft_fr_feature_manager_home_ajax_product_delete:
+    path: /ajax/product/delete
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxProductDeleteAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductDelete
+
+admin_drsoft_fr_feature_manager_home_ajax_product_get:
+    path: /ajax/product/get
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxProductGetAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductGet
+
+admin_drsoft_fr_feature_manager_home_ajax_product_move:
+    path: /ajax/product/move
+    methods: [ POST ]
+    defaults:
+        _controller: DrSoftFr\Module\FeatureManager\Controller\Admin\HomeController::ajaxProductMoveAction
+        _legacy_controller: AdminDrSoftFrFeatureManagerHome
+        _legacy_link: AdminDrSoftFrFeatureManagerHome:ajaxProductMove

@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@primeuix/themes": "^1.0.0",
+    "@primevue/core": "^4.3.1",
+    "@tailwindcss/vite": "^4.0.12",
+    "primevue": "^4.3.1",
+    "tailwindcss": "^4.0.12",
+    "tailwindcss-primeui": "^0.5.1",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "prettier": "^3.5.3",
+    "vite": "^6.2.0",
+    "vite-plugin-vue-devtools": "^7.7.2"
+  }
+}

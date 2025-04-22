@@ -1,0 +1,6 @@
+_admin_drsoft_fr_feature_manager_home_routing:
+    resource: "routes/home.yml"
+
+_admin_drsoft_fr_feature_manager_orphan_feature_routing:
+    resource: "routes/orphan_feature.yml"
+    prefix: /orphan-feature

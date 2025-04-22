@@ -1,0 +1,16 @@
+services:
+    # Query services
+    drsoft_fr.module.feature_manager.query.product.get_products_by_feature_value_id_query:
+        class: DrSoftFr\Module\FeatureManager\Query\Product\GetProductsByFeatureValueIdQuery
+        arguments:
+            - '@=service("prestashop.adapter.legacy.context").getContext().language.id'
+            - '@=service("prestashop.adapter.legacy.context").getContext().shop.id'
+        public: true
+
+    # Query handler services
+    drsoft_fr.module.feature_manager.adapter.query_handler.product.get_products_by_feature_value_id_query_handler:
+        class: DrSoftFr\Module\FeatureManager\Adapter\QueryHandler\Product\GetProductsByFeatureValueIdQueryHandler
+        arguments:
+            - '@doctrine.dbal.default_connection'
+            - '%database_prefix%'
+        public: true
