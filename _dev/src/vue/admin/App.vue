@@ -56,8 +56,11 @@ watch(leftSelectedFeature, async () => {
   leftFeatureValueTableLoading.value = true
   productTableLoading.value = true
   leftSelectedFeatureValue.value = undefined
+  leftFeatureValues.value = undefined
   selectedProducts.value = []
-  await featureValueGet(leftSelectedFeature.value.id_feature, 'left')
+  if (leftSelectedFeature.value) {
+    await featureValueGet(leftSelectedFeature.value.id_feature, 'left')
+  }
   leftFeatureValueTableLoading.value = false
   productTableLoading.value = false
 })
@@ -65,17 +68,23 @@ watch(leftSelectedFeature, async () => {
 watch(rightSelectedFeature, async () => {
   rightFeatureValueTableLoading.value = true
   rightSelectedFeatureValue.value = undefined
-  await featureValueGet(rightSelectedFeature.value.id_feature, 'right')
+  rightFeatureValues.value = undefined
+  if (rightSelectedFeature.value) {
+    await featureValueGet(rightSelectedFeature.value.id_feature, 'right')
+  }
   rightFeatureValueTableLoading.value = false
 })
 
 watch(leftSelectedFeatureValue, async () => {
   productTableLoading.value = true
   selectedProducts.value = []
-  await productGet(
-    leftSelectedFeature.value.id_feature,
-    leftSelectedFeatureValueId.value,
-  )
+  products.value = []
+  if (leftSelectedFeature.value && leftSelectedFeatureValue.value) {
+    await productGet(
+      leftSelectedFeature.value.id_feature,
+      leftSelectedFeatureValueId.value,
+    )
+  }
   productTableLoading.value = false
 })
 
