@@ -2,17 +2,24 @@
 {% trans_default_domain "Module.DrsoftfrFeatureManager.Admin" %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('../modules/drsoftfrfeaturemanager/views/' ~ manifest.url('src/js/admin/main.js')['css'][0]) }}" type="text/css" media="all">
+    <link rel="stylesheet"
+          href="{{ asset('../modules/drsoftfrfeaturemanager/views/' ~ manifest.url('src/js/admin/main.js')['css'][0]) }}"
+          type="text/css" media="all">
 {% endblock %}
 
 {% block content %}
     <div id="app"></div>
 {% endblock %}
 
+{% block content_footer %}
+    {% include '@Modules/drsoftfrfeaturemanager/views/templates/admin/common/layout/_footer.html.twig' %}
+{% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
 
     {% if manifest is defined %}
-        <script src="{{ asset('../modules/drsoftfrfeaturemanager/views/' ~ manifest.url('src/js/admin/main.js')['file']) }}" async defer></script>
+        <script src="{{ asset('../modules/drsoftfrfeaturemanager/views/' ~ manifest.url('src/js/admin/main.js')['file']) }}"
+                async defer></script>
     {% endif %}
 {% endblock %}

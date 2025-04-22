@@ -9,6 +9,7 @@ use DrSoftFr\Module\FeatureManager\Domain\Feature\Helper\ProductHelper;
 use DrSoftFr\Module\FeatureManager\Query\Product\GetProductsByFeatureValueIdQuery;
 use DrSoftFr\PrestaShopModuleHelper\Domain\Asset\Package;
 use DrSoftFr\PrestaShopModuleHelper\Domain\Asset\VersionStrategy\JsonManifestVersionStrategy;
+use DrsoftFrFeatureManager;
 use PrestaShop\PrestaShop\Adapter\Feature\Repository\FeatureRepository;
 use PrestaShop\PrestaShop\Adapter\Feature\Repository\FeatureValueRepository;
 use PrestaShop\PrestaShop\Core\Domain\Feature\Exception\InvalidFeatureValueIdException;
@@ -88,6 +89,7 @@ final class HomeController extends FrameworkBundleAdminController
             'enableSidebar' => true,
             'help_link' => $this->generateSidebarLink($request->attributes->get('_legacy_controller')),
             'manifest' => $this->manifest,
+            'module' => $this->getModule(),
         ]);
     }
 
@@ -1058,5 +1060,14 @@ final class HomeController extends FrameworkBundleAdminController
     {
         /* @type ProductHelper */
         return $this->get('drsoft_fr.module.feature_manager.domain.feature.helper.product_helper');
+    }
+
+    /**
+     * @return DrsoftFrFeatureManager
+     */
+    protected function getModule(): DrsoftFrFeatureManager
+    {
+        /** @type DrsoftFrFeatureManager */
+        return $this->get('drsoft_fr.module.feature_manager.module');
     }
 }
