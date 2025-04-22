@@ -50,7 +50,9 @@ their values, as well as manage their associations with products.
 3. Copy this folder to the `/modules` directory of your PrestaShop installation
 4. Compiler les assets du module :
    ```bash
-   $ cd {PRESTASHOP_FOLDER}/modules/drsoftfrfeaturemanager/_dev
+   $ cd {PRESTASHOP_FOLDER}/modules/drsoftfrfeaturemanager
+   $ composer install -a -o --no-dev
+   $ cd _dev
    $ npm install
    $ npm run build
    ```
@@ -62,13 +64,15 @@ their values, as well as manage their associations with products.
 If you have access to your server's terminal and Git is installed:
 
 ```bash
-$ cd {PRESTASHOP_FOLDER}/modules
-$ git clone git@github.com:drsoft-fr/drsoftfrfeaturemanager.git
-$ cd drsoftfrfeaturemanager/_dev
-$ npm install
-$ npm run build
-$ cd {PRESTASHOP_FOLDER}
-$ php ./bin/console prestashop:module install drsoftfrfeaturemanager
+   $ cd {PRESTASHOP_FOLDER}/modules
+   $ git clone git@github.com:drsoft-fr/drsoftfrfeaturemanager.git
+   $ cd drsoftfrfeaturemanager
+   $ composer install -a -o --no-dev
+   $ cd _dev
+   $ npm install
+   $ npm run build
+   $ cd {PRESTASHOP_FOLDER}
+   $ php ./bin/console prestashop:module install drsoftfrfeaturemanager
 ```
 
 ## Usage

@@ -63,7 +63,7 @@ class DrsoftFrFeatureManager extends Module
                 'visible' => false,
             ],
         ];
-        $this->version = '1.0.2';
+        $this->version = '1.0.3';
         $this->authorEmail = 'contact@drsoft.fr';
         $this->moduleGithubRepositoryUrl = 'https://github.com/drsoft-fr/drsoftfrfeaturemanager';
         $this->moduleGithubIssuesUrl = 'https://github.com/drsoft-fr/drsoftfrfeaturemanager/issues';
